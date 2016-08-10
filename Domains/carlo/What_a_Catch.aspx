@@ -9,7 +9,7 @@
 
     <script type="text/javascript" language="javascript">
         tinymce.init({
-            selector: "#editBlogContent",
+            mode: "textareas",
             plugins: "image"
         });
     </script>
@@ -339,6 +339,7 @@ WHERE blogId = @blogId ORDER BY timestamp DESC">
         }
 
         $(document).ready(function () {
+
             var deleteDialog = document.querySelector('.deleteDialogPrompt');
             var editDialog = document.querySelector('.editDialogWindow');
             var domain = arr[arr.length - 2];
@@ -401,7 +402,7 @@ WHERE blogId = @blogId ORDER BY timestamp DESC">
 
             $('.editDialogClose').on("click", function () {
                 //editDialog.close();
-                $('.editDialogWindow').css("visibility","hidden");
+                $('.editDialogWindow').css("visibility", "hidden");
             });
 
             $('.editDialogSave').on("click", function () {
@@ -429,6 +430,7 @@ WHERE blogId = @blogId ORDER BY timestamp DESC">
             if (domainSession != domain) {
                 $(".blog-menu").hide();
             }
+        
 
             __doPostBack('<%=UpdatePanel1.ClientID %>')
         });
