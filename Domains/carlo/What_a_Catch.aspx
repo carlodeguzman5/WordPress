@@ -9,7 +9,7 @@
 
     <script type="text/javascript" language="javascript">
         tinymce.init({
-            mode: "textareas",
+            selector: "#editBlogContent",
             plugins: "image"
         });
     </script>
@@ -267,8 +267,8 @@ WHERE blogId = @blogId ORDER BY timestamp DESC">
         </div>
     </dialog>
 
-    <div class=" editDialogWindow" style="width: 50%; position:absolute; left: 50%; z-index:101; top:40%; visibility: hidden; ">
-        <div class="mdl-dialog" style="position: relative; left: -50%; background-color:White;">
+    <div class="mdl-dialog editDialogWindow" style="width: 50%; position:absolute; z-index:101; top:20%; background-color:White; visibility: hidden; margin-left: auto; margin-right: auto; left: 0; right: 0;">
+        
             <h4 class="mdl-dialog__title">Edit Blog Entry</h4>
             <div class="mdl-dialog__content">
               <textarea id="editBlogContent"></textarea>
@@ -277,7 +277,7 @@ WHERE blogId = @blogId ORDER BY timestamp DESC">
               <button type="button" class="mdl-button editDialogSave">Save Changes</button>
               <button type="button" class="mdl-button editDialogClose">I Changed My Mind</button>
             </div>
-        </div>
+        
     </div>
 
     <script type="text/javascript">
@@ -346,11 +346,9 @@ WHERE blogId = @blogId ORDER BY timestamp DESC">
             var editor = tinymce.EditorManager.get('editBlogContent');
             var domainSession = '<%= Session["domain"]%>'
 
-
             $('.edit').on("click", function () {
                 //editDialog.showModal();
                 $('.editDialogWindow').css("visibility", "visible");
-
 
                 var data = "{\"blogId\":\"" + $('.TextBox3').val() + "\"}";
 
@@ -407,7 +405,8 @@ WHERE blogId = @blogId ORDER BY timestamp DESC">
 
             $('.editDialogSave').on("click", function () {
 
-                var data = "{\"blogId\":\"" + $(".TextBox3").val() + "\",\"blogContentText\":\"" + editor.getContent({ format: 'text' }) + "\",\"blogContentHtml\":\"" + editor.getContent() + "\"}"
+                var data = "{\"blogId\":\"" + $(".TextBox3").val() + "\",\"blogContentText\":\"" + editor.getContent({ format: 'text' }) + "\",\"blogContentHtml\":\"" + editor.getContent().replace(/"/g, "'") + "\"}"
+                console.log(data);
                 $.ajax({
                     cache: false,
                     type: "POST",
@@ -430,7 +429,7 @@ WHERE blogId = @blogId ORDER BY timestamp DESC">
             if (domainSession != domain) {
                 $(".blog-menu").hide();
             }
-        
+
 
             __doPostBack('<%=UpdatePanel1.ClientID %>')
         });

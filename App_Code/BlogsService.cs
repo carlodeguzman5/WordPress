@@ -65,7 +65,7 @@ public class BlogsService : System.Web.Services.WebService {
 
 
         ExecuteInsertQuery("INSERT INTO dbo.[Blogs] (blogTitle,domainId,username,blogContent,canLike,canComment,canReblog,dateCreated,dateModified) VALUES" +
-            "('" + blogTitle.Replace("'", "''") + "', '" + domainId + "', '" + username + "','" + blogContent.Replace("'", "''") + "','" + htmlBlogContent.Replace("'", "''") + "','" + canLike + "','" + canComment + "','" + canReblog + "','" + DateTime.Now.ToString() + "','" + DateTime.Now.ToString() + "')");
+            "('" + blogTitle.Replace("'", "''") + "', '" + domainId + "', '" + username + "','" + blogContent.Replace("'", "''").Replace("\"", "''") + "','" + htmlBlogContent.Replace("'", "''") + "','" + canLike + "','" + canComment + "','" + canReblog + "','" + DateTime.Now.ToString() + "','" + DateTime.Now.ToString() + "')");
 
         return CreateBlogPage(blogTitle, domainId);
     }
@@ -126,7 +126,7 @@ public class BlogsService : System.Web.Services.WebService {
     [WebMethod]
     public string EditBlogContent(string blogId, string blogContentText, string blogContentHtml)
     {
-        ExecuteInsertQuery("UPDATE dbo.[Blogs] SET blogContent = '" + blogContentText.Replace("'","''") + "', htmlBlogContent = '" + blogContentHtml.Replace("'", "''") + "' WHERE  blogId = '" + blogId + "'");
+        ExecuteInsertQuery("UPDATE dbo.[Blogs] SET blogContent = '" + blogContentText.Replace("'","''").Replace("\"","''") + "', htmlBlogContent = '" + blogContentHtml.Replace("'", "''") + "' WHERE  blogId = '" + blogId + "'");
         return "Success";
     }
     
