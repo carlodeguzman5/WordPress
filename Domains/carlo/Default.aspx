@@ -216,8 +216,7 @@
         </div>
     </dialog>
 
-    <asp:Button ID="btnHidden" CssClass="btnHidden hidden" runat="server" ClientIDMode="Static" 
-             onclick="btnHidden_Click" />
+    
 
     <script type="text/javascript">
         var loc = window.location.pathname;

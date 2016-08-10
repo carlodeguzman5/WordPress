@@ -3,6 +3,13 @@
 <%@ Register src="~/RichTextEditor.ascx" tagname="RichTextEditor" tagprefix="uc1" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" Runat="Server">
+    <script type="text/javascript" src="//cdn.tinymce.com/4/tinymce.min.js"></script>
+    <script type="text/javascript" language="javascript">
+        tinyMCE.init({
+            // General options
+            mode: "textareas"
+        });
+    </script>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" Runat="Server">
     <body>
@@ -192,7 +199,7 @@
                 ValidationExpression="[a-z0-9A-Z'!? ]+" 
                 ValidationGroup="Blog"></asp:RegularExpressionValidator>
                 <p></p>
-            <uc1:RichTextEditor ID="RichTextEditor1" runat="server" />
+            <textarea id="newBlogEditor"></textarea>
             <asp:CheckBox ID="LikeCheck" runat="server" Checked="False" 
                 Text="Enable Liking"></asp:CheckBox>
             <asp:CheckBox ID="commentCheck" runat="server" Checked="False" 
@@ -209,8 +216,7 @@
         </div>
     </dialog>
 
-    <asp:Button ID="btnHidden" CssClass="btnHidden hidden" runat="server" ClientIDMode="Static" 
-             onclick="btnHidden_Click" />
+    
 
     <script type="text/javascript">
         var loc = window.location.pathname;

@@ -19,12 +19,4 @@ public partial class Domains_Template : System.Web.UI.Page
         }
 
     }
-    protected void btnHidden_Click(object sender, EventArgs e)
-    {
-        Debug.WriteLine("WOOH");
-        Session["domain"] = null;
-        Session["email"] = null;
-        Session["username"] = null;
-        Response.Redirect("/WordPress/Login.aspx");
-    }
 }

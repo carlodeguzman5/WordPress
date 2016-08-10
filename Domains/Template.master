@@ -82,6 +82,8 @@
         <div class="mdl-layout__obfuscator"></div>
         </div>
     
+        <asp:Button ID="btnHidden" CssClass="btnHidden hidden" runat="server" ClientIDMode="Static" 
+             onclick="btnHidden_Click" />
     </form>
 
 

@@ -3,38 +3,18 @@
 <%@ Register src="~/RichTextEditor.ascx" tagname="RichTextEditor" tagprefix="uc1" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" Runat="Server">
+    <script type="text/javascript" src="//cdn.tinymce.com/4/tinymce.min.js"></script>
+    <script type="text/javascript" language="javascript">
+        tinyMCE.init({
+            // General options
+            mode: "textareas"
+        });
+    </script>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" Runat="Server">
     <body>
          <asp:HiddenField ID="HiddenField1" runat="server" />
-            
-        <div class="demo-blog mdl-layout mdl-js-layout has-drawer is-upgraded">
-            <header class="mdl-layout__header">
-            <div class="mdl-layout__header-row">
-              <!-- Title -->
-              <span class="mdl-layout-title">WordPress</span>
-              <!-- Add spacer, to align navigation to the right -->
-              <div class="mdl-layout-spacer"></div>
-              <!-- Navigation. We hide it in small screens. -->
-              <nav class="mdl-navigation mdl-layout--large-screen-only">
-                <a class="mdl-navigation__link" id="home-button" href="#">Home</a>
-                <a class="mdl-navigation__link" id="profile-button" href="#">Profile</a>
-                <a class="mdl-navigation__link" id="customize-button" href="#">Customize</a>
-                <a class="mdl-navigation__link" id="logout-button" href="#">Logout</a>
-              </nav>
-            </div>
-          </header>
-          <div class="mdl-layout__drawer">
-            <span class="mdl-layout-title">Title</span>
-            <nav class="mdl-navigation">
-              <a class="mdl-navigation__link" href="">Link</a>
-              <a class="mdl-navigation__link" href="">Link</a>
-              <a class="mdl-navigation__link" href="">Link</a>
-              <a class="mdl-navigation__link" href="">Link</a>
-            </nav>
-          </div>
-        <main class="mdl-layout__content">
-
+         
         <div class="blog__posts mdl-grid">
 
           <asp:ListView ID="ListView1" runat="server" DataKeyNames="blogId" 
@@ -204,30 +184,7 @@
 
         </div>
 
-        <!-- FOOTER --> 
-        <footer class="mdl-mini-footer">
-          <div class="mdl-mini-footer--left-section">
-            <button class="mdl-mini-footer--social-btn social-btn social-btn__twitter">
-              <span class="visuallyhidden">Twitter</span>
-            </button>
-            <button class="mdl-mini-footer--social-btn social-btn social-btn__blogger">
-              <span class="visuallyhidden">Facebook</span>
-            </button>
-            <button class="mdl-mini-footer--social-btn social-btn social-btn__gplus">
-              <span class="visuallyhidden">Google Plus</span>
-            </button>
-          </div>
-          <div class="mdl-mini-footer--right-section">
-            <button class="mdl-mini-footer--social-btn social-btn__share">
-              <i class="material-icons" role="presentation">share</i>
-              <span class="visuallyhidden">share</span>
-            </button>
-          </div>
-        </footer>
-      </main>
-
-      <div class="mdl-layout__obfuscator"></div>
-    </div>
+     
 
     <dialog class="mdl-dialog">
         <h4 class="mdl-dialog__title">New Blog Entry</h4>
@@ -242,7 +199,7 @@
                 ValidationExpression="[a-z0-9A-Z'!? ]+" 
                 ValidationGroup="Blog"></asp:RegularExpressionValidator>
                 <p></p>
-            <uc1:RichTextEditor ID="RichTextEditor1" runat="server" />
+            <textarea id="newBlogEditor"></textarea>
             <asp:CheckBox ID="LikeCheck" runat="server" Checked="False" 
                 Text="Enable Liking"></asp:CheckBox>
             <asp:CheckBox ID="commentCheck" runat="server" Checked="False" 
@@ -259,8 +216,7 @@
         </div>
     </dialog>
 
-    <asp:Button ID="btnHidden" CssClass="btnHidden hidden" runat="server" ClientIDMode="Static" 
-             onclick="btnHidden_Click" />
+    
 
     <script type="text/javascript">
         var loc = window.location.pathname;
@@ -268,31 +224,12 @@
         var dir = arr[arr.length - 2];
 
         var session = '<%= Session["domain"]%>'
-        if (session == "") {
-            $('#show-dialog').hide();
-            $('#home-button').hide();
-            $('#profile-button').hide();
-            $('#customize-button').hide();
-            $('#logout-button').text("Login");
-            $('#logout-button').on('click', function () {
-                window.location.replace("/WordPress/Login.aspx");
-            });
-        }
-        else {
-            $('#logout-button').on('click', function () {
-                $('.btnHidden').click();
-                
-            });
-        }
 
-        if(session != dir){
+        if (session != dir) {
             $('#show-dialog').hide();
         }
 
 
-        $('#home-button').on('click', function () {
-            window.location = "/WordPress/Domains/" + session;
-        });
 
 
         $(document).ready(function () {
