@@ -1,16 +1,8 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Domains/Template.master" AutoEventWireup="true" CodeFile="Default.aspx.cs" Inherits="Domains_Template" ValidateRequest = "false"%>
 
-<%@ Register src="~/RichTextEditor.ascx" tagname="RichTextEditor" tagprefix="uc1" %>
-
 <asp:Content ID="Content1" ContentPlaceHolderID="head" Runat="Server">
-    <script type="text/javascript" src="//cdn.tinymce.com/4/tinymce.min.js"></script>
-    <script type="text/javascript" language="javascript">
-        tinyMCE.init({
-            // General options
-            mode: "textareas"
-        });
-    </script>
 </asp:Content>
+
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" Runat="Server">
     <body>
          <asp:HiddenField ID="HiddenField1" runat="server" />
@@ -184,39 +176,49 @@
 
         </div>
 
-     
+        <dialog class="mdl-dialog">
+            <h4 class="mdl-dialog__title">New Blog Entry</h4>
+            <div class="mdl-dialog__content">
+            <asp:Label ID="Label1" runat="server" Text="Title: "></asp:Label>
+            <asp:TextBox CssClass="TitleText" ID="TitleText" runat="server"></asp:TextBox>
+            <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" 
+                    ErrorMessage="You'll need a Title" Text="*" ControlToValidate="TitleText" 
+                    Display="Dynamic" ValidationGroup="Blog"></asp:RequiredFieldValidator>
+            <asp:RegularExpressionValidator ID="RegularExpressionValidator1" runat="server" 
+                    ErrorMessage="There are invalid characters in your Title" ControlToValidate="TitleText" 
+                    ValidationExpression="[a-z0-9A-Z'!? ]+" 
+                    ValidationGroup="Blog"></asp:RegularExpressionValidator>
+                    <p></p>
+                <textarea id="newBlogEditor"></textarea>
+                <asp:CheckBox ID="LikeCheck" runat="server" Checked="False" 
+                    Text="Enable Liking"></asp:CheckBox>
+                <asp:CheckBox ID="commentCheck" runat="server" Checked="False" 
+                    Text="Disable Comments"></asp:CheckBox>
+                <asp:CheckBox ID="reblogCheck" runat="server" Checked="False" 
+                    Text="Disable Reblogging"></asp:CheckBox>
 
-    <dialog class="mdl-dialog">
-        <h4 class="mdl-dialog__title">New Blog Entry</h4>
-        <div class="mdl-dialog__content">
-        <asp:Label ID="Label1" runat="server" Text="Title: "></asp:Label>
-        <asp:TextBox CssClass="TitleText" ID="TitleText" runat="server"></asp:TextBox>
-        <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" 
-                ErrorMessage="You'll need a Title" Text="*" ControlToValidate="TitleText" 
-                Display="Dynamic" ValidationGroup="Blog"></asp:RequiredFieldValidator>
-        <asp:RegularExpressionValidator ID="RegularExpressionValidator1" runat="server" 
-                ErrorMessage="There are invalid characters in your Title" ControlToValidate="TitleText" 
-                ValidationExpression="[a-z0-9A-Z'!? ]+" 
-                ValidationGroup="Blog"></asp:RegularExpressionValidator>
-                <p></p>
-            <textarea id="newBlogEditor"></textarea>
-            <asp:CheckBox ID="LikeCheck" runat="server" Checked="False" 
-                Text="Enable Liking"></asp:CheckBox>
-            <asp:CheckBox ID="commentCheck" runat="server" Checked="False" 
-                Text="Disable Comments"></asp:CheckBox>
-            <asp:CheckBox ID="reblogCheck" runat="server" Checked="False" 
-                Text="Disable Reblogging"></asp:CheckBox>
+            </div>
+            <div class="mdl-dialog__actions">
+                <asp:Button ID="Button1" CssClass="mdl-button save" runat="server" Text="Save" OnClientClick=""
+                    UseSubmitBehavior="False" ValidationGroup="Blog"></asp:Button>
+                <button type="button" class="mdl-button close">Discard</button>
+                <button type="button" class="mdl-button draft">Save as Draft</button>
+            </div>
+        </dialog>
 
-        </div>
-        <div class="mdl-dialog__actions">
-            <asp:Button ID="Button1" CssClass="mdl-button save" runat="server" Text="Save" OnClientClick=""
-                UseSubmitBehavior="False" ValidationGroup="Blog"></asp:Button>
-            <button type="button" class="mdl-button close">Discard</button>
-            <button type="button" class="mdl-button draft">Save as Draft</button>
-        </div>
-    </dialog>
 
+        <asp:SqlDataSource ID="SqlDataSource1" runat="server" 
+        ConnectionString="<%$ ConnectionStrings:WordPressConnectionString %>" SelectCommand="SELECT * FROM dbo.[Blogs]
+        WHERE domainId = @domainId">
+            <SelectParameters>
+                <asp:ControlParameter ControlID="HiddenField1" Name="domainId" 
+                    PropertyName="Value" />
+            </SelectParameters>
+        </asp:SqlDataSource>
+    </body>
     
+
+
 
     <script type="text/javascript">
         var loc = window.location.pathname;
@@ -228,9 +230,6 @@
         if (session != dir) {
             $('#show-dialog').hide();
         }
-
-
-
 
         $(document).ready(function () {
             var dialog = document.querySelector('dialog');
@@ -284,8 +283,6 @@
                 var data = "{\"blogTitle\":\"" + $('.TitleText').val() + "\", \"domainId\":\"" + dir + "\",\"username\":\"" + dir + "\",\"blogContent\":\"" + contentText + "\"," +
                 "\"canLike\":\"" + LikeCheck + "\",\"canComment\":\"" + CommentCheck + "\",\"canReblog\":\"" + ReblogCheck + "\",\"htmlBlogContent\":\"" + contentHtml + "\"}";
 
-                //alert(data);
-
                 if (typeof (Page_ClientValidate) == 'function') {
                     Page_ClientValidate();
                 }
@@ -308,28 +305,10 @@
                             //alert(response.ds);
                         }
                     });
-
-
                 }
-
             });
         });
         
     </script>
-    
-    <script type="text/javascript" src="https://code.getmdl.io/1.1.3/material.min.js"></script>
-    
-    </body>
-    
-
-
-    <asp:SqlDataSource ID="SqlDataSource1" runat="server" 
-        ConnectionString="<%$ ConnectionStrings:WordPressConnectionString %>" SelectCommand="SELECT * FROM dbo.[Blogs]
-WHERE domainId = @domainId">
-        <SelectParameters>
-            <asp:ControlParameter ControlID="HiddenField1" Name="domainId" 
-                PropertyName="Value" />
-        </SelectParameters>
-    </asp:SqlDataSource>
 </asp:Content>
 

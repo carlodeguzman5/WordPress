@@ -10,7 +10,10 @@
     <script type="text/javascript" language="javascript">
         tinymce.init({
             selector: "#editBlogContent",
-            plugins: "image"
+            plugins: "image, paste, emoticons, textcolor, wordcount",
+            toolbar: "forecolor backcolor | styleselect | undo redo | removeformat | bold italic underline |  aligncenter alignjustify  | bullist numlist outdent indent | link | print | fontselect fontsizeselect",
+            max_height: 700,
+            min_height: 400
         });
     </script>
 
@@ -399,8 +402,8 @@ WHERE blogId = @blogId ORDER BY timestamp DESC">
             });
 
             $('.editDialogClose').on("click", function () {
-                //editDialog.close();
                 $('.editDialogWindow').css("visibility", "hidden");
+                editor.setContent("");
             });
 
             $('.editDialogSave').on("click", function () {
@@ -424,7 +427,6 @@ WHERE blogId = @blogId ORDER BY timestamp DESC">
 
                 editDialog.close();
             });
-
 
             if (domainSession != domain) {
                 $(".blog-menu").hide();

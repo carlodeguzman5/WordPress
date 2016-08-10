@@ -5,59 +5,62 @@
 </script>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" Runat="Server">
-    <script src="../../Scripts/tinymce/tinymce.min.js" type="text/javascript"></script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/tinymce/4.3.13/tinymce.min.js"></script>
+
     <script type="text/javascript" language="javascript">
-        tinyMCE.init({
-            // General options
-            mode: "textareas",
-            theme: "modern",
-            plugins: ""
+        tinymce.init({
+            selector: "#editBlogContent",
+            plugins: "image, paste, emoticons, textcolor, wordcount",
+            toolbar: "forecolor backcolor | styleselect | undo redo | removeformat | bold italic underline |  aligncenter alignjustify  | bullist numlist outdent indent | link | print | fontselect fontsizeselect",
+            max_height: 700,
+            min_height: 400
         });
     </script>
+
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" Runat="Server">
     <asp:ScriptManager ID="ScriptManager1" runat="server">
     </asp:ScriptManager>
-    
 <body>
-        
-
             <div class="demo-back">
               <a class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon" href="./" title="go back" role="button">
                 <i class="material-icons" role="presentation">arrow_back</i>
               </a>
+               
             </div>
-
 
             <asp:TextBox ID="TextBox1" cssClass="TextBox1" Text="" runat="server" style="visibility:hidden;"></asp:TextBox>
             <asp:TextBox ID="TextBox2" cssClass="TextBox2" text="" runat="server" style="visibility:hidden;"></asp:TextBox>
             <asp:TextBox ID="TextBox3" cssClass="TextBox3" text="" runat="server" style="visibility:hidden;"></asp:TextBox>
 
-                                                                                                            <script type="text/javascript">
-                                                                                                                var loc = window.location.pathname;
-                                                                                                                var arr = loc.split('/');
-                                                                                                                var domain = arr[arr.length - 2];
-                                                                                                                var title = arr[arr.length - 1];
-                                                                                                                var newTitle = title.replace(/.aspx/, "").replace(/_/g, " ")
+        
 
-                                                                                                                $('.TextBox1').val(domain);
-                                                                                                                $('.TextBox2').val(newTitle);
+        <script type="text/javascript">
 
-                                                                                                                $.ajax({
-                                                                                                                    cache: false,
-                                                                                                                    type: "POST",
-                                                                                                                    url: "http://www.wordpress.com:1234/WordPress/Services/BlogsService.asmx/GetBlogId",
-                                                                                                                    data: "{'domainId':'" + domain + "', 'blogTitle':'" + newTitle + "'}",
-                                                                                                                    contentType: "application/json; charset=utf-8",
-                                                                                                                    dataType: "json",
-                                                                                                                    success: function (response) {
-                                                                                                                        //alert(response.d);
-                                                                                                                        $('.TextBox3').val(response.d);
-                                                                                                                    },
-                                                                                                                    failure: function (response) {
-                                                                                                                        //alert(response.ds);
-                                                                                                                    }
-                                                                                                                });
+            var loc = window.location.pathname;
+            var arr = loc.split('/');
+            var domain = arr[arr.length - 2];
+            var title = arr[arr.length - 1];
+            var newTitle = title.replace(/.aspx/, "").replace(/_/g, " ")
+
+            $('.TextBox1').val(domain);
+            $('.TextBox2').val(newTitle);
+
+            $.ajax({
+                cache: false,
+                type: "POST",
+                url: "http://www.wordpress.com:1234/WordPress/Services/BlogsService.asmx/GetBlogId",
+                data: "{'domainId':'" + domain + "', 'blogTitle':'" + newTitle + "'}",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {
+                    //alert(response.d);
+                    $('.TextBox3').val(response.d);
+                },
+                failure: function (response) {
+                    //alert(response.ds);
+                }
+            });
             
 
         </script>
@@ -194,7 +197,7 @@
                                 <ItemTemplate>
                                    <div class="comment mdl-color-text--grey-700">
                                         <header class="comment__header">
-                                            <img src="../../Assets/user.jpg" class="comment__avatar">
+                                            <img src=" <%# "../../Assets/ProfilePictures/" + Eval("picture")  %>"  class="comment__avatar">
                                             <div class="comment__author">
                                             <strong><%# Eval("username") %></strong>
                                             <span><%# Eval("timestamp") %></span>
@@ -229,7 +232,7 @@
             </div>
 
         <asp:SqlDataSource ID="SqlDataSource2" runat="server" 
-                ConnectionString="<%$ ConnectionStrings:WordPressConnectionString %>" SelectCommand="SELECT * FROM dbo.[Comments] 
+                ConnectionString="<%$ ConnectionStrings:WordPressConnectionString %>" SelectCommand="SELECT c.blogId, c.username, commentContent, timestamp, picture FROM dbo.[Comments] as c JOIN dbo.[Accounts] ON c.username = dbo.[Accounts].username 
 WHERE blogId = @blogId ORDER BY timestamp DESC">
                 <SelectParameters>
                     <asp:ControlParameter ControlID="TextBox3" Name="blogId" PropertyName="Text" />
@@ -253,7 +256,7 @@ WHERE blogId = @blogId ORDER BY timestamp DESC">
         </asp:SqlDataSource>
 
 
-    <dialog class="mdl-dialog deleteDialogPrompt" style="width: 50%;">
+    <dialog class="mdl-dialog deleteDialogPrompt" style="width: 50%; margin:0 auto;">
         <h4 class="mdl-dialog__title">Delete Blog Entry?</h4>
         <div class="mdl-dialog__content">
           <p>
@@ -267,18 +270,19 @@ WHERE blogId = @blogId ORDER BY timestamp DESC">
         </div>
     </dialog>
 
-    <dialog class="mdl-dialog editDialogWindow" style="width: 50%;">
-        <h4 class="mdl-dialog__title">Edit Blog Entry</h4>
-        <div class="mdl-dialog__content">
-          <textarea id="editBlogContent"></textarea>
-        </div>
-        <div class="mdl-dialog__actions">
-          <button type="button" class="mdl-button editDialogSave">Save Changes</button>
-          <button type="button" class="mdl-button editDialogClose">I Changed My Mind</button>
-        </div>
-    </dialog>
+    <div class="mdl-dialog editDialogWindow" style="width: 50%; position:absolute; z-index:101; top:20%; background-color:White; visibility: hidden; margin-left: auto; margin-right: auto; left: 0; right: 0;">
+        
+            <h4 class="mdl-dialog__title">Edit Blog Entry</h4>
+            <div class="mdl-dialog__content">
+              <textarea id="editBlogContent"></textarea>
+            </div>
+            <div class="mdl-dialog__actions">
+              <button type="button" class="mdl-button editDialogSave">Save Changes</button>
+              <button type="button" class="mdl-button editDialogClose">I Changed My Mind</button>
+            </div>
+        
+    </div>
 
-    <script type="text/javascript" src="https://code.getmdl.io/1.1.3/material.min.js"></script>
     <script type="text/javascript">
         var emailSession = '<%= Session["email"] %>'
 
@@ -338,6 +342,7 @@ WHERE blogId = @blogId ORDER BY timestamp DESC">
         }
 
         $(document).ready(function () {
+
             var deleteDialog = document.querySelector('.deleteDialogPrompt');
             var editDialog = document.querySelector('.editDialogWindow');
             var domain = arr[arr.length - 2];
@@ -345,7 +350,8 @@ WHERE blogId = @blogId ORDER BY timestamp DESC">
             var domainSession = '<%= Session["domain"]%>'
 
             $('.edit').on("click", function () {
-                editDialog.showModal();
+                //editDialog.showModal();
+                $('.editDialogWindow').css("visibility", "visible");
 
                 var data = "{\"blogId\":\"" + $('.TextBox3').val() + "\"}";
 
@@ -357,7 +363,7 @@ WHERE blogId = @blogId ORDER BY timestamp DESC">
                     contentType: "application/json; charset=utf-8",
                     dataType: "json",
                     success: function (response) {
-                        editor.setContent(response.d)
+                        editor.setContent(response.d);
                     },
                     failure: function (response) {
                         alert("Database Error");
@@ -396,12 +402,14 @@ WHERE blogId = @blogId ORDER BY timestamp DESC">
             });
 
             $('.editDialogClose').on("click", function () {
-                editDialog.close();
+                $('.editDialogWindow').css("visibility", "hidden");
+                editor.setContent("");
             });
 
             $('.editDialogSave').on("click", function () {
 
-                var data = "{\"blogId\":\"" + $(".TextBox3").val() + "\",\"blogContentText\":\"" + editor.getContent({ format: 'text' }) + "\",\"blogContentHtml\":\"" + editor.getContent() + "\"}"
+                var data = "{\"blogId\":\"" + $(".TextBox3").val() + "\",\"blogContentText\":\"" + editor.getContent({ format: 'text' }) + "\",\"blogContentHtml\":\"" + editor.getContent().replace(/"/g, "'") + "\"}"
+                console.log(data);
                 $.ajax({
                     cache: false,
                     type: "POST",
@@ -424,10 +432,6 @@ WHERE blogId = @blogId ORDER BY timestamp DESC">
             if (domainSession != domain) {
                 $(".blog-menu").hide();
             }
-
-
-
-
 
 
             __doPostBack('<%=UpdatePanel1.ClientID %>')
