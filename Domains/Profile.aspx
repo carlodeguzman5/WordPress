@@ -20,13 +20,18 @@
             
         }
     </style>
+    
+    <asp:ScriptManager ID="ScriptManager1" runat="server">
+    </asp:ScriptManager>
 
     <div class="demo-card-square mdl-card mdl-shadow--2dp">
       <div class="mdl-card__title mdl-card--expand">
         <h2 class="mdl-card__title-text">Profile</h2>
       </div>
       <div class="mdl-card__supporting-text">
-          <asp:ListView ID="ListView1" runat="server" DataKeyNames="email" 
+          <asp:UpdatePanel ID="UpdatePanel1" runat="server">
+           <ContentTemplate>
+            <asp:ListView ID="ListView1" runat="server" DataKeyNames="email" 
               DataSourceID="SqlDataSource1" EnableModelValidation="True">
               <EditItemTemplate>
                   <span style="">email:
@@ -84,22 +89,25 @@
                             </td>
                         </tr>
                     </table>
-              </ItemTemplate>
-              <LayoutTemplate>
-                  <div ID="itemPlaceholderContainer" runat="server" style="">
-                      <span runat="server" id="itemPlaceholder" />
-                  </div>
-                  <div style="">
-                  </div>
-              </LayoutTemplate>
-          </asp:ListView>
+                </ItemTemplate>
+                <LayoutTemplate>
+                    <div ID="itemPlaceholderContainer" runat="server" style="">
+                        <span runat="server" id="itemPlaceholder" />
+                    </div>
+                    <div style="">
+                    </div>
+                </LayoutTemplate>
+            </asp:ListView>
+            </ContentTemplate>
+          </asp:UpdatePanel>
+          
 
             <asp:FileUpload ID="FileUpload1" runat="server" />
             <asp:Label ID="Label1" runat="server" Text="Label"></asp:Label>
             <asp:Button ID="Button1" runat="server" Text="Upload" />
           <asp:SqlDataSource ID="SqlDataSource1" runat="server" 
               ConnectionString="<%$ ConnectionStrings:WordPressConnectionString %>" SelectCommand="SELECT * FROM dbo.[Accounts]
-WHERE email = @email">
+                WHERE email = @email">
               <SelectParameters>
                   <asp:SessionParameter Name="email" SessionField="email" />
               </SelectParameters>
@@ -108,7 +116,7 @@ WHERE email = @email">
       </div>
       <div class="mdl-card__actions mdl-card--border">
         <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">
-          View Updates
+          Save
         </a>
       </div>
     </div>

@@ -11,52 +11,6 @@
 
           <asp:ListView ID="ListView1" runat="server" DataKeyNames="blogId" 
             DataSourceID="SqlDataSource1" EnableModelValidation="True">
-
-            <EditItemTemplate>
-                <span style="">blogId:
-                <asp:Label ID="blogIdLabel1" runat="server" Text='<%# Eval("blogId") %>' />
-                <br />
-                blogTitle:
-                <asp:TextBox ID="blogTitleTextBox" runat="server" 
-                    Text='<%# Bind("blogTitle") %>' />
-                <br />
-                domainId:
-                <asp:TextBox ID="domainIdTextBox" runat="server" 
-                    Text='<%# Bind("domainId") %>' />
-                <br />
-                username:
-                <asp:TextBox ID="usernameTextBox" runat="server" 
-                    Text='<%# Bind("username") %>' />
-                <br />
-                blogContent:
-                <asp:TextBox ID="blogContentTextBox" runat="server" 
-                    Text='<%# Bind("blogContent") %>' />
-                <br />
-                canLike:
-                <asp:TextBox ID="canLikeTextBox" runat="server" Text='<%# Bind("canLike") %>' />
-                <br />
-                canComment:
-                <asp:TextBox ID="canCommentTextBox" runat="server" 
-                    Text='<%# Bind("canComment") %>' />
-                <br />
-                canReblog:
-                <asp:TextBox ID="canReblogTextBox" runat="server" 
-                    Text='<%# Bind("canReblog") %>' />
-                <br />
-                dateCreated:
-                <asp:TextBox ID="dateCreatedTextBox" runat="server" 
-                    Text='<%# Bind("dateCreated") %>' />
-                <br />
-                datemodified:
-                <asp:TextBox ID="datemodifiedTextBox" runat="server" 
-                    Text='<%# Bind("datemodified") %>' />
-                <br />
-                <asp:Button ID="UpdateButton" runat="server" CommandName="Update" 
-                    Text="Update" />
-                <asp:Button ID="CancelButton" runat="server" CommandName="Cancel" 
-                    Text="Cancel" />
-                <br /><br /></span>
-            </EditItemTemplate>
             <EmptyDataTemplate>
                 <div class="mdl-card mdl-cell mdl-cell--12-col">
                     <div class="mdl-card__media mdl-color-text--grey-50" style="vertical-align: middle;">
@@ -64,40 +18,6 @@
                     </div>
                 </div>
             </EmptyDataTemplate>
-            <InsertItemTemplate>
-                <span style="">blogTitle:
-                <asp:TextBox ID="blogTitleTextBox" runat="server" 
-                    Text='<%# Bind("blogTitle") %>' />
-                <br />domainId:
-                <asp:TextBox ID="domainIdTextBox" runat="server" 
-                    Text='<%# Bind("domainId") %>' />
-                <br />username:
-                <asp:TextBox ID="usernameTextBox" runat="server" 
-                    Text='<%# Bind("username") %>' />
-                <br />blogContent:
-                <asp:TextBox ID="blogContentTextBox" runat="server" 
-                    Text='<%# Bind("blogContent") %>' />
-                <br />canLike:
-                <asp:TextBox ID="canLikeTextBox" runat="server" Text='<%# Bind("canLike") %>' />
-                <br />canComment:
-                <asp:TextBox ID="canCommentTextBox" runat="server" 
-                    Text='<%# Bind("canComment") %>' />
-                <br />canReblog:
-                <asp:TextBox ID="canReblogTextBox" runat="server" 
-                    Text='<%# Bind("canReblog") %>' />
-                <br />dateCreated:
-                <asp:TextBox ID="dateCreatedTextBox" runat="server" 
-                    Text='<%# Bind("dateCreated") %>' />
-                <br />datemodified:
-                <asp:TextBox ID="datemodifiedTextBox" runat="server" 
-                    Text='<%# Bind("datemodified") %>' />
-                <br />
-                <asp:Button ID="InsertButton" runat="server" CommandName="Insert" 
-                    Text="Insert" />
-                <asp:Button ID="CancelButton" runat="server" CommandName="Cancel" 
-                    Text="Clear" />
-                <br /><br /></span>
-            </InsertItemTemplate>
             <ItemTemplate>
                 <div class="mdl-card mdl-cell mdl-cell--12-col">
                     <div class="mdl-card__media mdl-color-text--grey-50">
@@ -108,7 +28,7 @@
                     </div>
 
                     <div class="mdl-card__supporting-text meta mdl-color-text--grey-600">
-                      <div class="minilogo"></div>
+                      <img src=" <%# "../../Assets/ProfilePictures/" + Eval("picture")  %>"  class="minilogo">
                       <div>
                         <strong><%# Eval("username") %></strong>
                         <span><%# Eval("dateCreated") %></span>
@@ -123,7 +43,6 @@
                           <i class="material-icons">repeat</i>
                         </button>
                     </span>
-                    
                 </div>
             </ItemTemplate>
             <LayoutTemplate>
@@ -131,43 +50,6 @@
                     <div runat="server" id="itemPlaceholder" />
                 </div>
             </LayoutTemplate>
-            <SelectedItemTemplate>
-                <span style="">blogId:
-                <asp:Label ID="blogIdLabel" runat="server" Text='<%# Eval("blogId") %>' />
-                <br />
-                blogTitle:
-                <asp:Label ID="blogTitleLabel" runat="server" Text='<%# Eval("blogTitle") %>' />
-                <br />
-                domainId:
-                <asp:Label ID="domainIdLabel" runat="server" Text='<%# Eval("domainId") %>' />
-                <br />
-                username:
-                <asp:Label ID="usernameLabel" runat="server" Text='<%# Eval("username") %>' />
-                <br />
-                blogContent:
-                <asp:Label ID="blogContentLabel" runat="server" 
-                    Text='<%# Eval("blogContent") %>' />
-                <br />
-                canLike:
-                <asp:Label ID="canLikeLabel" runat="server" Text='<%# Eval("canLike") %>' />
-                <br />
-                canComment:
-                <asp:Label ID="canCommentLabel" runat="server" 
-                    Text='<%# Eval("canComment") %>' />
-                <br />
-                canReblog:
-                <asp:Label ID="canReblogLabel" runat="server" Text='<%# Eval("canReblog") %>' />
-                <br />
-                dateCreated:
-                <asp:Label ID="dateCreatedLabel" runat="server" 
-                    Text='<%# Eval("dateCreated") %>' />
-                <br />
-                datemodified:
-                <asp:Label ID="datemodifiedLabel" runat="server" 
-                    Text='<%# Eval("datemodified") %>' />
-                <br />
-    <br /></span>
-            </SelectedItemTemplate>
             </asp:ListView>
 
             <a ID="show-dialog" href="#" class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored">
@@ -208,8 +90,7 @@
 
 
         <asp:SqlDataSource ID="SqlDataSource1" runat="server" 
-        ConnectionString="<%$ ConnectionStrings:WordPressConnectionString %>" SelectCommand="SELECT * FROM dbo.[Blogs]
-        WHERE domainId = @domainId">
+        ConnectionString="<%$ ConnectionStrings:WordPressConnectionString %>" SelectCommand="SELECT blogId, blogTitle, b.domainId, b.username, blogContent, htmlBlogContent, canLike, canComment, canReblog, dateCreated, datemodified, picture FROM dbo.[Blogs] as b, dbo.[Accounts] as a WHERE a.username = b.username AND b.domainId = @domainId">
             <SelectParameters>
                 <asp:ControlParameter ControlID="HiddenField1" Name="domainId" 
                     PropertyName="Value" />

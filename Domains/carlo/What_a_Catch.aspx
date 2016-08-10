@@ -79,150 +79,107 @@
                 </ul>
 
                     <asp:UpdatePanel ID="UpdatePanel1" runat="server" UpdateMode="Always">
-                    <ContentTemplate>
-                        <asp:ListView ID="ListView1" runat="server" DataKeyNames="blogId" 
-                            DataSourceID="SqlDataSource1" EnableModelValidation="True" 
-                            EnableViewState="False">
+                        <ContentTemplate>
+                            <asp:ListView ID="ListView1" runat="server" DataKeyNames="blogId" 
+                                DataSourceID="SqlDataSource1" EnableModelValidation="True" 
+                                EnableViewState="False">
                         
-                            <ItemTemplate>
-                            <div class="mdl-card__media mdl-color-text--grey-50">
-                         
-                                <h3>
-                                    <%# Eval("blogTitle") %>
-                                </h3>
-                            </div>
-                            <div class="mdl-color-text--grey-700 mdl-card__supporting-text meta">
-                              <div class="minilogo"></div>
-                              <div>
-                                <strong><%# Eval("username") %></strong>
-                                <span><%# Eval("dateCreated") %></span>
-                              </div>
-                              <div class="section-spacer"></div>
-                              <div class="meta__favorites">
-                                <%# Eval("likeCount") %>
-                                <button id="like-button" class="mdl-button mdl-js-button" onclick="like()" <%# Eval("canLike").ToString().Equals("1") ? "" : "disabled" %>>
-                                    <i class="material-icons" >favorite</i>
-                                </button>
-                                <span class="visuallyhidden">favorites</span>
-                              </div>
-                              <div>
-                                <i class="material-icons" role="presentation">share</i>
-                                <span class="visuallyhidden">share</span>
-                              </div>
-                            </div>
-                        
-                            <div class="mdl-color-text--grey-700 mdl-card__supporting-text">
-                                <p> <%# Eval("htmlBlogContent") %> </p>
-                            </div>
-
-                        
-                            <div class="mdl-color-text--primary-contrast mdl-card__supporting-text comments">
-                                <div class="form">
-                                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                                            <textarea rows=2 class="mdl-textfield__input comment"  <%# Eval("canComment").ToString().Equals("1") ? "" : "disabled" %>  ></textarea>
-                                            <label for="comment" class="mdl-textfield__label"> <%# Eval("canComment").ToString().Equals("1") ? "Join the Discussion" : "Comments have been disabled by the author."%></label>
-                                    </div>
-                                    <button onclick="comment()" id="comment-button" type="button" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon comment-button">
-                                        <i class="material-icons" role="presentation">check</i><span class="visuallyhidden">add comment</span>
-                                    </button>
-                                </div>
-                            </div>
-
-                        </ItemTemplate>
-                            <EmptyDataTemplate>
-                            <div class="blog__posts mdl-grid">
-                                <div class="mdl-card mdl-shadow--4dp mdl-cell mdl-cell--12-col">
-                                    <div ID="itemPlaceholderContainer" runat="server" style="">
-                                <span runat="server" id="itemPlaceholder" />
-                                    </div>
-                                </div>
-                            </div>
-                            </EmptyDataTemplate>
-                            <LayoutTemplate>    
-                                <div ID="itemPlaceholderContainer" runat="server">
-                                    <span runat="server" id="itemPlaceholder" />
-                                </div>
-                            </LayoutTemplate>
-                        </asp:ListView>
-
-                    
-                        <div class="mdl-color-text--primary-contrast mdl-card__supporting-text comments"
-
-                            <asp:ListView ID="ListView2" runat="server" DataSourceID="SqlDataSource2" 
-                                EnableModelValidation="True" EnableViewState="False">
-                                <EditItemTemplate>
-                                    <span style="">blogId:
-                                    <asp:TextBox ID="blogIdTextBox" runat="server" Text='<%# Bind("blogId") %>' />
-                                    <br />
-                                    username:
-                                    <asp:TextBox ID="usernameTextBox" runat="server" 
-                                        Text='<%# Bind("username") %>' />
-                                    <br />
-                                    commentContent:
-                                    <asp:TextBox ID="commentContentTextBox" runat="server" 
-                                        Text='<%# Bind("commentContent") %>' />
-                                    <br />
-                                    timestamp:
-                                    <asp:TextBox ID="timestampTextBox" runat="server" 
-                                        Text='<%# Bind("timestamp") %>' />
-                                    <br />
-                                    <asp:Button ID="UpdateButton" runat="server" CommandName="Update" 
-                                        Text="Update" />
-                                    <asp:Button ID="CancelButton" runat="server" CommandName="Cancel" 
-                                        Text="Cancel" />
-                                    <br /><br /></span>
-                                </EditItemTemplate>
-                                <EmptyDataTemplate>
-                                    <span>No comments yet. Care to share your thoughts?</span>
-                                </EmptyDataTemplate>
-                                <InsertItemTemplate>
-                                    <span style="">blogId:
-                                    <asp:TextBox ID="blogIdTextBox" runat="server" Text='<%# Bind("blogId") %>' />
-                                    <br />username:
-                                    <asp:TextBox ID="usernameTextBox" runat="server" 
-                                        Text='<%# Bind("username") %>' />
-                                    <br />commentContent:
-                                    <asp:TextBox ID="commentContentTextBox" runat="server" 
-                                        Text='<%# Bind("commentContent") %>' />
-                                    <br />timestamp:
-                                    <asp:TextBox ID="timestampTextBox" runat="server" 
-                                        Text='<%# Bind("timestamp") %>' />
-                                    <br />
-                                    <asp:Button ID="InsertButton" runat="server" CommandName="Insert" 
-                                        Text="Insert" />
-                                    <asp:Button ID="CancelButton" runat="server" CommandName="Cancel" 
-                                        Text="Clear" />
-                                    <br /><br /></span>
-                                </InsertItemTemplate>
                                 <ItemTemplate>
-                                   <div class="comment mdl-color-text--grey-700">
-                                        <header class="comment__header">
-                                            <img src=" <%# "../../Assets/ProfilePictures/" + Eval("picture")  %>"  class="comment__avatar">
-                                            <div class="comment__author">
-                                            <strong><%# Eval("username") %></strong>
-                                            <span><%# Eval("timestamp") %></span>
-                                            </div>
-                                        </header>
-                                        <div class="comment__text">
-                                            <%# Eval("commentContent") %>
+                                <div class="mdl-card__media mdl-color-text--grey-50">
+                                    <h3>
+                                        <%# Eval("blogTitle") %>
+                                    </h3>
+                                </div>
+                                <div class="mdl-color-text--grey-700 mdl-card__supporting-text meta">
+                                  <img src=" <%# "../../Assets/ProfilePictures/" + Eval("picture")  %>"  class="minilogo">
+                                  <div>
+                                    <strong><%# Eval("username") %></strong>
+                                    <span><%# Eval("dateCreated") %></span>
+                                  </div>
+                                  <div class="section-spacer"></div>
+                                  <div class="meta__favorites">
+                                    <%# Eval("likeCount") %>
+                                    <button id="like-button" class="mdl-button mdl-js-button" onclick="like()" <%# Eval("canLike").ToString().Equals("1") ? "" : "disabled" %>>
+                                        <i class="material-icons" >favorite</i>
+                                    </button>
+                                    <span class="visuallyhidden">favorites</span>
+                                  </div>
+                                  <div>
+                                    <i class="material-icons" role="presentation">share</i>
+                                    <span class="visuallyhidden">share</span>
+                                  </div>
+                                </div>
+                        
+                                <div class="mdl-color-text--grey-700 mdl-card__supporting-text">
+                                    <p> <%# Eval("htmlBlogContent") %> </p>
+                                </div>
+
+                        
+                                <div class="mdl-color-text--primary-contrast mdl-card__supporting-text comments">
+                                    <div class="form">
+                                        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                                <textarea rows=2 class="mdl-textfield__input comment"  <%# Eval("canComment").ToString().Equals("1") ? "" : "disabled" %>  ></textarea>
+                                                <label for="comment" class="mdl-textfield__label"> <%# Eval("canComment").ToString().Equals("1") ? "Join the Discussion" : "Comments have been disabled by the author."%></label>
                                         </div>
-                                        <br />
-                                        <br />
+                                        <button onclick="comment()" id="comment-button" type="button" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon comment-button">
+                                            <i class="material-icons" role="presentation">check</i><span class="visuallyhidden">add comment</span>
+                                        </button>
                                     </div>
-                                </ItemTemplate>
-                                <LayoutTemplate>
-                                    <div ID="itemPlaceholderContainer" runat="server" style="">
+                                </div>
+
+                            </ItemTemplate>
+                                <EmptyDataTemplate>
+                                <div class="blog__posts mdl-grid">
+                                    <div class="mdl-card mdl-shadow--4dp mdl-cell mdl-cell--12-col">
+                                        <div ID="itemPlaceholderContainer" runat="server" style="">
+                                    <span runat="server" id="itemPlaceholder" />
+                                        </div>
+                                    </div>
+                                </div>
+                                </EmptyDataTemplate>
+                                <LayoutTemplate>    
+                                    <div ID="itemPlaceholderContainer" runat="server">
                                         <span runat="server" id="itemPlaceholder" />
-                                    </div>
-                                    <div style="">
                                     </div>
                                 </LayoutTemplate>
                             </asp:ListView>
-                        </div>
-                    </ContentTemplate>
-                    <Triggers>
-                        <asp:AsyncPostBackTrigger ControlID="UpdateButton" EventName="Click" />
-                    </Triggers>
+
+                            <div class="mdl-color-text--primary-contrast mdl-card__supporting-text comments"
+                                <asp:ListView ID="ListView2" runat="server" DataSourceID="SqlDataSource2" 
+                                    EnableModelValidation="True" EnableViewState="False">
+                                    <EmptyDataTemplate>
+                                        <span>No comments yet. Care to share your thoughts?</span>
+                                    </EmptyDataTemplate>
+                                    <ItemTemplate>
+                                       <div class="comment mdl-color-text--grey-700">
+                                            <header class="comment__header">
+                                                <img src=" <%# "../../Assets/ProfilePictures/" + Eval("picture")  %>"  class="comment__avatar">
+                                                <div class="comment__author">
+                                                <strong><%# Eval("username") %></strong>
+                                                <span><%# Eval("timestamp") %></span>
+                                                </div>
+                                            </header>
+                                            <div class="comment__text">
+                                                <%# Eval("commentContent") %>
+                                            </div>
+                                            <br />
+                                            <br />
+                                        </div>
+                                    </ItemTemplate>
+                                    <LayoutTemplate>
+                                        <div ID="itemPlaceholderContainer" runat="server" style="">
+                                            <span runat="server" id="itemPlaceholder" />
+                                        </div>
+                                        <div style="">
+                                        </div>
+                                    </LayoutTemplate>
+                                </asp:ListView>
+                            </div>
+                        </ContentTemplate>
+
+                        <Triggers>
+                            <asp:AsyncPostBackTrigger ControlID="UpdateButton" EventName="Click" />
+                        </Triggers>
                
                     </asp:UpdatePanel>
                      <asp:Button ID="UpdateButton" runat="server" style="display:none;" />
@@ -241,12 +198,13 @@ WHERE blogId = @blogId ORDER BY timestamp DESC">
 
         <asp:SqlDataSource ID="SqlDataSource1" runat="server" 
             ConnectionString="<%$ ConnectionStrings:WordPressConnectionString %>" 
-            SelectCommand="SELECT dbo.[Blogs].blogId, blogTitle, domainId, username, blogContent, htmlBlogContent, canLike, canComment, canReblog, dateCreated, dateModified, COUNT(dbo.[Likes].blogId) as likeCount
-                FROM dbo.[Blogs]
-                left join dbo.[Likes]
+            SelectCommand="SELECT dbo.[Blogs].blogId, blogTitle, dbo.[Blogs].domainId, dbo.[Blogs].username, blogContent, htmlBlogContent, canLike, canComment, canReblog, dateCreated, dateModified, picture, COUNT(dbo.[Likes].blogId) as likeCount
+                FROM  dbo.[Accounts], dbo.[Blogs]
+                LEFT JOIN dbo.[Likes]
                 on (dbo.[Blogs].blogId = dbo.[Likes].blogId)
-                WHERE domainId = @domainId AND blogTitle = @blogTitle
-                group by dbo.[Blogs].blogId, blogTitle, domainId, username, blogContent, htmlBlogContent, canLike, canComment, canReblog, dateCreated, dateModified">
+                WHERE dbo.[Blogs].domainId = @domainId AND blogTitle = @blogTitle
+                AND dbo.[Blogs].username = dbo.[Accounts].username
+                group by dbo.[Blogs].blogId, blogTitle,  dbo.[Blogs].domainId,  dbo.[Blogs].username, blogContent, htmlBlogContent, canLike, canComment, canReblog, dateCreated, dateModified, picture">
             <SelectParameters>
                 <asp:ControlParameter ControlID="TextBox1" Name="domainId" 
                     PropertyName="Text" Type="String" DefaultValue="" />
