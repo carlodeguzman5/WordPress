@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://tempuri.org/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://tempuri.org/">
+      <s:element name="GetDomain">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="email" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetDomainResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetDomainResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="string" nillable="true" type="s:string" />
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="GetDomainSoapIn">
+    <wsdl:part name="parameters" element="tns:GetDomain" />
+  </wsdl:message>
+  <wsdl:message name="GetDomainSoapOut">
+    <wsdl:part name="parameters" element="tns:GetDomainResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetDomainHttpGetIn">
+    <wsdl:part name="email" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetDomainHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="GetDomainHttpPostIn">
+    <wsdl:part name="email" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetDomainHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:portType name="DomainsServiceSoap">
+    <wsdl:operation name="GetDomain">
+      <wsdl:input message="tns:GetDomainSoapIn" />
+      <wsdl:output message="tns:GetDomainSoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:portType name="DomainsServiceHttpGet">
+    <wsdl:operation name="GetDomain">
+      <wsdl:input message="tns:GetDomainHttpGetIn" />
+      <wsdl:output message="tns:GetDomainHttpGetOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:portType name="DomainsServiceHttpPost">
+    <wsdl:operation name="GetDomain">
+      <wsdl:input message="tns:GetDomainHttpPostIn" />
+      <wsdl:output message="tns:GetDomainHttpPostOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="DomainsServiceSoap" type="tns:DomainsServiceSoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="GetDomain">
+      <soap:operation soapAction="http://tempuri.org/GetDomain" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="DomainsServiceSoap12" type="tns:DomainsServiceSoap">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="GetDomain">
+      <soap12:operation soapAction="http://tempuri.org/GetDomain" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="DomainsServiceHttpGet" type="tns:DomainsServiceHttpGet">
+    <http:binding verb="GET" />
+    <wsdl:operation name="GetDomain">
+      <http:operation location="/GetDomain" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="DomainsServiceHttpPost" type="tns:DomainsServiceHttpPost">
+    <http:binding verb="POST" />
+    <wsdl:operation name="GetDomain">
+      <http:operation location="/GetDomain" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="DomainsService">
+    <wsdl:port name="DomainsServiceSoap" binding="tns:DomainsServiceSoap">
+      <soap:address location="http://www.wordpress.com:1234/WordPress/Services/DomainsService.asmx" />
+    </wsdl:port>
+    <wsdl:port name="DomainsServiceSoap12" binding="tns:DomainsServiceSoap12">
+      <soap12:address location="http://www.wordpress.com:1234/WordPress/Services/DomainsService.asmx" />
+    </wsdl:port>
+    <wsdl:port name="DomainsServiceHttpGet" binding="tns:DomainsServiceHttpGet">
+      <http:address location="http://www.wordpress.com:1234/WordPress/Services/DomainsService.asmx" />
+    </wsdl:port>
+    <wsdl:port name="DomainsServiceHttpPost" binding="tns:DomainsServiceHttpPost">
+      <http:address location="http://www.wordpress.com:1234/WordPress/Services/DomainsService.asmx" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>
