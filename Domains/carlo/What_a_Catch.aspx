@@ -100,7 +100,7 @@
                                   <div class="meta__favorites">
                                     <%# Eval("likeCount") %>
                                     <button id="like-button" class="mdl-button mdl-js-button" onclick="like()" <%# Eval("canLike").ToString().Equals("1") ? "" : "disabled" %>>
-                                        <i class="material-icons" >favorite</i>
+                                        <i class="material-icons" <%# Eval("isLiked").ToString().Equals("1") ? "style='color:Red';" : ""%> > favorite </i>
                                     </button>
                                     <span class="visuallyhidden">favorites</span>
                                   </div>
@@ -198,7 +198,10 @@ WHERE blogId = @blogId ORDER BY timestamp DESC">
 
         <asp:SqlDataSource ID="SqlDataSource1" runat="server" 
             ConnectionString="<%$ ConnectionStrings:WordPressConnectionString %>" 
-            SelectCommand="SELECT dbo.[Blogs].blogId, blogTitle, dbo.[Blogs].domainId, dbo.[Blogs].username, blogContent, htmlBlogContent, canLike, canComment, canReblog, dateCreated, dateModified, picture, COUNT(dbo.[Likes].blogId) as likeCount
+            SelectCommand="SELECT dbo.[Blogs].blogId, blogTitle, dbo.[Blogs].domainId, dbo.[Blogs].username, blogContent, htmlBlogContent, canLike, canComment, canReblog, dateCreated, dateModified, picture, COUNT(dbo.[Likes].blogId) as likeCount, CASE WHEN EXISTS (SELECT * FROM dbo.[Likes] WHERE email = @email)
+                THEN '1' 
+                ELSE '0'
+	            END AS isLiked
                 FROM  dbo.[Accounts], dbo.[Blogs]
                 LEFT JOIN dbo.[Likes]
                 on (dbo.[Blogs].blogId = dbo.[Likes].blogId)
@@ -206,15 +209,17 @@ WHERE blogId = @blogId ORDER BY timestamp DESC">
                 AND dbo.[Blogs].username = dbo.[Accounts].username
                 group by dbo.[Blogs].blogId, blogTitle,  dbo.[Blogs].domainId,  dbo.[Blogs].username, blogContent, htmlBlogContent, canLike, canComment, canReblog, dateCreated, dateModified, picture">
             <SelectParameters>
+                <asp:SessionParameter DefaultValue="-" Name="email" SessionField="email" />
                 <asp:ControlParameter ControlID="TextBox1" Name="domainId" 
                     PropertyName="Text" Type="String" DefaultValue="" />
                 <asp:ControlParameter ControlID="TextBox2" Name="blogTitle" 
                     PropertyName="Text" Type="String" DefaultValue="" />
+
             </SelectParameters>
         </asp:SqlDataSource>
 
 
-    <dialog class="mdl-dialog deleteDialogPrompt" style="width: 50%; margin:0 auto;">
+    <div class="mdl-dialog deleteDialogPrompt" style="width: 50%; position:absolute; z-index:101; top:20%; background-color:White; visibility: hidden; margin-left: auto; margin-right: auto; left: 0; right: 0;"">
         <h4 class="mdl-dialog__title">Delete Blog Entry?</h4>
         <div class="mdl-dialog__content">
           <p>
@@ -226,7 +231,7 @@ WHERE blogId = @blogId ORDER BY timestamp DESC">
           <button type="button" class="mdl-button dialogDelete">Delete</button>
           <button type="button" class="mdl-button deleteDialogClose">I Changed My Mind</button>
         </div>
-    </dialog>
+    </div>
 
     <div class="mdl-dialog editDialogWindow" style="width: 50%; position:absolute; z-index:101; top:20%; background-color:White; visibility: hidden; margin-left: auto; margin-right: auto; left: 0; right: 0;">
         
@@ -333,7 +338,7 @@ WHERE blogId = @blogId ORDER BY timestamp DESC">
             });
 
             $('.delete').on("click", function () {
-                deleteDialog.showModal();
+                $('.deleteDialogPrompt').css("visibility", "visible");
             });
 
             $('.dialogDelete').on("click", function () {
@@ -356,7 +361,7 @@ WHERE blogId = @blogId ORDER BY timestamp DESC">
             });
 
             $('.deleteDialogClose').on("click", function () {
-                deleteDialog.close();
+                $('.deleteDialogPrompt').css("visibility", "hidden");
             });
 
             $('.editDialogClose').on("click", function () {

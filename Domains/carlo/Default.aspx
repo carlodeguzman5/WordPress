@@ -1,6 +1,17 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Domains/Template.master" AutoEventWireup="true" CodeFile="Default.aspx.cs" Inherits="Domains_Template" ValidateRequest = "false"%>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" Runat="Server">
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/tinymce/4.3.13/tinymce.min.js"></script>
+
+<script type="text/javascript" language="javascript">
+    tinymce.init({
+        selector: "#newBlogEditor",
+        plugins: "image, paste, emoticons, textcolor, wordcount",
+        toolbar: "forecolor backcolor | styleselect | undo redo | removeformat | bold italic underline |  aligncenter alignjustify  | bullist numlist outdent indent | link | print | fontselect fontsizeselect",
+        max_height: 700,
+        min_height: 400
+    });
+</script>
 </asp:Content>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" Runat="Server">
@@ -58,7 +69,7 @@
 
         </div>
 
-        <dialog class="mdl-dialog">
+        <div class="mdl-dialog addNewBlogDialog" style="width: 50%; position:absolute; z-index:101; top:20%; background-color:White; visibility: hidden; margin-left: auto; margin-right: auto; left: 0; right: 0;">
             <h4 class="mdl-dialog__title">New Blog Entry</h4>
             <div class="mdl-dialog__content">
             <asp:Label ID="Label1" runat="server" Text="Title: "></asp:Label>
@@ -86,7 +97,7 @@
                 <button type="button" class="mdl-button close">Discard</button>
                 <button type="button" class="mdl-button draft">Save as Draft</button>
             </div>
-        </dialog>
+        </div>
 
 
         <asp:SqlDataSource ID="SqlDataSource1" runat="server" 
@@ -113,28 +124,23 @@
         }
 
         $(document).ready(function () {
-            var dialog = document.querySelector('dialog');
-            var showDialogButton = document.querySelector('#show-dialog');
+            var dialog = $('.addNewBlogDialog');
 
+            dialog.css("visibility", "hidden")
 
-            //$('.mdl-layout-title').val(dir);
-
-            if (!dialog.showModal) {
-                dialogPolyfill.registerDialog(dialog);
-            }
-            showDialogButton.addEventListener('click', function () {
-                dialog.showModal();
-            });
-            dialog.querySelector('.close').addEventListener('click', function () {
-
-                dialog.close();
+            $('#show-dialog').on("click", function () {
+                dialog.css("visibility", "visible");
             });
 
-            dialog.querySelector('.draft').addEventListener('click', function () {
-                dialog.close();
+            $('.close').on('click', function () {
+                dialog.css("visibility", "hidden");
             });
 
-            dialog.querySelector('.save').addEventListener('click', function () {
+            $('.draft').on('click', function () {
+                dialog.css("visibility", "hidden");
+            });
+
+            $('.save').on('click', function () {
                 var contentText = tinyMCE.activeEditor.getContent({ format: 'text' }); //.replace(/'/g, "\\'");
                 var contentHtml = tinyMCE.activeEditor.getContent(); //.replace(/'/g, "\\'");
 

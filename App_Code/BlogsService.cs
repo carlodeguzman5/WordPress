@@ -64,7 +64,7 @@ public class BlogsService : System.Web.Services.WebService {
     public String CreateBlog(string blogTitle, string domainId, string username, string blogContent, string canLike, string canComment, string canReblog, string htmlBlogContent) {
 
 
-        ExecuteInsertQuery("INSERT INTO dbo.[Blogs] (blogTitle,domainId,username,blogContent,canLike,canComment,canReblog,dateCreated,dateModified) VALUES" +
+        ExecuteInsertQuery("INSERT INTO dbo.[Blogs] (blogTitle,domainId,username,blogContent, htmlBlogContent ,canLike,canComment,canReblog,dateCreated,dateModified) VALUES" +
             "('" + blogTitle.Replace("'", "''") + "', '" + domainId + "', '" + username + "','" + blogContent.Replace("'", "''").Replace("\"", "''") + "','" + htmlBlogContent.Replace("'", "''") + "','" + canLike + "','" + canComment + "','" + canReblog + "','" + DateTime.Now.ToString() + "','" + DateTime.Now.ToString() + "')");
 
         return CreateBlogPage(blogTitle, domainId);
