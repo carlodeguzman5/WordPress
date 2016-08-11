@@ -92,7 +92,7 @@
 
             </div>
             <div class="mdl-dialog__actions">
-                <asp:Button ID="Button1" CssClass="mdl-button save" runat="server" Text="Save" OnClientClick=""
+                <asp:Button ID="Button1" CssClass="mdl-button save" runat="server" Text="Save" OnClientClick="return false;"
                     UseSubmitBehavior="False" ValidationGroup="Blog"></asp:Button>
                 <button type="button" class="mdl-button close">Discard</button>
                 <button type="button" class="mdl-button draft">Save as Draft</button>
@@ -176,6 +176,7 @@
 
 
                 if (Page_IsValid) {
+                    alert(data);
                     $.ajax({
                         cache: false,
                         type: "POST",

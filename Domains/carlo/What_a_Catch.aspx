@@ -374,7 +374,7 @@ WHERE blogId = @blogId ORDER BY timestamp DESC">
                 var data = "{\"blogId\":\"" + $(".TextBox3").val() + "\",\"blogContentText\":\"" + editor.getContent({ format: 'text' }) + "\",\"blogContentHtml\":\"" + editor.getContent().replace(/"/g, "'") + "\"}"
                 console.log(data);
                 $.ajax({
-                    cache: false,
+                    cache: false,d
                     type: "POST",
                     url: "http://www.wordpress.com:1234/WordPress/Services/BlogsService.asmx/EditBlogContent",
                     data: data,
