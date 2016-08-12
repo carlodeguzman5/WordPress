@@ -17,6 +17,20 @@ public partial class Domains_Template : System.Web.UI.Page
         if (Session["domain"] != null) { 
             
         }
-
     }
+
+    protected void ListView1_OnItemCommand(object sender, ListViewCommandEventArgs e)
+    {
+        if (String.Equals(e.CommandName, "Like"))
+        {
+
+            ListViewDataItem dataItem = (ListViewDataItem)e.Item;
+            string blogId = ListView1.DataKeys[dataItem.DisplayIndex].Value.ToString();
+
+            com.wordpress.www.LikesService LikesService = new com.wordpress.www.LikesService();
+            LikesService.CreateLike(blogId, Session["email"].ToString());
+
+        }
+    }
+
 }

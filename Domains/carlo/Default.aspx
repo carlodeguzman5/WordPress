@@ -1,7 +1,7 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Domains/Template.master" AutoEventWireup="true" CodeFile="Default.aspx.cs" Inherits="Domains_Template" ValidateRequest = "false"%>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" Runat="Server">
-<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/tinymce/4.3.13/tinymce.min.js"></script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/tinymce/4.3.13/tinymce.min.js"></script>
 
 <script type="text/javascript" language="javascript">
     tinymce.init({
@@ -21,7 +21,8 @@
         <div class="blog__posts mdl-grid">
 
           <asp:ListView ID="ListView1" runat="server" DataKeyNames="blogId" 
-            DataSourceID="SqlDataSource1" EnableModelValidation="True">
+            DataSourceID="SqlDataSource1" EnableModelValidation="True" 
+                onitemcommand="ListView1_OnItemCommand">
             <EmptyDataTemplate>
                 <div class="mdl-card mdl-cell mdl-cell--12-col">
                     <div class="mdl-card__media mdl-color-text--grey-50" style="vertical-align: middle;">
@@ -39,7 +40,7 @@
                     </div>
 
                     <div class="mdl-card__supporting-text meta mdl-color-text--grey-600">
-                      <img src=" <%# "../../Assets/ProfilePictures/" + Eval("picture")  %>"  class="minilogo">
+                      <img alt="DP" src=" <%# "../../Assets/ProfilePictures/" + Eval("picture")  %>"  class="minilogo">
                       <div>
                         <strong><%# Eval("username") %></strong>
                         <span><%# Eval("dateCreated") %></span>
@@ -47,9 +48,9 @@
                     </div>
 
                     <span>
-                        <button class="mdl-button mdl-js-button mdl-button--icon" <%# Eval("canLike").ToString().Equals("1") ? "" : "disabled" %>>
-                          <i class="material-icons">favorite_border</i>
-                        </button>
+                        <asp:LinkButton runat="server" class="mdl-button mdl-js-button mdl-button--icon" CommandName="Like" CommandArgument="<%#Eval("blogId").toString()%>">
+                          <i class="material-icons" style= "color:<%# Eval("isLiked").ToString().Equals("1") ? "Red" : "" %>" >favorite</i>
+                        </asp:LinkButton>
                         <button class="mdl-button mdl-js-button mdl-button--icon" <%# Eval("canReblog").ToString().Equals("1") ? "" : "disabled" %>>
                           <i class="material-icons">repeat</i>
                         </button>
@@ -101,7 +102,14 @@
 
 
         <asp:SqlDataSource ID="SqlDataSource1" runat="server" 
-        ConnectionString="<%$ ConnectionStrings:WordPressConnectionString %>" SelectCommand="SELECT blogId, blogTitle, b.domainId, b.username, blogContent, htmlBlogContent, canLike, canComment, canReblog, dateCreated, datemodified, picture FROM dbo.[Blogs] as b, dbo.[Accounts] as a WHERE a.username = b.username AND b.domainId = @domainId">
+        ConnectionString="<%$ ConnectionStrings:WordPressConnectionString %>" SelectCommand="SELECT blogId, blogTitle, b.domainId, b.username, blogContent, htmlBlogContent, canLike, canComment, canReblog, dateCreated, datemodified, picture,
+                CASE WHEN EXISTS(SELECT * FROM dbo.[Likes] as l WHERE l.email = a.email AND l.blogId = b.blogId)
+                    THEN '1' 
+                    ELSE '0'
+	                END AS isLiked
+                FROM dbo.[Blogs] AS b, dbo.[Accounts] AS a 
+                WHERE a.username = b.username 
+                AND b.domainId = @domainId">
             <SelectParameters>
                 <asp:ControlParameter ControlID="HiddenField1" Name="domainId" 
                     PropertyName="Value" />
@@ -121,6 +129,10 @@
 
         if (session != dir) {
             $('#show-dialog').hide();
+        }
+
+        function Like(blogId) {
+            alert(blogId);
         }
 
         $(document).ready(function () {

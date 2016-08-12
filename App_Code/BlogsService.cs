@@ -74,7 +74,7 @@ public class BlogsService : System.Web.Services.WebService {
     public DataTable GetBlog()
     { //string domainId, string blogTitle
         DataTable dt = ExecuteSelectQuery("SELECT * FROM dbo.[Blogs] WHERE domainId = '" + "carlo" + "' AND blogTitle = '" + "This is Gospel" + "'");
-        dt.TableName = "This is Gospel";
+        dt.TableName = "Table";
         return dt;
     }
 
@@ -128,6 +128,43 @@ public class BlogsService : System.Web.Services.WebService {
     {
         ExecuteInsertQuery("UPDATE dbo.[Blogs] SET blogContent = '" + blogContentText.Replace("'","''").Replace("\"","''") + "', htmlBlogContent = '" + blogContentHtml.Replace("'", "''") + "' WHERE  blogId = '" + blogId + "'");
         return "Success";
+    }
+
+
+    private string ConvertDataTabletoString(DataTable dt)
+    {   
+        System.Web.Script.Serialization.JavaScriptSerializer serializer = new System.Web.Script.Serialization.JavaScriptSerializer();
+        List<Dictionary<string, object>> rows = new List<Dictionary<string, object>>();
+        Dictionary<string, object> row;
+        foreach (DataRow dr in dt.Rows)
+        {
+            row = new Dictionary<string, object>();
+            foreach (DataColumn col in dt.Columns)
+            {
+                row.Add(col.ColumnName, dr[col]);
+            }
+            rows.Add(row);
+        }
+        return serializer.Serialize(rows);
+    }
+
+
+    [WebMethod]
+    public string GetBlogContentsForPage(string blogId, string email)
+    {
+        DataTable dt = ExecuteSelectQuery("SELECT dbo.[Blogs].blogId, blogTitle, dbo.[Blogs].domainId, dbo.[Blogs].username, blogContent, htmlBlogContent, canLike, canComment, canReblog, dateCreated, dateModified, picture, COUNT(dbo.[Likes].blogId) as likeCount, CASE WHEN EXISTS (SELECT * FROM dbo.[Likes] WHERE email = '" + email + "' AND blogId = '" + blogId + "') "
+                + "THEN '1' "
+                + "ELSE '0' "
+	            + "END AS isLiked "
+                + "FROM  dbo.[Accounts], dbo.[Blogs] "
+                + "LEFT JOIN dbo.[Likes] "
+                + "on (dbo.[Blogs].blogId = dbo.[Likes].blogId) "
+                + "WHERE dbo.[Blogs].blogId = '" + blogId + "' "
+                + "AND dbo.[Blogs].username = dbo.[Accounts].username "
+                + "group by dbo.[Blogs].blogId, blogTitle,  dbo.[Blogs].domainId, dbo.[Blogs].username, blogContent, htmlBlogContent, canLike, canComment, canReblog, dateCreated, dateModified, picture");
+        dt.TableName = blogId;
+
+        return ConvertDataTabletoString(dt);
     }
     
 }

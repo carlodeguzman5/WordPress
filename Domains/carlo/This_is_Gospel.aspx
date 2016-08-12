@@ -33,191 +33,111 @@
             <asp:TextBox ID="TextBox2" cssClass="TextBox2" text="" runat="server" style="visibility:hidden;"></asp:TextBox>
             <asp:TextBox ID="TextBox3" cssClass="TextBox3" text="" runat="server" style="visibility:hidden;"></asp:TextBox>
 
-        
-
-        <script type="text/javascript">
-
-            var loc = window.location.pathname;
-            var arr = loc.split('/');
-            var domain = arr[arr.length - 2];
-            var title = arr[arr.length - 1];
-            var newTitle = title.replace(/.aspx/, "").replace(/_/g, " ")
-
-            $('.TextBox1').val(domain);
-            $('.TextBox2').val(newTitle);
-
-            $.ajax({
-                cache: false,
-                type: "POST",
-                url: "http://www.wordpress.com:1234/WordPress/Services/BlogsService.asmx/GetBlogId",
-                data: "{'domainId':'" + domain + "', 'blogTitle':'" + newTitle + "'}",
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                success: function (response) {
-                    //alert(response.d);
-                    $('.TextBox3').val(response.d);
-                },
-                failure: function (response) {
-                    //alert(response.ds);
-                }
-            });
-            
-
-        </script>
 
             <div class="blog__posts mdl-grid">
                 <div class="mdl-card mdl-shadow--4dp mdl-cell mdl-cell--12-col">
-                <asp:Button id="demo-menu-lower-left"
-                        class="mdl-button mdl-js-button mdl-button--icon blog-menu" OnClientClick="return false;">
+                <button id="blogMenu" type="button"
+                        class="mdl-button mdl-js-button mdl-button--icon blog-menu" >
                   <i class="material-icons">more_vert</i>
-                </asp:Button>
+                </button>
 
-                <ul class="mdl-menu mdl-menu--bottom-left mdl-js-menu mdl-js-ripple-effect"
-                    for="demo-menu-lower-left">
+                <ul class="mdl-menu mdl-menu--bottom-left mdl-js-menu mdl-js-ripple-effect" for="blogMenu">
                   <li class="mdl-menu__item edit">Edit</li>
                   <li class="mdl-menu__item delete">Delete</li>
                 </ul>
-
-                    <asp:UpdatePanel ID="UpdatePanel1" runat="server" UpdateMode="Always">
-                        <ContentTemplate>
-                            <asp:ListView ID="ListView1" runat="server" DataKeyNames="blogId" 
-                                DataSourceID="SqlDataSource1" EnableModelValidation="True" 
-                                EnableViewState="False">
+                    
+                <div class="mdl-card__media mdl-color-text--grey-50">
+                    <h3 class="blogTitle">
+                    </h3>
+                </div>
+                <div class="mdl-color-text--grey-700 mdl-card__supporting-text meta">
+                    <img class="picture minilogo" src="">
+                    <div>
+                    <strong class="username"></strong>
+                    <span class="dateCreated"></span>
+                    </div>
+                    <div class="section-spacer"></div>
+                    <div class="meta__favorites">
+                        <div class="likeCount"> </div>
+                        <asp:LinkButton ID="LikeButton" runat="server" OnClientClick="return false;" class="mdl-button mdl-js-button like-button">
+                            <i class="material-icons like-icon">favorite</i>
+                        </asp:LinkButton>
+                        <span class="visuallyhidden">favorites</span>
+                    </div>
+                    <div>
+                    <i class="material-icons" role="presentation">share</i>
+                    <span class="visuallyhidden">share</span>
+                    </div>
+                </div>
                         
-                                <ItemTemplate>
-                                <div class="mdl-card__media mdl-color-text--grey-50">
-                                    <h3>
-                                        <%# Eval("blogTitle") %>
-                                    </h3>
-                                </div>
-                                <div class="mdl-color-text--grey-700 mdl-card__supporting-text meta">
-                                  <img src=" <%# "../../Assets/ProfilePictures/" + Eval("picture")  %>"  class="minilogo">
-                                  <div>
-                                    <strong><%# Eval("username") %></strong>
-                                    <span><%# Eval("dateCreated") %></span>
-                                  </div>
-                                  <div class="section-spacer"></div>
-                                  <div class="meta__favorites">
-                                    <%# Eval("likeCount") %>
-                                    <button id="like-button" class="mdl-button mdl-js-button" onclick="like()" <%# Eval("canLike").ToString().Equals("1") ? "" : "disabled" %>>
-                                        <i class="material-icons" <%# Eval("isLiked").ToString().Equals("1") ? "style='color:Red';" : ""%> > favorite </i>
-                                    </button>
-                                    <span class="visuallyhidden">favorites</span>
-                                  </div>
-                                  <div>
-                                    <i class="material-icons" role="presentation">share</i>
-                                    <span class="visuallyhidden">share</span>
-                                  </div>
-                                </div>
-                        
-                                <div class="mdl-color-text--grey-700 mdl-card__supporting-text">
-                                    <p> <%# Eval("htmlBlogContent") %> </p>
-                                </div>
+                <div class="mdl-color-text--grey-700 mdl-card__supporting-text">
+                    <p class="htmlBlogContent"></p>
+                </div>
 
                         
-                                <div class="mdl-color-text--primary-contrast mdl-card__supporting-text comments">
-                                    <div class="form">
-                                        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                                                <textarea rows=2 class="mdl-textfield__input comment"  <%# Eval("canComment").ToString().Equals("1") ? "" : "disabled" %>  ></textarea>
-                                                <label for="comment" class="mdl-textfield__label"> <%# Eval("canComment").ToString().Equals("1") ? "Join the Discussion" : "Comments have been disabled by the author."%></label>
-                                        </div>
-                                        <button onclick="comment()" id="comment-button" type="button" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon comment-button">
-                                            <i class="material-icons" role="presentation">check</i><span class="visuallyhidden">add comment</span>
-                                        </button>
-                                    </div>
-                                </div>
+                <div class="mdl-color-text--primary-contrast mdl-card__supporting-text comments">
+                    <div class="form">
+                        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                <textarea rows=2 class="mdl-textfield__input comment-field"></textarea>
+                                <label for="comment" class="mdl-textfield__label comment-label"></label>
+                        </div>
+                        <button onclick="comment()" id="comment-button" type="button" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon comment-button">
+                            <i class="material-icons" role="presentation">check</i><span class="visuallyhidden">add comment</span>
+                        </button>
+                    </div>
+                </div>
 
-                            </ItemTemplate>
+                <asp:UpdatePanel ID="UpdatePanel2" runat="server" UpdateMode="Always" EnableViewState="False">
+                    <ContentTemplate>
+                        <div class="mdl-color-text--primary-contrast mdl-card__supporting-text comments">
+                            <asp:ListView ID="ListView2" runat="server" DataSourceID="SqlDataSource2" 
+                                EnableModelValidation="True" EnableViewState="False">
                                 <EmptyDataTemplate>
-                                <div class="blog__posts mdl-grid">
-                                    <div class="mdl-card mdl-shadow--4dp mdl-cell mdl-cell--12-col">
-                                        <div ID="itemPlaceholderContainer" runat="server" style="">
-                                    <span runat="server" id="itemPlaceholder" />
-                                        </div>
-                                    </div>
-                                </div>
+                                    <span>No comments yet. Care to share your thoughts?</span>
                                 </EmptyDataTemplate>
-                                <LayoutTemplate>    
-                                    <div ID="itemPlaceholderContainer" runat="server">
+                                <ItemTemplate>
+                                    <div class="comment mdl-color-text--grey-700">
+                                        <header class="comment__header">
+                                            <img alt="DP" src=" <%# "../../Assets/ProfilePictures/" + Eval("picture")  %>"  class="comment__avatar">
+                                            <div class="comment__author">
+                                            <strong><%# Eval("username") %></strong>
+                                            <span><%# Eval("timestamp") %></span>
+                                            </div>
+                                        </header>
+                                        <div class="comment__text">
+                                            <%# Eval("commentContent") %>
+                                        </div>
+                                        <br />
+                                        <br />
+                                    </div>
+                                </ItemTemplate>
+                                <LayoutTemplate>
+                                    <div ID="itemPlaceholderContainer" runat="server" style="">
                                         <span runat="server" id="itemPlaceholder" />
+                                    </div>
+                                    <div style="">
                                     </div>
                                 </LayoutTemplate>
                             </asp:ListView>
+                        </div>
+                    </ContentTemplate>
 
-                            <div class="mdl-color-text--primary-contrast mdl-card__supporting-text comments"
-                                <asp:ListView ID="ListView2" runat="server" DataSourceID="SqlDataSource2" 
-                                    EnableModelValidation="True" EnableViewState="False">
-                                    <EmptyDataTemplate>
-                                        <span>No comments yet. Care to share your thoughts?</span>
-                                    </EmptyDataTemplate>
-                                    <ItemTemplate>
-                                       <div class="comment mdl-color-text--grey-700">
-                                            <header class="comment__header">
-                                                <img src=" <%# "../../Assets/ProfilePictures/" + Eval("picture")  %>"  class="comment__avatar">
-                                                <div class="comment__author">
-                                                <strong><%# Eval("username") %></strong>
-                                                <span><%# Eval("timestamp") %></span>
-                                                </div>
-                                            </header>
-                                            <div class="comment__text">
-                                                <%# Eval("commentContent") %>
-                                            </div>
-                                            <br />
-                                            <br />
-                                        </div>
-                                    </ItemTemplate>
-                                    <LayoutTemplate>
-                                        <div ID="itemPlaceholderContainer" runat="server" style="">
-                                            <span runat="server" id="itemPlaceholder" />
-                                        </div>
-                                        <div style="">
-                                        </div>
-                                    </LayoutTemplate>
-                                </asp:ListView>
-                            </div>
-                        </ContentTemplate>
-
-                        <Triggers>
-                            <asp:AsyncPostBackTrigger ControlID="UpdateButton" EventName="Click" />
-                        </Triggers>
+                    <Triggers>
+                        <asp:AsyncPostBackTrigger ControlID="UpdateButton" EventName="Click" />
+                    </Triggers>
                
-                    </asp:UpdatePanel>
-                     <asp:Button ID="UpdateButton" runat="server" style="display:none;" />
-                </div>
-            
-            
+                </asp:UpdatePanel>
+                <asp:Button ID="UpdateButton" runat="server" style="display:none;" />
             </div>
+        </div>
 
         <asp:SqlDataSource ID="SqlDataSource2" runat="server" 
                 ConnectionString="<%$ ConnectionStrings:WordPressConnectionString %>" SelectCommand="SELECT c.blogId, c.username, commentContent, timestamp, picture FROM dbo.[Comments] as c JOIN dbo.[Accounts] ON c.username = dbo.[Accounts].username 
-WHERE blogId = @blogId ORDER BY timestamp DESC">
+                WHERE blogId = @blogId ORDER BY timestamp DESC">
                 <SelectParameters>
                     <asp:ControlParameter ControlID="TextBox3" Name="blogId" PropertyName="Text" />
                 </SelectParameters>
             </asp:SqlDataSource>
-
-        <asp:SqlDataSource ID="SqlDataSource1" runat="server" 
-            ConnectionString="<%$ ConnectionStrings:WordPressConnectionString %>" 
-            SelectCommand="SELECT dbo.[Blogs].blogId, blogTitle, dbo.[Blogs].domainId, dbo.[Blogs].username, blogContent, htmlBlogContent, canLike, canComment, canReblog, dateCreated, dateModified, picture, COUNT(dbo.[Likes].blogId) as likeCount, CASE WHEN EXISTS (SELECT * FROM dbo.[Likes] WHERE email = @email)
-                THEN '1' 
-                ELSE '0'
-	            END AS isLiked
-                FROM  dbo.[Accounts], dbo.[Blogs]
-                LEFT JOIN dbo.[Likes]
-                on (dbo.[Blogs].blogId = dbo.[Likes].blogId)
-                WHERE dbo.[Blogs].domainId = @domainId AND blogTitle = @blogTitle
-                AND dbo.[Blogs].username = dbo.[Accounts].username
-                group by dbo.[Blogs].blogId, blogTitle,  dbo.[Blogs].domainId,  dbo.[Blogs].username, blogContent, htmlBlogContent, canLike, canComment, canReblog, dateCreated, dateModified, picture">
-            <SelectParameters>
-                <asp:SessionParameter DefaultValue="-" Name="email" SessionField="email" />
-                <asp:ControlParameter ControlID="TextBox1" Name="domainId" 
-                    PropertyName="Text" Type="String" DefaultValue="" />
-                <asp:ControlParameter ControlID="TextBox2" Name="blogTitle" 
-                    PropertyName="Text" Type="String" DefaultValue="" />
-
-            </SelectParameters>
-        </asp:SqlDataSource>
-
 
     <div class="mdl-dialog deleteDialogPrompt" style="width: 50%; position:absolute; z-index:101; top:20%; background-color:White; visibility: hidden; margin-left: auto; margin-right: auto; left: 0; right: 0;"">
         <h4 class="mdl-dialog__title">Delete Blog Entry?</h4>
@@ -235,14 +155,14 @@ WHERE blogId = @blogId ORDER BY timestamp DESC">
 
     <div class="mdl-dialog editDialogWindow" style="width: 50%; position:absolute; z-index:101; top:20%; background-color:White; visibility: hidden; margin-left: auto; margin-right: auto; left: 0; right: 0;">
         
-            <h4 class="mdl-dialog__title">Edit Blog Entry</h4>
-            <div class="mdl-dialog__content">
-              <textarea id="editBlogContent"></textarea>
-            </div>
-            <div class="mdl-dialog__actions">
-              <button type="button" class="mdl-button editDialogSave">Save Changes</button>
-              <button type="button" class="mdl-button editDialogClose">I Changed My Mind</button>
-            </div>
+        <h4 class="mdl-dialog__title">Edit Blog Entry</h4>
+        <div class="mdl-dialog__content">
+            <textarea id="editBlogContent"></textarea>
+        </div>
+        <div class="mdl-dialog__actions">
+            <button type="button" class="mdl-button editDialogSave">Save Changes</button>
+            <button type="button" class="mdl-button editDialogClose">I Changed My Mind</button>
+        </div>
         
     </div>
 
@@ -264,12 +184,13 @@ WHERE blogId = @blogId ORDER BY timestamp DESC">
                     dataType: "json",
                     success: function (response) {
                         if (response.d == "Liked") {
-                            $('#like-button').css("color", "red");
+                            $('.like-icon').css("color", "red");
+                            $('.likeCount').html(parseInt($('.likeCount').html()) + 1);
                         }
                         else {
-                            $('#like-button').css("color", "black");
+                            $('.like-icon').css("color", "black");
+                            $('.likeCount').html(parseInt($('.likeCount').html()) - 1);
                         }
-                        __doPostBack('<%=UpdateButton.ClientID %>')
                     },
                     failure: function (response) {
                         alert("Database Error");
@@ -304,16 +225,96 @@ WHERE blogId = @blogId ORDER BY timestamp DESC">
             }
         }
 
+        function GetBlogData() {
+
+            var data = "{\"blogId\":\"" + $('.TextBox3').val() + "\",\"email\":\"" + '<%=Session["email"]%>' + "\"}";
+            $.ajax({
+                cache: false,
+                type: "POST",
+                url: "http://www.wordpress.com:1234/WordPress/Services/BlogsService.asmx/GetBlogContentsForPage",
+                data: data,
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {
+                    var datatable = JSON.parse(response.d)[0];
+
+                    if (datatable != null) {
+                        $('.blogTitle').html(datatable["blogTitle"]);
+                        $('.htmlBlogContent').html(datatable["htmlBlogContent"]);
+                        $('.likeCount').html(datatable["likeCount"]);
+                        $('.picture').prop("src", "../../Assets/ProfilePictures/" + datatable["picture"]);
+                        $('.username').html(datatable["username"]);
+
+                        var date = new Date(parseInt(datatable["dateCreated"].replace(/\//g, "").replace(/Date\(/g, "").replace(/\)/g, "")));
+                        $('.dateCreated').html(new Date());
+
+                        if (datatable["isLiked"] == "1") {
+                            $('.like-icon').css("color", "Red");
+                        }
+
+                        if (datatable["canComment"] == "0") {
+                            $('.comment-field').attr("disabled", "disabled");
+                            $('.comment-label').html("Comments have been disabled.");
+
+                        }
+                        else if (datatable["canComment"] == "1") {
+                            $('.comment-label').html("Join the discussion!");
+                        }
+
+                        if (datatable["canLike"] == "0") {
+                            $('.like-button').attr("disabled", "disabled");
+                        }
+                        else {
+                            $('.like-button').attr("onclick", "like(); return false;");
+                        }
+
+                    }
+                },
+                failure: function (response) {
+                    alert("Database Error");
+                }
+            });
+        }
+
         $(document).ready(function () {
 
             var deleteDialog = document.querySelector('.deleteDialogPrompt');
             var editDialog = document.querySelector('.editDialogWindow');
+
+            var loc = window.location.pathname;
+            var arr = loc.split('/');
             var domain = arr[arr.length - 2];
             var editor = tinymce.EditorManager.get('editBlogContent');
             var domainSession = '<%= Session["domain"]%>'
 
+            var title = arr[arr.length - 1];
+            var newTitle = title.replace(/.aspx/, "").replace(/_/g, " ")
+
+            $('.TextBox1').val(domain);
+            $('.TextBox2').val(newTitle);
+
+            $.ajax({
+                cache: false,
+                type: "POST",
+                url: "http://www.wordpress.com:1234/WordPress/Services/BlogsService.asmx/GetBlogId",
+                data: "{'domainId':'" + domain + "', 'blogTitle':'" + newTitle + "'}",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {
+                    $('.TextBox3').val(response.d);
+                    GetBlogData();
+                    __doPostBack('<%=UpdatePanel2.ClientID%>', '')
+                },
+                failure: function (response) {
+                    alert("Database Error");
+                }
+            });
+
+
+
+
+
             $('.edit').on("click", function () {
-                //editDialog.showModal();
                 $('.editDialogWindow').css("visibility", "visible");
 
                 var data = "{\"blogId\":\"" + $('.TextBox3').val() + "\"}";
@@ -395,9 +396,8 @@ WHERE blogId = @blogId ORDER BY timestamp DESC">
                 $(".blog-menu").hide();
             }
 
-
-            __doPostBack('<%=UpdatePanel1.ClientID %>')
         });
+        
     </script>
 </body>
 </asp:Content>
