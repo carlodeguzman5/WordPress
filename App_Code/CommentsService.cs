@@ -61,7 +61,19 @@ public class CommentsService : System.Web.Services.WebService {
 
     [WebMethod]
     public string CreateComment(string blogId, string username, string commentContent) {
-        ExecuteInsertQuery("INSERT INTO dbo.[Comments] VALUES ('" + blogId + "','" + username + "','" + commentContent.Replace("'", "''") + "','" + DateTime.Now + "')");
+        //ExecuteInsertQuery("INSERT INTO dbo.[Comments] VALUES ('" + blogId + "','" + username + "','" + commentContent.Replace("'", "''") + "','" + DateTime.Now + "')");
+
+        SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["WordPressConnectionString"].ConnectionString);
+        conn.Open();
+
+        SqlCommand cmd = new SqlCommand("INSERT INTO dbo.[Comments] VALUES (@blogId, @username, @commentContent, @timestamp)", conn);
+        cmd.Parameters.AddWithValue("@blogId", blogId);
+        cmd.Parameters.AddWithValue("@username", username);
+        cmd.Parameters.AddWithValue("@commentContent", commentContent);
+        cmd.Parameters.AddWithValue("@timestamp", DateTime.Now);
+        cmd.ExecuteNonQuery();
+
+        conn.Close();
 
         return "Success";
     }

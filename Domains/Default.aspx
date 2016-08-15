@@ -1,7 +1,7 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Domains/Template.master" AutoEventWireup="true" CodeFile="Default.aspx.cs" Inherits="Domains_Template" ValidateRequest = "false"%>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" Runat="Server">
-<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/tinymce/4.3.13/tinymce.min.js"></script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/tinymce/4.3.13/tinymce.min.js"></script>
 
 <script type="text/javascript" language="javascript">
     tinymce.init({
@@ -16,52 +16,62 @@
 
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" Runat="Server">
     <body>
-         <asp:HiddenField ID="HiddenField1" runat="server" />
+        <asp:ScriptManager ID="ScriptManager1" runat="server">
+        </asp:ScriptManager>
+        <asp:HiddenField ID="HiddenField1" runat="server" />
          
         <div class="blog__posts mdl-grid">
+            
+            <asp:UpdatePanel ID="UpdatePanel1" runat="server" UpdateMode="Conditional">
+                <ContentTemplate>
+                    <asp:ListView ID="ListView1" runat="server" DataKeyNames="blogId" 
+                    DataSourceID="SqlDataSource1" EnableModelValidation="True" 
+                    onitemcommand="ListView1_OnItemCommand" EnableViewState="False">
+                    <EmptyDataTemplate>
+                        <div class="mdl-card mdl-cell mdl-cell--12-col">
+                            <div class="mdl-card__media mdl-color-text--grey-50" style="vertical-align: middle;">
+                                <h3>It's quiet here. Care to add a story?</h3>
+                            </div>
+                        </div>
+                    </EmptyDataTemplate>
+                    <ItemTemplate>
+                        <div class="mdl-card mdl-cell mdl-cell--12-col">
+                            <div class="mdl-card__media mdl-color-text--grey-50">
+                                <h3><a href= "<%# Eval("blogTitle").ToString().Replace(" ", "_") + ".aspx" %>"> <%# Eval("blogTitle") %></a></h3>
+                            </div>
+                            <div class="mdl-color-text--grey-600 mdl-card__supporting-text">
+                                <%# Eval("blogContent") %>
+                            </div>
 
-          <asp:ListView ID="ListView1" runat="server" DataKeyNames="blogId" 
-            DataSourceID="SqlDataSource1" EnableModelValidation="True">
-            <EmptyDataTemplate>
-                <div class="mdl-card mdl-cell mdl-cell--12-col">
-                    <div class="mdl-card__media mdl-color-text--grey-50" style="vertical-align: middle;">
-                        <h3>It's quiet here. Care to add a story?</h3>
-                    </div>
-                </div>
-            </EmptyDataTemplate>
-            <ItemTemplate>
-                <div class="mdl-card mdl-cell mdl-cell--12-col">
-                    <div class="mdl-card__media mdl-color-text--grey-50">
-                        <h3><a href= "<%# Eval("blogTitle").ToString().Replace(" ", "_") + ".aspx" %>"> <%# Eval("blogTitle") %></a></h3>
-                    </div>
-                    <div class="mdl-color-text--grey-600 mdl-card__supporting-text">
-                        <%# Eval("blogContent") %>
-                    </div>
+                            <div class="mdl-card__supporting-text meta mdl-color-text--grey-600">
+                              <img alt="DP" src=" <%# "../../Assets/ProfilePictures/" + Eval("picture")  %>"  class="minilogo">
+                              <div>
+                                <strong><%# Eval("username") %></strong>
+                                <span><%# Eval("dateCreated") %></span>
+                              </div>
+                            </div>
 
-                    <div class="mdl-card__supporting-text meta mdl-color-text--grey-600">
-                      <img src=" <%# "../../Assets/ProfilePictures/" + Eval("picture")  %>"  class="minilogo">
-                      <div>
-                        <strong><%# Eval("username") %></strong>
-                        <span><%# Eval("dateCreated") %></span>
-                      </div>
-                    </div>
+                            <span>
+                                <asp:LinkButton ID="LinkButton1" runat="server" class="mdl-button mdl-js-button mdl-button--icon" OnClientClick="__onPostBack('<%#UpdateButton.ClientID%>','')" CommandName="Like" CommandArgument="<%#Eval("blogId").toString()%>
+                                    <i class="material-icons like-icon" style="color:<%# Eval("isLiked").ToString().Equals("1") ? "Red" : "Black" %>">favorite</i>
+                                </asp:LinkButton>
+                                <button class="mdl-button mdl-js-button mdl-button--icon" <%# Eval("canReblog").ToString().Equals("1") ? "" : "disabled" %>>
+                                    <i class="material-icons">repeat</i>
+                                </button>
+                            </span>
+                                        
+                        </div>
+                    </ItemTemplate>
+                    <LayoutTemplate>
+                        <div class="blog__posts mdl-grid" ID="itemPlaceholderContainer" runat="server" style="">
+                            <div runat="server" id="itemPlaceholder" />
+                        </div>
+                    </LayoutTemplate>
+                    </asp:ListView>
+                </ContentTemplate>
+            </asp:UpdatePanel>
 
-                    <span>
-                        <button class="mdl-button mdl-js-button mdl-button--icon" <%# Eval("canLike").ToString().Equals("1") ? "" : "disabled" %>>
-                          <i class="material-icons">favorite_border</i>
-                        </button>
-                        <button class="mdl-button mdl-js-button mdl-button--icon" <%# Eval("canReblog").ToString().Equals("1") ? "" : "disabled" %>>
-                          <i class="material-icons">repeat</i>
-                        </button>
-                    </span>
-                </div>
-            </ItemTemplate>
-            <LayoutTemplate>
-                <div class="blog__posts mdl-grid" ID="itemPlaceholderContainer" runat="server" style="">
-                    <div runat="server" id="itemPlaceholder" />
-                </div>
-            </LayoutTemplate>
-            </asp:ListView>
+          
 
             <a ID="show-dialog" href="#" class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored">
               <i class="material-icons">add</i>
@@ -101,8 +111,16 @@
 
 
         <asp:SqlDataSource ID="SqlDataSource1" runat="server" 
-        ConnectionString="<%$ ConnectionStrings:WordPressConnectionString %>" SelectCommand="SELECT blogId, blogTitle, b.domainId, b.username, blogContent, htmlBlogContent, canLike, canComment, canReblog, dateCreated, datemodified, picture FROM dbo.[Blogs] as b, dbo.[Accounts] as a WHERE a.username = b.username AND b.domainId = @domainId">
+        ConnectionString="<%$ ConnectionStrings:WordPressConnectionString %>" SelectCommand="SELECT blogId, blogTitle, b.domainId, b.username, blogContent, htmlBlogContent, canLike, canComment, canReblog, dateCreated, datemodified, picture,
+                CASE WHEN EXISTS(SELECT * FROM dbo.[Likes] as l WHERE l.email = @email AND l.blogId = b.blogId)
+                    THEN '1' 
+                    ELSE '0'
+	                END AS isLiked
+                FROM dbo.[Blogs] AS b, dbo.[Accounts] AS a 
+                WHERE a.username = b.username 
+                AND b.domainId = @domainId">
             <SelectParameters>
+                <asp:SessionParameter Name="email" SessionField="email" DefaultValue=" " />
                 <asp:ControlParameter ControlID="HiddenField1" Name="domainId" 
                     PropertyName="Value" />
             </SelectParameters>
@@ -121,6 +139,10 @@
 
         if (session != dir) {
             $('#show-dialog').hide();
+        }
+
+        function Like(blogId) {
+            alert(blogId);
         }
 
         $(document).ready(function () {
@@ -196,7 +218,7 @@
                 }
             });
         });
-        
+        __doPostBack('<%=UpdatePanel1.ClientID%>', '')
     </script>
 </asp:Content>
 

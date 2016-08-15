@@ -103,8 +103,9 @@
           
 
             <asp:FileUpload ID="FileUpload1" runat="server" />
-            <asp:Label ID="Label1" runat="server" Text="Label"></asp:Label>
+            <asp:Label ID="Label1" runat="server" Text=""></asp:Label>
             <asp:Button ID="Button1" runat="server" Text="Upload" />
+
           <asp:SqlDataSource ID="SqlDataSource1" runat="server" 
               ConnectionString="<%$ ConnectionStrings:WordPressConnectionString %>" SelectCommand="SELECT * FROM dbo.[Accounts]
                 WHERE email = @email">
@@ -135,6 +136,29 @@
                 //alert(response.ds);
             }
         });
+
+
+        $.ajax({
+            cache: false,
+            type: "POST",
+            url: "http://www.wordpress.com:1234/WordPress/Services/DomainsService.asmx/GetStyles",
+            data: "{\"domainId\":\"" + '<%=Session["domain"]%>' + "\"}",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                var datatable = JSON.parse(response.d)[0];
+
+                $('.mdl-card__media').css("background-color", datatable["primaryColor"]);
+                $('.mdl-card_media').css("color", datatable["secondaryColor"]);
+                $('body').css("background-image", "url('../Assets/BackgroundImages/" + datatable["bgImage"] + "')");
+
+
+            },
+            failure: function (response) {
+                //alert(response.ds);
+            }
+        });
+
     </script>
 
 

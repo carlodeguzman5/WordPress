@@ -16,6 +16,35 @@
           </s:sequence>
         </s:complexType>
       </s:element>
+      <s:element name="GetStyles">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="domainId" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetStylesResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetStylesResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="setPrimaryColor">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="color" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="domainId" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="setPrimaryColorResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="setPrimaryColorResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
       <s:element name="string" nillable="true" type="s:string" />
     </s:schema>
   </wsdl:types>
@@ -25,10 +54,35 @@
   <wsdl:message name="GetDomainSoapOut">
     <wsdl:part name="parameters" element="tns:GetDomainResponse" />
   </wsdl:message>
+  <wsdl:message name="GetStylesSoapIn">
+    <wsdl:part name="parameters" element="tns:GetStyles" />
+  </wsdl:message>
+  <wsdl:message name="GetStylesSoapOut">
+    <wsdl:part name="parameters" element="tns:GetStylesResponse" />
+  </wsdl:message>
+  <wsdl:message name="setPrimaryColorSoapIn">
+    <wsdl:part name="parameters" element="tns:setPrimaryColor" />
+  </wsdl:message>
+  <wsdl:message name="setPrimaryColorSoapOut">
+    <wsdl:part name="parameters" element="tns:setPrimaryColorResponse" />
+  </wsdl:message>
   <wsdl:message name="GetDomainHttpGetIn">
     <wsdl:part name="email" type="s:string" />
   </wsdl:message>
   <wsdl:message name="GetDomainHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="GetStylesHttpGetIn">
+    <wsdl:part name="domainId" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetStylesHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="setPrimaryColorHttpGetIn">
+    <wsdl:part name="color" type="s:string" />
+    <wsdl:part name="domainId" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="setPrimaryColorHttpGetOut">
     <wsdl:part name="Body" element="tns:string" />
   </wsdl:message>
   <wsdl:message name="GetDomainHttpPostIn">
@@ -37,10 +91,31 @@
   <wsdl:message name="GetDomainHttpPostOut">
     <wsdl:part name="Body" element="tns:string" />
   </wsdl:message>
+  <wsdl:message name="GetStylesHttpPostIn">
+    <wsdl:part name="domainId" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetStylesHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="setPrimaryColorHttpPostIn">
+    <wsdl:part name="color" type="s:string" />
+    <wsdl:part name="domainId" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="setPrimaryColorHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
   <wsdl:portType name="DomainsServiceSoap">
     <wsdl:operation name="GetDomain">
       <wsdl:input message="tns:GetDomainSoapIn" />
       <wsdl:output message="tns:GetDomainSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetStyles">
+      <wsdl:input message="tns:GetStylesSoapIn" />
+      <wsdl:output message="tns:GetStylesSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="setPrimaryColor">
+      <wsdl:input message="tns:setPrimaryColorSoapIn" />
+      <wsdl:output message="tns:setPrimaryColorSoapOut" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:portType name="DomainsServiceHttpGet">
@@ -48,17 +123,51 @@
       <wsdl:input message="tns:GetDomainHttpGetIn" />
       <wsdl:output message="tns:GetDomainHttpGetOut" />
     </wsdl:operation>
+    <wsdl:operation name="GetStyles">
+      <wsdl:input message="tns:GetStylesHttpGetIn" />
+      <wsdl:output message="tns:GetStylesHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="setPrimaryColor">
+      <wsdl:input message="tns:setPrimaryColorHttpGetIn" />
+      <wsdl:output message="tns:setPrimaryColorHttpGetOut" />
+    </wsdl:operation>
   </wsdl:portType>
   <wsdl:portType name="DomainsServiceHttpPost">
     <wsdl:operation name="GetDomain">
       <wsdl:input message="tns:GetDomainHttpPostIn" />
       <wsdl:output message="tns:GetDomainHttpPostOut" />
     </wsdl:operation>
+    <wsdl:operation name="GetStyles">
+      <wsdl:input message="tns:GetStylesHttpPostIn" />
+      <wsdl:output message="tns:GetStylesHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="setPrimaryColor">
+      <wsdl:input message="tns:setPrimaryColorHttpPostIn" />
+      <wsdl:output message="tns:setPrimaryColorHttpPostOut" />
+    </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="DomainsServiceSoap" type="tns:DomainsServiceSoap">
     <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
     <wsdl:operation name="GetDomain">
       <soap:operation soapAction="http://tempuri.org/GetDomain" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetStyles">
+      <soap:operation soapAction="http://tempuri.org/GetStyles" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="setPrimaryColor">
+      <soap:operation soapAction="http://tempuri.org/setPrimaryColor" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
@@ -78,6 +187,24 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="GetStyles">
+      <soap12:operation soapAction="http://tempuri.org/GetStyles" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="setPrimaryColor">
+      <soap12:operation soapAction="http://tempuri.org/setPrimaryColor" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
   </wsdl:binding>
   <wsdl:binding name="DomainsServiceHttpGet" type="tns:DomainsServiceHttpGet">
     <http:binding verb="GET" />
@@ -90,11 +217,47 @@
         <mime:mimeXml part="Body" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="GetStyles">
+      <http:operation location="/GetStyles" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="setPrimaryColor">
+      <http:operation location="/setPrimaryColor" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
   </wsdl:binding>
   <wsdl:binding name="DomainsServiceHttpPost" type="tns:DomainsServiceHttpPost">
     <http:binding verb="POST" />
     <wsdl:operation name="GetDomain">
       <http:operation location="/GetDomain" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetStyles">
+      <http:operation location="/GetStyles" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="setPrimaryColor">
+      <http:operation location="/setPrimaryColor" />
       <wsdl:input>
         <mime:content type="application/x-www-form-urlencoded" />
       </wsdl:input>

@@ -22,6 +22,21 @@ public class DomainsService : System.Web.Services.WebService {
         //InitializeComponent(); 
     }
 
+    private void ExecuteInsertQuery(string Query)
+    {
+        string constr = ConfigurationManager.ConnectionStrings["WordPressConnectionString"].ConnectionString;
+        SqlConnection sqlConnection1 = new SqlConnection(constr);
+
+        System.Data.SqlClient.SqlCommand cmd = new System.Data.SqlClient.SqlCommand();
+        cmd.CommandType = System.Data.CommandType.Text;
+        cmd.CommandText = Query;
+        cmd.Connection = sqlConnection1;
+
+        sqlConnection1.Open();
+        cmd.ExecuteNonQuery();
+        sqlConnection1.Close();
+    }
+
     private DataTable ExecuteSelectQuery(string Query)
     {
         string constr = ConfigurationManager.ConnectionStrings["WordPressConnectionString"].ConnectionString;
@@ -44,6 +59,23 @@ public class DomainsService : System.Web.Services.WebService {
         }
     }
 
+    private string ConvertDataTabletoString(DataTable dt)
+    {
+        System.Web.Script.Serialization.JavaScriptSerializer serializer = new System.Web.Script.Serialization.JavaScriptSerializer();
+        List<Dictionary<string, object>> rows = new List<Dictionary<string, object>>();
+        Dictionary<string, object> row;
+        foreach (DataRow dr in dt.Rows)
+        {
+            row = new Dictionary<string, object>();
+            foreach (DataColumn col in dt.Columns)
+            {
+                row.Add(col.ColumnName, dr[col]);
+            }
+            rows.Add(row);
+        }
+        return serializer.Serialize(rows);
+    }
+
     [WebMethod]
     public string GetDomain(string email) {
         DataTable dt = ExecuteSelectQuery("SELECT * FROM dbo.[Accounts] WHERE email = '" + email + "'");
@@ -51,6 +83,21 @@ public class DomainsService : System.Web.Services.WebService {
             return dt.Rows[0]["domainId"].ToString();
         }
         return "";
+    }
+
+    [WebMethod]
+    public string GetStyles(string domainId) {
+        DataTable dt = ExecuteSelectQuery("SELECT * FROM dbo.[Domains] WHERE domainId = '" + domainId + "'");
+        return ConvertDataTabletoString(dt);
+    }
+
+
+    [WebMethod]
+    public string setPrimaryColor(string color, string domainId) {
+        ExecuteInsertQuery("UPDATE dbo.[Domains] SET primaryColor = '" + color + "' WHERE domainId = '" + domainId + "'");
+
+
+        return "Success";
     }
     
 }

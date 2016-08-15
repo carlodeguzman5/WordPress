@@ -152,16 +152,17 @@ public class BlogsService : System.Web.Services.WebService {
     [WebMethod]
     public string GetBlogContentsForPage(string blogId, string email)
     {
-        DataTable dt = ExecuteSelectQuery("SELECT dbo.[Blogs].blogId, blogTitle, dbo.[Blogs].domainId, dbo.[Blogs].username, blogContent, htmlBlogContent, canLike, canComment, canReblog, dateCreated, dateModified, picture, COUNT(dbo.[Likes].blogId) as likeCount, CASE WHEN EXISTS (SELECT * FROM dbo.[Likes] WHERE email = '" + email + "' AND blogId = '" + blogId + "') "
+        DataTable dt = ExecuteSelectQuery("SELECT dbo.[Blogs].blogId, blogTitle, dbo.[Blogs].domainId, dbo.[Blogs].username, blogContent, htmlBlogContent, canLike, canComment, canReblog, dateCreated, dateModified, picture, COUNT(dbo.[Likes].blogId) as likeCount, primaryColor, secondaryColor, CASE WHEN EXISTS (SELECT * FROM dbo.[Likes] WHERE email = '" + email + "' AND blogId = '" + blogId + "') "
                 + "THEN '1' "
                 + "ELSE '0' "
 	            + "END AS isLiked "
-                + "FROM  dbo.[Accounts], dbo.[Blogs] "
+                + "FROM  dbo.[Accounts], dbo.[Blogs], dbo.[Domains] "
                 + "LEFT JOIN dbo.[Likes] "
-                + "on (dbo.[Blogs].blogId = dbo.[Likes].blogId) "
+                + "on (blogId = dbo.[Likes].blogId) "
                 + "WHERE dbo.[Blogs].blogId = '" + blogId + "' "
                 + "AND dbo.[Blogs].username = dbo.[Accounts].username "
-                + "group by dbo.[Blogs].blogId, blogTitle,  dbo.[Blogs].domainId, dbo.[Blogs].username, blogContent, htmlBlogContent, canLike, canComment, canReblog, dateCreated, dateModified, picture");
+                + "AND dbo.[Blogs].domainId = dbo.[Domains].domainId "
+                + "group by dbo.[Blogs].blogId, blogTitle,  dbo.[Blogs].domainId, dbo.[Blogs].username, blogContent, htmlBlogContent, canLike, canComment, canReblog, dateCreated, dateModified, picture, primaryColor, secondaryColor");
         dt.TableName = blogId;
 
         return ConvertDataTabletoString(dt);

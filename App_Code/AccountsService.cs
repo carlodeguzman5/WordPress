@@ -102,7 +102,9 @@ public class AccountsService : System.Web.Services.WebService {
         if (responseMessage[0].Equals(""))
         {
             
-            ExecuteInsertQuery("INSERT INTO dbo.[Accounts] (email, username, password, domainId) VALUES('" + email + "','" + username + "','" + password + "','" + domain + "')");
+            ExecuteInsertQuery("INSERT INTO dbo.[Accounts] (email, username, password, domainId, picture) VALUES('" + email + "','" + username + "','" + password + "','" + domain + "', 'default/user.png')");
+            ExecuteInsertQuery("INSERT INTO dbo.[Domains] VALUES('" + domain + "','#000000','#FFFFFF', 'bg_2048.png')");
+
             responseMessage[0] = "200";
             responseMessage[1] = "Your account is ready!";
 
@@ -121,7 +123,16 @@ public class AccountsService : System.Web.Services.WebService {
 
         return dt.Rows[0]["picture"].ToString();
     }
-
+    
+    [WebMethod]
+    public string GetProfileInformation(string domainId)
+    {
+        DataTable dt = ExecuteSelectQuery("SELECT username, domainId, picture FROM dbo.[Accounts] WHERE domainId = '" + domainId + "'");
+        
+        return ConvertDataTabletoString(dt);
+    }
+    
+    
     private void CreateDirectory(string folderName) {
         string directoryPath = Server.MapPath(string.Format("~/Domains/{0}/", folderName));
         if (!Directory.Exists(directoryPath))
@@ -137,4 +148,23 @@ public class AccountsService : System.Web.Services.WebService {
             //Error
         }
     }
+
+
+    private string ConvertDataTabletoString(DataTable dt)
+    {
+        System.Web.Script.Serialization.JavaScriptSerializer serializer = new System.Web.Script.Serialization.JavaScriptSerializer();
+        List<Dictionary<string, object>> rows = new List<Dictionary<string, object>>();
+        Dictionary<string, object> row;
+        foreach (DataRow dr in dt.Rows)
+        {
+            row = new Dictionary<string, object>();
+            foreach (DataColumn col in dt.Columns)
+            {
+                row.Add(col.ColumnName, dr[col]);
+            }
+            rows.Add(row);
+        }
+        return serializer.Serialize(rows);
+    }
+
 }

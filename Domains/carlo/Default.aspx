@@ -16,53 +16,87 @@
 
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" Runat="Server">
     <body>
-         <asp:HiddenField ID="HiddenField1" runat="server" />
+        <asp:ScriptManager ID="ScriptManager1" runat="server">
+        </asp:ScriptManager>
+        <asp:HiddenField ID="HiddenField1" runat="server" />
          
         <div class="blog__posts mdl-grid">
 
-          <asp:ListView ID="ListView1" runat="server" DataKeyNames="blogId" 
-            DataSourceID="SqlDataSource1" EnableModelValidation="True" 
-                onitemcommand="ListView1_OnItemCommand">
-            <EmptyDataTemplate>
-                <div class="mdl-card mdl-cell mdl-cell--12-col">
-                    <div class="mdl-card__media mdl-color-text--grey-50" style="vertical-align: middle;">
-                        <h3>It's quiet here. Care to add a story?</h3>
-                    </div>
+            <div class="mdl-card something-else mdl-cell mdl-cell--8-col mdl-cell--4-col-desktop">
+                <button type="button" class="mdl-button mdl-js-ripple-effect mdl-js-button mdl-button--fab mdl-color--accent">
+                  <i class="material-icons mdl-color-text--white" role="presentation">add</i>
+                  <span class="visuallyhidden">add</span>
+                </button>
+                <div class="mdl-card__media mdl-color--white mdl-color-text--grey-600">
+                  <img alt="Profile Picture" class="picture" src="" />
                 </div>
-            </EmptyDataTemplate>
-            <ItemTemplate>
-                <div class="mdl-card mdl-cell mdl-cell--12-col">
-                    <div class="mdl-card__media mdl-color-text--grey-50">
-                        <h3><a href= "<%# Eval("blogTitle").ToString().Replace(" ", "_") + ".aspx" %>"> <%# Eval("blogTitle") %></a></h3>
-                    </div>
-                    <div class="mdl-color-text--grey-600 mdl-card__supporting-text">
-                        <%# Eval("blogContent") %>
-                    </div>
+                <div class="mdl-card__supporting-text meta meta--fill mdl-color-text--grey-600">
+                  <div>
+                    <strong class="username"></strong>
+                  </div>
+                  <ul class="mdl-menu mdl-js-menu mdl-menu--bottom-right mdl-js-ripple-effect" for="menubtn">
+                    <li class="mdl-menu__item">About</li>
+                    <li class="mdl-menu__item">Message</li>
+                    <li class="mdl-menu__item">Favorite</li>
+                    <li class="mdl-menu__item">Search</li>
+                  </ul>
+                  <button id="menubtn" type="button" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon">
+                    <i class="material-icons" role="presentation">more_vert</i>
+                    <span class="visuallyhidden">show menu</span>
+                  </button>
+                </div>
+            </div>
+            
+            <asp:UpdatePanel ID="UpdatePanel1" runat="server" UpdateMode="Always">
+                <ContentTemplate>
+                    <asp:ListView ID="ListView1" runat="server" DataKeyNames="blogId" 
+                    DataSourceID="SqlDataSource1" EnableModelValidation="True" 
+                    onitemcommand="ListView1_OnItemCommand" EnableViewState="False">
+                    <EmptyDataTemplate>
+                        <div class="mdl-card mdl-cell mdl-cell--12-col">
+                            <div class="mdl-card__media mdl-color-text--grey-50" style="vertical-align: middle;">
+                                <h3>It's quiet here. Care to add a story?</h3>
+                            </div>
+                        </div>
+                    </EmptyDataTemplate>
+                    <ItemTemplate>
+                        <div class="mdl-card mdl-cell mdl-cell--12-col">
+                            <div class="mdl-card__media mdl-color-text--grey-50" style="background-color: <%# Eval("primaryColor") %> ;">
+                                <h3><a href= "<%# Eval("blogTitle").ToString().Replace(" ", "_") + ".aspx" %>"> <%# Eval("blogTitle") %></a></h3>
+                            </div>
+                            <div class="mdl-color-text--grey-600 mdl-card__supporting-text">
+                                <%# Eval("blogContent") %>
+                            </div>
 
-                    <div class="mdl-card__supporting-text meta mdl-color-text--grey-600">
-                      <img alt="DP" src=" <%# "../../Assets/ProfilePictures/" + Eval("picture")  %>"  class="minilogo">
-                      <div>
-                        <strong><%# Eval("username") %></strong>
-                        <span><%# Eval("dateCreated") %></span>
-                      </div>
-                    </div>
+                            <div class="mdl-card__supporting-text meta mdl-color-text--grey-600">
+                              <img alt="DP" src=" <%# "../../Assets/ProfilePictures/" + Eval("picture")  %>"  class="minilogo">
+                              <div>
+                                <strong><%# Eval("username") %></strong>
+                                <span><%# Eval("dateCreated") %></span>
+                              </div>
+                            </div>
 
-                    <span>
-                        <asp:LinkButton runat="server" class="mdl-button mdl-js-button mdl-button--icon" CommandName="Like" CommandArgument="<%#Eval("blogId").toString()%>">
-                          <i class="material-icons" style= "color:<%# Eval("isLiked").ToString().Equals("1") ? "Red" : "" %>" >favorite</i>
-                        </asp:LinkButton>
-                        <button class="mdl-button mdl-js-button mdl-button--icon" <%# Eval("canReblog").ToString().Equals("1") ? "" : "disabled" %>>
-                          <i class="material-icons">repeat</i>
-                        </button>
-                    </span>
-                </div>
-            </ItemTemplate>
-            <LayoutTemplate>
-                <div class="blog__posts mdl-grid" ID="itemPlaceholderContainer" runat="server" style="">
-                    <div runat="server" id="itemPlaceholder" />
-                </div>
-            </LayoutTemplate>
-            </asp:ListView>
+                            <span>
+                                <asp:LinkButton ID="LinkButton1" runat="server" class="mdl-button mdl-js-button mdl-button--icon" CommandName="Like" CommandArgument="<%#Eval("blogId").toString()%>
+                                    <i class="material-icons like-icon" style="color:<%# Eval("isLiked").ToString().Equals("1") ? "Red" : "Black" %>">favorite</i>
+                                </asp:LinkButton>
+                                <button class="mdl-button mdl-js-button mdl-button--icon" <%# Eval("canReblog").ToString().Equals("1") ? "" : "disabled" %>>
+                                    <i class="material-icons">repeat</i>
+                                </button>
+                            </span>
+                                        
+                        </div>
+                    </ItemTemplate>
+                    <LayoutTemplate>
+                        <div class="blog__posts mdl-grid" ID="itemPlaceholderContainer" runat="server" style="">
+                            <div runat="server" id="itemPlaceholder" />
+                        </div>
+                    </LayoutTemplate>
+                    </asp:ListView>
+                </ContentTemplate>
+            </asp:UpdatePanel>
+
+          
 
             <a ID="show-dialog" href="#" class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored">
               <i class="material-icons">add</i>
@@ -102,15 +136,17 @@
 
 
         <asp:SqlDataSource ID="SqlDataSource1" runat="server" 
-        ConnectionString="<%$ ConnectionStrings:WordPressConnectionString %>" SelectCommand="SELECT blogId, blogTitle, b.domainId, b.username, blogContent, htmlBlogContent, canLike, canComment, canReblog, dateCreated, datemodified, picture,
-                CASE WHEN EXISTS(SELECT * FROM dbo.[Likes] as l WHERE l.email = a.email AND l.blogId = b.blogId)
+        ConnectionString="<%$ ConnectionStrings:WordPressConnectionString %>" SelectCommand="SELECT blogId, blogTitle, b.domainId, b.username, blogContent, htmlBlogContent, canLike, canComment, canReblog, dateCreated, datemodified, picture, primaryColor, secondaryColor,
+                CASE WHEN EXISTS(SELECT * FROM dbo.[Likes] as l WHERE l.email = @email AND l.blogId = b.blogId)
                     THEN '1' 
                     ELSE '0'
 	                END AS isLiked
-                FROM dbo.[Blogs] AS b, dbo.[Accounts] AS a 
+                FROM dbo.[Blogs] AS b, dbo.[Accounts] AS a, dbo.[Domains] as d 
                 WHERE a.username = b.username 
+                AND d.domainId = b.domainId
                 AND b.domainId = @domainId">
             <SelectParameters>
+                <asp:SessionParameter Name="email" SessionField="email" DefaultValue=" " />
                 <asp:ControlParameter ControlID="HiddenField1" Name="domainId" 
                     PropertyName="Value" />
             </SelectParameters>
@@ -207,8 +243,51 @@
                     });
                 }
             });
+
+
+
+            $.ajax({
+                cache: false,
+                type: "POST",
+                url: "http://www.wordpress.com:1234/WordPress/Services/AccountsService.asmx/GetProfileInformation",
+                data: "{\"domainId\":\"" + dir + "\"}",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {
+                    var datatable = JSON.parse(response.d)[0];
+
+                    $('.picture').prop("src", "../../Assets/ProfilePictures/" + datatable["picture"]);
+                    $('.username').html(datatable["username"]);
+
+
+                },
+                failure: function (response) {
+                    //alert(response.ds);
+                }
+            });
+
+
+            $.ajax({
+                cache: false,
+                type: "POST",
+                url: "http://www.wordpress.com:1234/WordPress/Services/DomainsService.asmx/GetStyles",
+                data: "{\"domainId\":\"" + dir + "\"}",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {
+                    var datatable = JSON.parse(response.d)[0];
+
+                    $('body').css("background-image", "url('../../Assets/BackgroundImages/" + datatable["bgImage"] + "')");
+
+                },
+                failure: function (response) {
+                    //alert(response.ds);
+                }
+            });
+
+
         });
-        
+        //__doPostBack('<%=UpdatePanel1.ClientID%>', '')
     </script>
 </asp:Content>
 

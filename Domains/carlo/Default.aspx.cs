@@ -28,9 +28,12 @@ public partial class Domains_Template : System.Web.UI.Page
             string blogId = ListView1.DataKeys[dataItem.DisplayIndex].Value.ToString();
 
             com.wordpress.www.LikesService LikesService = new com.wordpress.www.LikesService();
-            LikesService.CreateLike(blogId, Session["email"].ToString());
-
+            if (Session["email"] != null)
+            {
+                LikesService.CreateLike(blogId, Session["email"].ToString());
+                //UpdatePanel1.Update();   
+            }
+            //else, return error message.
         }
     }
-
 }
