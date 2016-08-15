@@ -27,7 +27,7 @@
                 <header class="mdl-layout__header">
                     <div class="mdl-layout__header-row">
                         <a href="http://www.WordPress.com:1234/WordPress/">
-                            <img src="../../Assets/logo.png"  height="45px" style="padding: 16px 16px 16px 16px;"/>
+                            <img src="http://www.WordPress.com:1234/WordPress/Assets/logo.png"  height="45px" style="padding: 16px 16px 16px 16px;"/>
                         </a>
                         
                         <!-- Title -->
@@ -43,15 +43,6 @@
                         </nav>
                     </div>
                 </header>
-                <div class="mdl-layout__drawer">
-                    <span class="mdl-layout-title">Title</span>
-                    <nav class="mdl-navigation">
-                        <a class="mdl-navigation__link" href="">Link</a>
-                        <a class="mdl-navigation__link" href="">Link</a>
-                        <a class="mdl-navigation__link" href="">Link</a>
-                        <a class="mdl-navigation__link" href="">Link</a>
-                    </nav>
-                </div>
                 
                 <main class="mdl-layout__content">
                     <div class="demo-blog--blogpost demo-blog">
