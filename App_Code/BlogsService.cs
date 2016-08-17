@@ -64,8 +64,28 @@ public class BlogsService : System.Web.Services.WebService {
     public String CreateBlog(string blogTitle, string domainId, string username, string blogContent, string canLike, string canComment, string canReblog, string htmlBlogContent) {
 
 
-        ExecuteInsertQuery("INSERT INTO dbo.[Blogs] (blogTitle,domainId,username,blogContent, htmlBlogContent ,canLike,canComment,canReblog,dateCreated,dateModified) VALUES" +
-            "('" + blogTitle.Replace("'", "''") + "', '" + domainId + "', '" + username + "','" + blogContent.Replace("'", "''").Replace("\"", "''") + "','" + htmlBlogContent.Replace("'", "''") + "','" + canLike + "','" + canComment + "','" + canReblog + "','" + DateTime.Now.ToString() + "','" + DateTime.Now.ToString() + "')");
+        SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["WordPressConnectionString"].ConnectionString);
+        conn.Open();
+
+        SqlCommand cmd = new SqlCommand("INSERT INTO dbo.[Blogs] (blogTitle,domainId,username,blogContent, htmlBlogContent ,canLike, canComment,canReblog, dateCreated,dateModified)" +
+            " VALUES (@blogTitle, @domainId, @username,@blogContent,@htmlBlogContent,@canLike,@canComment,@canReblog,@dateCreated,@dateModified)", conn);
+
+        cmd.Parameters.AddWithValue("@blogTitle", blogTitle.Replace("'", "''"));
+        cmd.Parameters.AddWithValue("@username", username);
+        cmd.Parameters.AddWithValue("@domainId", domainId);
+        cmd.Parameters.AddWithValue("@htmlBlogContent", htmlBlogContent.Replace("'", "''").Replace("\"", "''"));
+        cmd.Parameters.AddWithValue("@blogContent", blogContent.Replace("'", "''").Replace("\"", "''"));
+        cmd.Parameters.AddWithValue("@canLike", int.Parse(canLike));
+        cmd.Parameters.AddWithValue("@canComment", canComment);
+        cmd.Parameters.AddWithValue("@canReblog", canReblog);
+        cmd.Parameters.AddWithValue("@dateCreated", DateTime.Now);
+        cmd.Parameters.AddWithValue("@dateModified", DateTime.Now);
+        cmd.ExecuteNonQuery();
+
+        conn.Close();
+                
+        //ExecuteInsertQuery("INSERT INTO dbo.[Blogs] (blogTitle,domainId,username,blogContent, htmlBlogContent ,canLike,canComment,canReblog,dateCreated,dateModified) VALUES" +
+          //  "('" + blogTitle.Replace("'", "''") + "', '" + domainId + "', '" + username + "','" + blogContent.Replace("'", "''").Replace("\"", "''") + "','" + htmlBlogContent.Replace("'", "''") + "','" + canLike + "','" + canComment + "','" + canReblog + "','" + DateTime.Now.ToString() + "','" + DateTime.Now.ToString() + "')");
 
         return CreateBlogPage(blogTitle, domainId);
     }

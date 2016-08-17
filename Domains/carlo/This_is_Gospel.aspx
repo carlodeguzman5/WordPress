@@ -19,6 +19,14 @@
 
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" Runat="Server">
+    <div id="fb-root"></div>
+    <script>        (function (d, s, id) {
+            var js, fjs = d.getElementsByTagName(s)[0];
+            if (d.getElementById(id)) return;
+            js = d.createElement(s); js.id = id;
+            js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.7&appId=1659501234363339";
+            fjs.parentNode.insertBefore(js, fjs);
+        } (document, 'script', 'facebook-jssdk'));</script>
     <asp:ScriptManager ID="ScriptManager1" runat="server">
     </asp:ScriptManager>
 <body>
@@ -66,7 +74,7 @@
                         <span class="visuallyhidden">favorites</span>
                     </div>
                     <div>
-                    <i class="material-icons" role="presentation">share</i>
+                    <div class="fb-share-button" onclick="fbshareCurrentPage()" data-layout="button" data-size="large" data-mobile-iframe="false"><a class="fb-xfbml-parse-ignore" >Share</a></div>
                     <span class="visuallyhidden">share</span>
                     </div>
                 </div>
@@ -463,6 +471,12 @@
 
 
             });
+
+            function fbshareCurrentPage() {
+                window.open("https://www.facebook.com/sharer/sharer.php?u=" + escape(window.location.href) + "&t=" + document.title, '',
+                'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=600');
+                return false;
+            }
 
             $('.editDialogSave').on("click", function () {
 

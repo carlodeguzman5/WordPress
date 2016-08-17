@@ -50,6 +50,7 @@
                         </asp:ContentPlaceHolder>
                     </div>
 
+
                 <!-- FOOTER --> 
                     <footer class="mdl-mini-footer">
                         <div class="mdl-mini-footer--left-section">

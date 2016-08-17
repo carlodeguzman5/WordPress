@@ -80,7 +80,7 @@
      <script type="text/javascript">
         
 
-             var imageSet1 = ["Assets/home1.jpg", "Assets/home1.jpg", "Assets/home2.jpg", "Assets/home3.jpg"];
+             var imageSet1 = ["Assets/home1.jpg", "Assets/home2.jpg", "Assets/home3.jpg"];
              var currentImageSet1 = 0;
 
              var imageSet2 = ["Assets/home4.jpg", "Assets/home5.jpg", "Assets/home6.jpg"];
@@ -89,7 +89,6 @@
              function changeBackgroundImages() {
                  img1Fade();
                  setTimeout(img2Fade, 5000);
-
              }
 
              function img1Fade() {
