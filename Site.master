@@ -24,7 +24,7 @@
         {
             height: 24px;
         }
-        .demo-layout-transparent {
+        #background-images {
           background: url('Assets/home.jpg') center / cover;
         }
         .demo-layout-transparent .mdl-layout__header,
@@ -37,6 +37,11 @@
 </head>
 <body>
     
+    <div id="background-images">
+        <div id="bImg1"></div>
+        <div id="bImg2"></div>
+    </div>
+
     <form id="form1" runat="server">
 
     <div class="demo-layout-transparent mdl-layout mdl-js-layout">
@@ -71,5 +76,47 @@
 
     
     </form>
+
+     <script type="text/javascript">
+        
+
+             var imageSet1 = ["Assets/home1.jpg", "Assets/home1.jpg", "Assets/home2.jpg", "Assets/home3.jpg"];
+             var currentImageSet1 = 0;
+
+             var imageSet2 = ["Assets/home4.jpg", "Assets/home5.jpg", "Assets/home6.jpg"];
+             var currentImageSet2 = 0;
+
+             function changeBackgroundImages() {
+                 img1Fade();
+                 setTimeout(img2Fade, 5000);
+
+             }
+
+             function img1Fade() {
+
+                 $('#bImg1').fadeOut('slow', function () { $('#bImg1').css({ background: 'url(' + imageSet1[++currentImageSet1] + ') center / cover' }) });
+                 $('#bImg2').fadeIn('slow');
+                 if (currentImageSet1 >= imageSet1.length - 1) {
+
+                     currentImageSet1 -= imageSet1.length;
+                 };
+             }
+
+             function img2Fade() {
+
+                 $('#bImg2').fadeOut('slow', function () { $('#bImg2').css({ background: 'url(' + imageSet2[++currentImageSet2] + ') center / cover' }) });
+                 $('#bImg1').fadeIn('slow');
+                 if (currentImageSet2 >= imageSet2.length - 1) {
+
+                     currentImageSet2 -= imageSet2.length;
+                 };
+             }
+             
+             $(document).ready(function () {
+                 setInterval(changeBackgroundImages, 10000);
+             });
+
+    </script>
+
 </body>
 </html>

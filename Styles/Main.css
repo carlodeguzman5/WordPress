@@ -524,7 +524,34 @@ body .demo-blog {
     
 }
 
+#background-images {
+    position: fixed; 
+    top: 0; 
+    left: 0; 
+    width: 100%; 
+    height: 100%; 
+    z-index: 1;
+    }
 
+#bImg1 {
+    position: absolute; 
+    top: 0; 
+    left: 0; 
+    width: 100%; 
+    height: 100%; 
+    z-index: 3; 
+    background: url(starting-img1.jpg) no-repeat; 
+    background-size: contain;
+    }
 
-
-
+#bImg2 {
+    display: none;
+    position: absolute; 
+    top: 0; 
+    left: 0; 
+    width: 100%; 
+    height: 100%; 
+    z-index: 2; 
+    background: url(starting-img2.jpg) no-repeat; 
+    background-size: contain;
+    }
