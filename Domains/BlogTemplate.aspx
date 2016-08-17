@@ -178,7 +178,7 @@
                 $.ajax({
                     cache: false,
                     type: "POST",
-                    url: "http://www.wordpress.com:1234/WordPress/Services/LikesService.asmx/CreateLike",
+                    url: "http://www.wordpress.com/WordPress/Services/LikesService.asmx/CreateLike",
                     data: data,
                     contentType: "application/json; charset=utf-8",
                     dataType: "json",
@@ -202,7 +202,7 @@
         function comment() {
 
             var username = '<%= Session["username"]%>'
-            var data = "{\"blogId\":\"" + $('.TextBox3').val() + "\",\"username\":\"" + username + "\" ,\"commentContent\": \"" + $('.comment').val() + "\"}";
+            var data = "{\"blogId\":\"" + $('.TextBox3').val() + "\",\"username\":\"" + username + "\" ,\"commentContent\": \"" + $('.comment-field').val() + "\"}";
 
             if (username == "") {
                 alert("Please log in to post a comment");
@@ -211,11 +211,12 @@
                 $.ajax({
                     cache: false,
                     type: "POST",
-                    url: "http://www.wordpress.com:1234/WordPress/Services/CommentsService.asmx/CreateComment",
+                    url: "http://www.wordpress.com/WordPress/Services/CommentsService.asmx/CreateComment",
                     data: data,
                     contentType: "application/json; charset=utf-8",
                     dataType: "json",
                     success: function (response) {
+                        $('.comment-field').val("");
                         __doPostBack('<%=UpdateButton.ClientID %>')
                     },
                     failure: function (response) {
@@ -231,7 +232,7 @@
             $.ajax({
                 cache: false,
                 type: "POST",
-                url: "http://www.wordpress.com:1234/WordPress/Services/BlogsService.asmx/GetBlogContentsForPage",
+                url: "http://www.wordpress.com/WordPress/Services/BlogsService.asmx/GetBlogContentsForPage",
                 data: data,
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
@@ -244,6 +245,7 @@
                         $('.likeCount').html(datatable["likeCount"]);
                         $('.picture').prop("src", "../../Assets/ProfilePictures/" + datatable["picture"]);
                         $('.username').html(datatable["username"]);
+                        $('.mdl-card__media').css("background-color", datatable["primaryColor"]);
 
                         var date = new Date(parseInt(datatable["dateCreated"].replace(/\//g, "").replace(/Date\(/g, "").replace(/\)/g, "")));
                         $('.dateCreated').html(new Date());
@@ -296,7 +298,7 @@
             $.ajax({
                 cache: false,
                 type: "POST",
-                url: "http://www.wordpress.com:1234/WordPress/Services/BlogsService.asmx/GetBlogId",
+                url: "http://www.wordpress.com/WordPress/Services/BlogsService.asmx/GetBlogId",
                 data: "{'domainId':'" + domain + "', 'blogTitle':'" + newTitle + "'}",
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
@@ -322,7 +324,7 @@
                 $.ajax({
                     cache: false,
                     type: "POST",
-                    url: "http://www.wordpress.com:1234/WordPress/Services/BlogsService.asmx/GetBlogContent",
+                    url: "http://www.wordpress.com/WordPress/Services/BlogsService.asmx/GetBlogContent",
                     data: data,
                     contentType: "application/json; charset=utf-8",
                     dataType: "json",
@@ -348,7 +350,7 @@
                 $.ajax({
                     cache: false,
                     type: "POST",
-                    url: "http://www.wordpress.com:1234/WordPress/Services/BlogsService.asmx/DeleteBlog",
+                    url: "http://www.wordpress.com/WordPress/Services/BlogsService.asmx/DeleteBlog",
                     data: data,
                     contentType: "application/json; charset=utf-8",
                     dataType: "json",
@@ -377,7 +379,7 @@
                 $.ajax({
                     cache: false,
                     type: "POST",
-                    url: "http://www.wordpress.com:1234/WordPress/Services/BlogsService.asmx/EditBlogContent",
+                    url: "http://www.wordpress.com/WordPress/Services/BlogsService.asmx/EditBlogContent",
                     data: data,
                     contentType: "application/json; charset=utf-8",
                     dataType: "json",
@@ -395,6 +397,27 @@
             if (domainSession != domain) {
                 $(".blog-menu").hide();
             }
+
+
+
+
+            $.ajax({
+                cache: false,
+                type: "POST",
+                url: "http://www.wordpress.com/WordPress/Services/DomainsService.asmx/GetStyles",
+                data: "{\"domainId\":\"" + domain + "\"}",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {
+                    var datatable = JSON.parse(response.d)[0];
+
+                    $('body').css("background-image", "url('../../Assets/BackgroundImages/" + datatable["bgImage"] + "')");
+                },
+                failure: function (response) {
+                    alert("Database Error: Set BG Image")
+                }
+            });
+
 
         });
         

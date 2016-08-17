@@ -109,7 +109,7 @@
             $.ajax({
                 cache: false,
                 type: "POST",
-                url: "http://www.wordpress.com:1234/WordPress/Services/AccountsService.asmx/Register",
+                url: "http://www.wordpress.com/WordPress/Services/AccountsService.asmx/Register",
                 data: data,
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",

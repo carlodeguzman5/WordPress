@@ -9,12 +9,13 @@
     <style>
         .demo-card-square.mdl-card 
         {
-            margin: 100px auto;
+            margin: 0 auto;
             width: 60%;
         }
         .demo-card-square > .mdl-card__title {
           color: #fff;
           background: rgb(255,171,64);
+          height: 250px;
         }
         .demo-card-square > .mdl-card__supporting-text
         {
@@ -26,7 +27,7 @@
     </asp:ScriptManager>
 
     <div class="demo-card-square mdl-card mdl-shadow--2dp">
-      <div class="mdl-card__title mdl-card--expand">
+      <div class="mdl-card__title mdl-card--expand" style="background-image: url('http://www.wordpress.com/WordPress/Assets/customize.jpg'); background-size:cover;">
         <h2 class="mdl-card__title-text">Customize Profile</h2>
       </div>
       <div class="mdl-card__supporting-text">
@@ -34,9 +35,11 @@
             <table>
                 <tr>
                     <td>
-                        <asp:FileUpload ID="FileUpload1" runat="server" />
-                        <asp:Label ID="Label1" runat="server" Text=""></asp:Label>
-                        <asp:Button ID="Button1" runat="server" Text="Upload" />
+                        <p>Background Image:
+                            <asp:FileUpload ID="FileUpload1" runat="server" />
+                            <asp:Label ID="Label1" runat="server" Text=""></asp:Label>
+                            <asp:Button ID="Button1" runat="server" Text="Upload" />
+                         </p>
                     </td>
                 </tr>
                 <tr>
@@ -59,8 +62,8 @@
 
       </div>
       <div class="mdl-card__actions mdl-card--border">
-        <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">
-          Save
+        <a href="http://www.wordpress.com/WordPress/" class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">
+          Back
         </a>
       </div>
     </div>
@@ -68,7 +71,7 @@
         $.ajax({
             cache: false,
             type: "POST",
-            url: "http://www.wordpress.com:1234/WordPress/Services/AccountsService.asmx/GetImagePath",
+            url: "http://www.wordpress.com/WordPress/Services/AccountsService.asmx/GetImagePath",
             data: "{\"email\":\"" + '<%=Session["email"] %>' + "\"}",
             contentType: "application/json; charset=utf-8",
             dataType: "json",
@@ -76,7 +79,7 @@
                 $('#image').attr("src", response.d);
             },
             failure: function (response) {
-                //alert(response.ds);
+                alert("Database Error: Load")
             }
         });
 
@@ -84,22 +87,21 @@
         $.ajax({
             cache: false,
             type: "POST",
-            url: "http://www.wordpress.com:1234/WordPress/Services/DomainsService.asmx/GetStyles",
+            url: "http://www.wordpress.com/WordPress/Services/DomainsService.asmx/GetStyles",
             data: "{\"domainId\":\"" + '<%=Session["domain"]%>' + "\"}",
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             success: function (response) {
                 var datatable = JSON.parse(response.d)[0];
 
-                $('.mdl-card__media').css("background-color", datatable["primaryColor"]);
-                $('.mdl-card_media').css("color", datatable["secondaryColor"]);
+                $('.mdl-card__title').css("background-color", datatable["primaryColor"]);
+                $('.mdl-card__title').css("color", datatable["secondaryColor"]);
                 $('body').css("background-image", "url('../Assets/BackgroundImages/" + datatable["bgImage"] + "')");
 
-                $('#primary-color').val( datatable["primaryColor"] );
-
+                $('#primary-color').val(datatable["primaryColor"]);
             },
             failure: function (response) {
-                //alert(response.ds);
+                alert("Database Error: GetStyle")
             }
         });
 
@@ -109,7 +111,7 @@
             $.ajax({
                 cache: false,
                 type: "POST",
-                url: "http://www.wordpress.com:1234/WordPress/Services/DomainsService.asmx/setPrimaryColor",
+                url: "http://www.wordpress.com/WordPress/Services/DomainsService.asmx/setPrimaryColor",
                 data: "{\"color\":\"#" + primaryColor +"\",\"domainId\":\"" + '<%=Session["domain"]%>' + "\"}",
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",

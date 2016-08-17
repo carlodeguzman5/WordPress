@@ -1,4 +1,4 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Domains/Template.master" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="Template.master" %>
 
 <script runat="server">
 
@@ -178,7 +178,7 @@
                 $.ajax({
                     cache: false,
                     type: "POST",
-                    url: "http://www.wordpress.com:1234/WordPress/Services/LikesService.asmx/CreateLike",
+                    url: "http://www.wordpress.com/WordPress/Services/LikesService.asmx/CreateLike",
                     data: data,
                     contentType: "application/json; charset=utf-8",
                     dataType: "json",
@@ -211,7 +211,7 @@
                 $.ajax({
                     cache: false,
                     type: "POST",
-                    url: "http://www.wordpress.com:1234/WordPress/Services/CommentsService.asmx/CreateComment",
+                    url: "http://www.wordpress.com/WordPress/Services/CommentsService.asmx/CreateComment",
                     data: data,
                     contentType: "application/json; charset=utf-8",
                     dataType: "json",
@@ -232,7 +232,7 @@
             $.ajax({
                 cache: false,
                 type: "POST",
-                url: "http://www.wordpress.com:1234/WordPress/Services/BlogsService.asmx/GetBlogContentsForPage",
+                url: "http://www.wordpress.com/WordPress/Services/BlogsService.asmx/GetBlogContentsForPage",
                 data: data,
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
@@ -298,7 +298,7 @@
             $.ajax({
                 cache: false,
                 type: "POST",
-                url: "http://www.wordpress.com:1234/WordPress/Services/BlogsService.asmx/GetBlogId",
+                url: "http://www.wordpress.com/WordPress/Services/BlogsService.asmx/GetBlogId",
                 data: "{'domainId':'" + domain + "', 'blogTitle':'" + newTitle + "'}",
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
@@ -324,7 +324,7 @@
                 $.ajax({
                     cache: false,
                     type: "POST",
-                    url: "http://www.wordpress.com:1234/WordPress/Services/BlogsService.asmx/GetBlogContent",
+                    url: "http://www.wordpress.com/WordPress/Services/BlogsService.asmx/GetBlogContent",
                     data: data,
                     contentType: "application/json; charset=utf-8",
                     dataType: "json",
@@ -350,7 +350,7 @@
                 $.ajax({
                     cache: false,
                     type: "POST",
-                    url: "http://www.wordpress.com:1234/WordPress/Services/BlogsService.asmx/DeleteBlog",
+                    url: "http://www.wordpress.com/WordPress/Services/BlogsService.asmx/DeleteBlog",
                     data: data,
                     contentType: "application/json; charset=utf-8",
                     dataType: "json",
@@ -379,7 +379,7 @@
                 $.ajax({
                     cache: false,
                     type: "POST",
-                    url: "http://www.wordpress.com:1234/WordPress/Services/BlogsService.asmx/EditBlogContent",
+                    url: "http://www.wordpress.com/WordPress/Services/BlogsService.asmx/EditBlogContent",
                     data: data,
                     contentType: "application/json; charset=utf-8",
                     dataType: "json",
@@ -404,7 +404,7 @@
             $.ajax({
                 cache: false,
                 type: "POST",
-                url: "http://www.wordpress.com:1234/WordPress/Services/DomainsService.asmx/GetStyles",
+                url: "http://www.wordpress.com/WordPress/Services/DomainsService.asmx/GetStyles",
                 data: "{\"domainId\":\"" + domain + "\"}",
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",

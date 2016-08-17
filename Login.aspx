@@ -90,7 +90,7 @@
                 $.ajax({
                     cache: false,
                     type: "POST",
-                    url: "http://www.wordpress.com:1234/WordPress/Services/AccountsService.asmx/Login",
+                    url: "http://www.wordpress.com/WordPress/Services/AccountsService.asmx/Login",
                     data: data,
                     contentType: "application/json; charset=utf-8",
                     dataType: "json",
@@ -123,7 +123,7 @@
             $.ajax({
                 cache: false,
                 type: "POST",
-                url: "http://www.wordpress.com:1234/WordPress/Services/DomainsService.asmx/GetDomain",
+                url: "http://www.wordpress.com/WordPress/Services/DomainsService.asmx/GetDomain",
                 data: "{\"email\":\"" + email + "\"}",
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",

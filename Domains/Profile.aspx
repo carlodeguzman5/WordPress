@@ -8,12 +8,13 @@
     <style>
         .demo-card-square.mdl-card 
         {
-            margin: 200px auto;
+            margin: 0 auto;
             width: 60%;
         }
         .demo-card-square > .mdl-card__title {
           color: #fff;
           background: rgb(255,171,64);
+          height: 250px;
         }
         .demo-card-square > .mdl-card__supporting-text
         {
@@ -25,69 +26,45 @@
     </asp:ScriptManager>
 
     <div class="demo-card-square mdl-card mdl-shadow--2dp">
-      <div class="mdl-card__title mdl-card--expand">
-        <h2 class="mdl-card__title-text">Profile</h2>
+      <div class="mdl-card__title mdl-card--expand" style="background-image: url('http://www.wordpress.com/WordPress/Assets/profile.jpg'); background-size:cover;">
+        <h1 class="mdl-card__title-text">Profile</h1>
       </div>
-      <div class="mdl-card__supporting-text">
+      <div class="mdl-card__supporting-text" >
           <asp:UpdatePanel ID="UpdatePanel1" runat="server">
            <ContentTemplate>
             <asp:ListView ID="ListView1" runat="server" DataKeyNames="email" 
               DataSourceID="SqlDataSource1" EnableModelValidation="True">
-              <EditItemTemplate>
-                  <span style="">email:
-                  <asp:Label ID="emailLabel1" runat="server" Text='<%# Eval("email") %>' />
-                  <br />
-                  username:
-                  <asp:TextBox ID="usernameTextBox" runat="server" 
-                      Text='<%# Bind("username") %>' />
-                  <br />
-                  password:
-                  <asp:TextBox ID="passwordTextBox" runat="server" 
-                      Text='<%# Bind("password") %>' />
-                  <br />
-                  domainId:
-                  <asp:TextBox ID="domainIdTextBox" runat="server" 
-                      Text='<%# Bind("domainId") %>' />
-                  <br />
-                  picture:
-                  <asp:TextBox ID="pictureTextBox" runat="server" Text='<%# Bind("picture") %>' />
-                  <br />
-                  <asp:Button ID="UpdateButton" runat="server" CommandName="Update" 
-                      Text="Update" />
-                  <asp:Button ID="CancelButton" runat="server" CommandName="Cancel" 
-                      Text="Cancel" />
-                  <br /><br /></span>
-              </EditItemTemplate>
               <EmptyDataTemplate>
-                  <span>No data was returned.</span>
+                  <span>An Error has occured.</span>
               </EmptyDataTemplate>
               <ItemTemplate>
-                    <table>
+                    <table style="padding: 0 32px 0 32px; width: 100%;" >
                         <tr>
                             <td>
-                             Username: 
-                            </td>
-                            <td>
-                                 <asp:TextBox ID="TextBox1" ReadOnly="true" runat="server" Text='<%# Eval("username") %>'></asp:TextBox>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                Email Address: 
-                            </td>
-                            <td>
-                                <asp:TextBox ID="TextBox2" ReadOnly="true" runat="server" Text='<%# Eval("email") %>'></asp:TextBox> 
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                
+                                <p>Profile Picture: </p>
                             </td>
                             <td>
                                 <asp:Image ID="Image1" AlternateText="Picture" ImageUrl= '<%# "~/Assets/ProfilePictures/" +  Eval("picture") %>' width="100px" runat="server" />
                                    
                             </td>
                         </tr>
+                        <tr>
+                            <td>
+                             <p>Username: </p>
+                            </td>
+                            <td>
+                                <p><%# Eval("username") %></p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <p> Email Address: </p>
+                            </td>
+                            <td>
+                                <p><%# Eval("email") %></p>
+                            </td>
+                        </tr>
+                        
                     </table>
                 </ItemTemplate>
                 <LayoutTemplate>
@@ -125,7 +102,7 @@
         $.ajax({
             cache: false,
             type: "POST",
-            url: "http://www.wordpress.com:1234/WordPress/Services/AccountsService.asmx/GetImagePath",
+            url: "http://www.wordpress.com/WordPress/Services/AccountsService.asmx/GetImagePath",
             data: "{\"email\":\"" + '<%=Session["email"] %>' + "\"}",
             contentType: "application/json; charset=utf-8",
             dataType: "json",
@@ -141,15 +118,15 @@
         $.ajax({
             cache: false,
             type: "POST",
-            url: "http://www.wordpress.com:1234/WordPress/Services/DomainsService.asmx/GetStyles",
+            url: "http://www.wordpress.com/WordPress/Services/DomainsService.asmx/GetStyles",
             data: "{\"domainId\":\"" + '<%=Session["domain"]%>' + "\"}",
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             success: function (response) {
                 var datatable = JSON.parse(response.d)[0];
 
-                $('.mdl-card__media').css("background-color", datatable["primaryColor"]);
-                $('.mdl-card_media').css("color", datatable["secondaryColor"]);
+                $('.mdl-card__title').css("background-color", datatable["primaryColor"]);
+                $('.mdl-card__title').css("color", datatable["secondaryColor"]);
                 $('body').css("background-image", "url('../Assets/BackgroundImages/" + datatable["bgImage"] + "')");
 
 

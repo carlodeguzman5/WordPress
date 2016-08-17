@@ -1,0 +1,726 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://tempuri.org/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://tempuri.org/">
+      <s:element name="CreateBlog">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="blogTitle" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="domainId" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="username" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="blogContent" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="canLike" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="canComment" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="canReblog" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="htmlBlogContent" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="CreateBlogResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="CreateBlogResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetBlog">
+        <s:complexType />
+      </s:element>
+      <s:element name="GetBlogResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetBlogResult">
+              <s:complexType>
+                <s:sequence>
+                  <s:any minOccurs="0" maxOccurs="unbounded" namespace="http://www.w3.org/2001/XMLSchema" processContents="lax" />
+                  <s:any minOccurs="1" namespace="urn:schemas-microsoft-com:xml-diffgram-v1" processContents="lax" />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetBlogId">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="domainId" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="blogTitle" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetBlogIdResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetBlogIdResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="IsCommentable">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="blogId" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="IsCommentableResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="IsCommentableResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="DeleteBlog">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="blogId" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="domainId" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="blogTitle" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="DeleteBlogResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="DeleteBlogResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetBlogContent">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="blogId" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetBlogContentResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetBlogContentResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="EditBlogContent">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="blogId" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="blogContentText" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="blogContentHtml" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="EditBlogContentResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="EditBlogContentResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetBlogContentsForPage">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="blogId" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="email" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetBlogContentsForPageResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetBlogContentsForPageResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="string" nillable="true" type="s:string" />
+      <s:element name="DataTable" nillable="true">
+        <s:complexType>
+          <s:sequence>
+            <s:any minOccurs="0" maxOccurs="unbounded" namespace="http://www.w3.org/2001/XMLSchema" processContents="lax" />
+            <s:any minOccurs="1" namespace="urn:schemas-microsoft-com:xml-diffgram-v1" processContents="lax" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="CreateBlogSoapIn">
+    <wsdl:part name="parameters" element="tns:CreateBlog" />
+  </wsdl:message>
+  <wsdl:message name="CreateBlogSoapOut">
+    <wsdl:part name="parameters" element="tns:CreateBlogResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetBlogSoapIn">
+    <wsdl:part name="parameters" element="tns:GetBlog" />
+  </wsdl:message>
+  <wsdl:message name="GetBlogSoapOut">
+    <wsdl:part name="parameters" element="tns:GetBlogResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetBlogIdSoapIn">
+    <wsdl:part name="parameters" element="tns:GetBlogId" />
+  </wsdl:message>
+  <wsdl:message name="GetBlogIdSoapOut">
+    <wsdl:part name="parameters" element="tns:GetBlogIdResponse" />
+  </wsdl:message>
+  <wsdl:message name="IsCommentableSoapIn">
+    <wsdl:part name="parameters" element="tns:IsCommentable" />
+  </wsdl:message>
+  <wsdl:message name="IsCommentableSoapOut">
+    <wsdl:part name="parameters" element="tns:IsCommentableResponse" />
+  </wsdl:message>
+  <wsdl:message name="DeleteBlogSoapIn">
+    <wsdl:part name="parameters" element="tns:DeleteBlog" />
+  </wsdl:message>
+  <wsdl:message name="DeleteBlogSoapOut">
+    <wsdl:part name="parameters" element="tns:DeleteBlogResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetBlogContentSoapIn">
+    <wsdl:part name="parameters" element="tns:GetBlogContent" />
+  </wsdl:message>
+  <wsdl:message name="GetBlogContentSoapOut">
+    <wsdl:part name="parameters" element="tns:GetBlogContentResponse" />
+  </wsdl:message>
+  <wsdl:message name="EditBlogContentSoapIn">
+    <wsdl:part name="parameters" element="tns:EditBlogContent" />
+  </wsdl:message>
+  <wsdl:message name="EditBlogContentSoapOut">
+    <wsdl:part name="parameters" element="tns:EditBlogContentResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetBlogContentsForPageSoapIn">
+    <wsdl:part name="parameters" element="tns:GetBlogContentsForPage" />
+  </wsdl:message>
+  <wsdl:message name="GetBlogContentsForPageSoapOut">
+    <wsdl:part name="parameters" element="tns:GetBlogContentsForPageResponse" />
+  </wsdl:message>
+  <wsdl:message name="CreateBlogHttpGetIn">
+    <wsdl:part name="blogTitle" type="s:string" />
+    <wsdl:part name="domainId" type="s:string" />
+    <wsdl:part name="username" type="s:string" />
+    <wsdl:part name="blogContent" type="s:string" />
+    <wsdl:part name="canLike" type="s:string" />
+    <wsdl:part name="canComment" type="s:string" />
+    <wsdl:part name="canReblog" type="s:string" />
+    <wsdl:part name="htmlBlogContent" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="CreateBlogHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="GetBlogHttpGetIn" />
+  <wsdl:message name="GetBlogHttpGetOut">
+    <wsdl:part name="Body" element="tns:DataTable" />
+  </wsdl:message>
+  <wsdl:message name="GetBlogIdHttpGetIn">
+    <wsdl:part name="domainId" type="s:string" />
+    <wsdl:part name="blogTitle" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetBlogIdHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="IsCommentableHttpGetIn">
+    <wsdl:part name="blogId" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="IsCommentableHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="DeleteBlogHttpGetIn">
+    <wsdl:part name="blogId" type="s:string" />
+    <wsdl:part name="domainId" type="s:string" />
+    <wsdl:part name="blogTitle" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="DeleteBlogHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="GetBlogContentHttpGetIn">
+    <wsdl:part name="blogId" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetBlogContentHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="EditBlogContentHttpGetIn">
+    <wsdl:part name="blogId" type="s:string" />
+    <wsdl:part name="blogContentText" type="s:string" />
+    <wsdl:part name="blogContentHtml" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="EditBlogContentHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="GetBlogContentsForPageHttpGetIn">
+    <wsdl:part name="blogId" type="s:string" />
+    <wsdl:part name="email" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetBlogContentsForPageHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="CreateBlogHttpPostIn">
+    <wsdl:part name="blogTitle" type="s:string" />
+    <wsdl:part name="domainId" type="s:string" />
+    <wsdl:part name="username" type="s:string" />
+    <wsdl:part name="blogContent" type="s:string" />
+    <wsdl:part name="canLike" type="s:string" />
+    <wsdl:part name="canComment" type="s:string" />
+    <wsdl:part name="canReblog" type="s:string" />
+    <wsdl:part name="htmlBlogContent" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="CreateBlogHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="GetBlogHttpPostIn" />
+  <wsdl:message name="GetBlogHttpPostOut">
+    <wsdl:part name="Body" element="tns:DataTable" />
+  </wsdl:message>
+  <wsdl:message name="GetBlogIdHttpPostIn">
+    <wsdl:part name="domainId" type="s:string" />
+    <wsdl:part name="blogTitle" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetBlogIdHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="IsCommentableHttpPostIn">
+    <wsdl:part name="blogId" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="IsCommentableHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="DeleteBlogHttpPostIn">
+    <wsdl:part name="blogId" type="s:string" />
+    <wsdl:part name="domainId" type="s:string" />
+    <wsdl:part name="blogTitle" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="DeleteBlogHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="GetBlogContentHttpPostIn">
+    <wsdl:part name="blogId" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetBlogContentHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="EditBlogContentHttpPostIn">
+    <wsdl:part name="blogId" type="s:string" />
+    <wsdl:part name="blogContentText" type="s:string" />
+    <wsdl:part name="blogContentHtml" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="EditBlogContentHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="GetBlogContentsForPageHttpPostIn">
+    <wsdl:part name="blogId" type="s:string" />
+    <wsdl:part name="email" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetBlogContentsForPageHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:portType name="BlogsServiceSoap">
+    <wsdl:operation name="CreateBlog">
+      <wsdl:input message="tns:CreateBlogSoapIn" />
+      <wsdl:output message="tns:CreateBlogSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetBlog">
+      <wsdl:input message="tns:GetBlogSoapIn" />
+      <wsdl:output message="tns:GetBlogSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetBlogId">
+      <wsdl:input message="tns:GetBlogIdSoapIn" />
+      <wsdl:output message="tns:GetBlogIdSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="IsCommentable">
+      <wsdl:input message="tns:IsCommentableSoapIn" />
+      <wsdl:output message="tns:IsCommentableSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="DeleteBlog">
+      <wsdl:input message="tns:DeleteBlogSoapIn" />
+      <wsdl:output message="tns:DeleteBlogSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetBlogContent">
+      <wsdl:input message="tns:GetBlogContentSoapIn" />
+      <wsdl:output message="tns:GetBlogContentSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="EditBlogContent">
+      <wsdl:input message="tns:EditBlogContentSoapIn" />
+      <wsdl:output message="tns:EditBlogContentSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetBlogContentsForPage">
+      <wsdl:input message="tns:GetBlogContentsForPageSoapIn" />
+      <wsdl:output message="tns:GetBlogContentsForPageSoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:portType name="BlogsServiceHttpGet">
+    <wsdl:operation name="CreateBlog">
+      <wsdl:input message="tns:CreateBlogHttpGetIn" />
+      <wsdl:output message="tns:CreateBlogHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetBlog">
+      <wsdl:input message="tns:GetBlogHttpGetIn" />
+      <wsdl:output message="tns:GetBlogHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetBlogId">
+      <wsdl:input message="tns:GetBlogIdHttpGetIn" />
+      <wsdl:output message="tns:GetBlogIdHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="IsCommentable">
+      <wsdl:input message="tns:IsCommentableHttpGetIn" />
+      <wsdl:output message="tns:IsCommentableHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="DeleteBlog">
+      <wsdl:input message="tns:DeleteBlogHttpGetIn" />
+      <wsdl:output message="tns:DeleteBlogHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetBlogContent">
+      <wsdl:input message="tns:GetBlogContentHttpGetIn" />
+      <wsdl:output message="tns:GetBlogContentHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="EditBlogContent">
+      <wsdl:input message="tns:EditBlogContentHttpGetIn" />
+      <wsdl:output message="tns:EditBlogContentHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetBlogContentsForPage">
+      <wsdl:input message="tns:GetBlogContentsForPageHttpGetIn" />
+      <wsdl:output message="tns:GetBlogContentsForPageHttpGetOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:portType name="BlogsServiceHttpPost">
+    <wsdl:operation name="CreateBlog">
+      <wsdl:input message="tns:CreateBlogHttpPostIn" />
+      <wsdl:output message="tns:CreateBlogHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetBlog">
+      <wsdl:input message="tns:GetBlogHttpPostIn" />
+      <wsdl:output message="tns:GetBlogHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetBlogId">
+      <wsdl:input message="tns:GetBlogIdHttpPostIn" />
+      <wsdl:output message="tns:GetBlogIdHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="IsCommentable">
+      <wsdl:input message="tns:IsCommentableHttpPostIn" />
+      <wsdl:output message="tns:IsCommentableHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="DeleteBlog">
+      <wsdl:input message="tns:DeleteBlogHttpPostIn" />
+      <wsdl:output message="tns:DeleteBlogHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetBlogContent">
+      <wsdl:input message="tns:GetBlogContentHttpPostIn" />
+      <wsdl:output message="tns:GetBlogContentHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="EditBlogContent">
+      <wsdl:input message="tns:EditBlogContentHttpPostIn" />
+      <wsdl:output message="tns:EditBlogContentHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetBlogContentsForPage">
+      <wsdl:input message="tns:GetBlogContentsForPageHttpPostIn" />
+      <wsdl:output message="tns:GetBlogContentsForPageHttpPostOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="BlogsServiceSoap" type="tns:BlogsServiceSoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="CreateBlog">
+      <soap:operation soapAction="http://tempuri.org/CreateBlog" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetBlog">
+      <soap:operation soapAction="http://tempuri.org/GetBlog" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetBlogId">
+      <soap:operation soapAction="http://tempuri.org/GetBlogId" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="IsCommentable">
+      <soap:operation soapAction="http://tempuri.org/IsCommentable" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DeleteBlog">
+      <soap:operation soapAction="http://tempuri.org/DeleteBlog" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetBlogContent">
+      <soap:operation soapAction="http://tempuri.org/GetBlogContent" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="EditBlogContent">
+      <soap:operation soapAction="http://tempuri.org/EditBlogContent" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetBlogContentsForPage">
+      <soap:operation soapAction="http://tempuri.org/GetBlogContentsForPage" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="BlogsServiceSoap12" type="tns:BlogsServiceSoap">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="CreateBlog">
+      <soap12:operation soapAction="http://tempuri.org/CreateBlog" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetBlog">
+      <soap12:operation soapAction="http://tempuri.org/GetBlog" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetBlogId">
+      <soap12:operation soapAction="http://tempuri.org/GetBlogId" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="IsCommentable">
+      <soap12:operation soapAction="http://tempuri.org/IsCommentable" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DeleteBlog">
+      <soap12:operation soapAction="http://tempuri.org/DeleteBlog" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetBlogContent">
+      <soap12:operation soapAction="http://tempuri.org/GetBlogContent" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="EditBlogContent">
+      <soap12:operation soapAction="http://tempuri.org/EditBlogContent" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetBlogContentsForPage">
+      <soap12:operation soapAction="http://tempuri.org/GetBlogContentsForPage" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="BlogsServiceHttpGet" type="tns:BlogsServiceHttpGet">
+    <http:binding verb="GET" />
+    <wsdl:operation name="CreateBlog">
+      <http:operation location="/CreateBlog" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetBlog">
+      <http:operation location="/GetBlog" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetBlogId">
+      <http:operation location="/GetBlogId" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="IsCommentable">
+      <http:operation location="/IsCommentable" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DeleteBlog">
+      <http:operation location="/DeleteBlog" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetBlogContent">
+      <http:operation location="/GetBlogContent" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="EditBlogContent">
+      <http:operation location="/EditBlogContent" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetBlogContentsForPage">
+      <http:operation location="/GetBlogContentsForPage" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="BlogsServiceHttpPost" type="tns:BlogsServiceHttpPost">
+    <http:binding verb="POST" />
+    <wsdl:operation name="CreateBlog">
+      <http:operation location="/CreateBlog" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetBlog">
+      <http:operation location="/GetBlog" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetBlogId">
+      <http:operation location="/GetBlogId" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="IsCommentable">
+      <http:operation location="/IsCommentable" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DeleteBlog">
+      <http:operation location="/DeleteBlog" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetBlogContent">
+      <http:operation location="/GetBlogContent" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="EditBlogContent">
+      <http:operation location="/EditBlogContent" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetBlogContentsForPage">
+      <http:operation location="/GetBlogContentsForPage" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="BlogsService">
+    <wsdl:port name="BlogsServiceSoap" binding="tns:BlogsServiceSoap">
+      <soap:address location="http://www.wordpress.com:1234/WordPress/Services/BlogsService.asmx" />
+    </wsdl:port>
+    <wsdl:port name="BlogsServiceSoap12" binding="tns:BlogsServiceSoap12">
+      <soap12:address location="http://www.wordpress.com:1234/WordPress/Services/BlogsService.asmx" />
+    </wsdl:port>
+    <wsdl:port name="BlogsServiceHttpGet" binding="tns:BlogsServiceHttpGet">
+      <http:address location="http://www.wordpress.com:1234/WordPress/Services/BlogsService.asmx" />
+    </wsdl:port>
+    <wsdl:port name="BlogsServiceHttpPost" binding="tns:BlogsServiceHttpPost">
+      <http:address location="http://www.wordpress.com:1234/WordPress/Services/BlogsService.asmx" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

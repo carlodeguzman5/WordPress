@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://tempuri.org/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://tempuri.org/">
+      <s:element name="GetLikeCount">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="blogId" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetLikeCountResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetLikeCountResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="CreateLike">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="blogId" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="email" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="CreateLikeResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="CreateLikeResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="string" nillable="true" type="s:string" />
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="GetLikeCountSoapIn">
+    <wsdl:part name="parameters" element="tns:GetLikeCount" />
+  </wsdl:message>
+  <wsdl:message name="GetLikeCountSoapOut">
+    <wsdl:part name="parameters" element="tns:GetLikeCountResponse" />
+  </wsdl:message>
+  <wsdl:message name="CreateLikeSoapIn">
+    <wsdl:part name="parameters" element="tns:CreateLike" />
+  </wsdl:message>
+  <wsdl:message name="CreateLikeSoapOut">
+    <wsdl:part name="parameters" element="tns:CreateLikeResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetLikeCountHttpGetIn">
+    <wsdl:part name="blogId" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetLikeCountHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="CreateLikeHttpGetIn">
+    <wsdl:part name="blogId" type="s:string" />
+    <wsdl:part name="email" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="CreateLikeHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="GetLikeCountHttpPostIn">
+    <wsdl:part name="blogId" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetLikeCountHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="CreateLikeHttpPostIn">
+    <wsdl:part name="blogId" type="s:string" />
+    <wsdl:part name="email" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="CreateLikeHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:portType name="LikesServiceSoap">
+    <wsdl:operation name="GetLikeCount">
+      <wsdl:input message="tns:GetLikeCountSoapIn" />
+      <wsdl:output message="tns:GetLikeCountSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="CreateLike">
+      <wsdl:input message="tns:CreateLikeSoapIn" />
+      <wsdl:output message="tns:CreateLikeSoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:portType name="LikesServiceHttpGet">
+    <wsdl:operation name="GetLikeCount">
+      <wsdl:input message="tns:GetLikeCountHttpGetIn" />
+      <wsdl:output message="tns:GetLikeCountHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="CreateLike">
+      <wsdl:input message="tns:CreateLikeHttpGetIn" />
+      <wsdl:output message="tns:CreateLikeHttpGetOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:portType name="LikesServiceHttpPost">
+    <wsdl:operation name="GetLikeCount">
+      <wsdl:input message="tns:GetLikeCountHttpPostIn" />
+      <wsdl:output message="tns:GetLikeCountHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="CreateLike">
+      <wsdl:input message="tns:CreateLikeHttpPostIn" />
+      <wsdl:output message="tns:CreateLikeHttpPostOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="LikesServiceSoap" type="tns:LikesServiceSoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="GetLikeCount">
+      <soap:operation soapAction="http://tempuri.org/GetLikeCount" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CreateLike">
+      <soap:operation soapAction="http://tempuri.org/CreateLike" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="LikesServiceSoap12" type="tns:LikesServiceSoap">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="GetLikeCount">
+      <soap12:operation soapAction="http://tempuri.org/GetLikeCount" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CreateLike">
+      <soap12:operation soapAction="http://tempuri.org/CreateLike" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="LikesServiceHttpGet" type="tns:LikesServiceHttpGet">
+    <http:binding verb="GET" />
+    <wsdl:operation name="GetLikeCount">
+      <http:operation location="/GetLikeCount" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CreateLike">
+      <http:operation location="/CreateLike" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="LikesServiceHttpPost" type="tns:LikesServiceHttpPost">
+    <http:binding verb="POST" />
+    <wsdl:operation name="GetLikeCount">
+      <http:operation location="/GetLikeCount" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CreateLike">
+      <http:operation location="/CreateLike" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="LikesService">
+    <wsdl:port name="LikesServiceSoap" binding="tns:LikesServiceSoap">
+      <soap:address location="http://www.wordpress.com:1234/WordPress/Services/LikesService.asmx" />
+    </wsdl:port>
+    <wsdl:port name="LikesServiceSoap12" binding="tns:LikesServiceSoap12">
+      <soap12:address location="http://www.wordpress.com:1234/WordPress/Services/LikesService.asmx" />
+    </wsdl:port>
+    <wsdl:port name="LikesServiceHttpGet" binding="tns:LikesServiceHttpGet">
+      <http:address location="http://www.wordpress.com:1234/WordPress/Services/LikesService.asmx" />
+    </wsdl:port>
+    <wsdl:port name="LikesServiceHttpPost" binding="tns:LikesServiceHttpPost">
+      <http:address location="http://www.wordpress.com:1234/WordPress/Services/LikesService.asmx" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

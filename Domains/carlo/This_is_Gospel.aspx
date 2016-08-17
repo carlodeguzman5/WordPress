@@ -1,4 +1,4 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Domains/Template.master" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="Template.master" %>
 
 <script runat="server">
 
@@ -202,7 +202,7 @@
         function comment() {
 
             var username = '<%= Session["username"]%>'
-            var data = "{\"blogId\":\"" + $('.TextBox3').val() + "\",\"username\":\"" + username + "\" ,\"commentContent\": \"" + $('.comment').val() + "\"}";
+            var data = "{\"blogId\":\"" + $('.TextBox3').val() + "\",\"username\":\"" + username + "\" ,\"commentContent\": \"" + $('.comment-field').val() + "\"}";
 
             if (username == "") {
                 alert("Please log in to post a comment");
@@ -216,6 +216,7 @@
                     contentType: "application/json; charset=utf-8",
                     dataType: "json",
                     success: function (response) {
+                        $('.comment-field').val("");
                         __doPostBack('<%=UpdateButton.ClientID %>')
                     },
                     failure: function (response) {
@@ -244,6 +245,7 @@
                         $('.likeCount').html(datatable["likeCount"]);
                         $('.picture').prop("src", "../../Assets/ProfilePictures/" + datatable["picture"]);
                         $('.username').html(datatable["username"]);
+                        $('.mdl-card__media').css("background-color", datatable["primaryColor"]);
 
                         var date = new Date(parseInt(datatable["dateCreated"].replace(/\//g, "").replace(/Date\(/g, "").replace(/\)/g, "")));
                         $('.dateCreated').html(new Date());
@@ -395,6 +397,27 @@
             if (domainSession != domain) {
                 $(".blog-menu").hide();
             }
+
+
+
+
+            $.ajax({
+                cache: false,
+                type: "POST",
+                url: "http://www.wordpress.com:1234/WordPress/Services/DomainsService.asmx/GetStyles",
+                data: "{\"domainId\":\"" + domain + "\"}",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {
+                    var datatable = JSON.parse(response.d)[0];
+
+                    $('body').css("background-image", "url('../../Assets/BackgroundImages/" + datatable["bgImage"] + "')");
+                },
+                failure: function (response) {
+                    alert("Database Error: Set BG Image")
+                }
+            });
+
 
         });
         
