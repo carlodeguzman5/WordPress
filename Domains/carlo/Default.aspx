@@ -23,7 +23,7 @@
         <div class="blog__posts mdl-grid">
 
             <div class="mdl-card something-else mdl-cell mdl-cell--8-col mdl-cell--4-col-desktop">
-                <button type="button" class="mdl-button mdl-js-ripple-effect mdl-js-button mdl-button--fab mdl-color--accent">
+                <button type="button" id="show-dialog" class="mdl-button mdl-js-ripple-effect mdl-js-button mdl-button--fab">
                   <i class="material-icons mdl-color-text--white" role="presentation">add</i>
                   <span class="visuallyhidden">add</span>
                 </button>
@@ -95,10 +95,6 @@
                     </asp:ListView>
                 </ContentTemplate>
             </asp:UpdatePanel>
-
-            <a ID="show-dialog" href="#" class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored">
-              <i class="material-icons">add</i>
-            </a>
 
         </div>
 
@@ -275,6 +271,7 @@
                 success: function (response) {
                     var datatable = JSON.parse(response.d)[0];
 
+                    $('#show-dialog').css("background-color", datatable["primaryColor"])
                     $('body').css("background-image", "url('http://www.wordpress.com/WordPress/Assets/BackgroundImages/" + datatable["bgImage"] + "'");
 
                 },
