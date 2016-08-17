@@ -152,7 +152,7 @@ public class BlogsService : System.Web.Services.WebService {
     [WebMethod]
     public string GetBlogContentsForPage(string blogId, string email)
     {
-        DataTable dt = ExecuteSelectQuery("SELECT dbo.[Blogs].blogId, blogTitle, dbo.[Blogs].domainId, dbo.[Blogs].username, blogContent, htmlBlogContent, canLike, canComment, canReblog, dateCreated, dateModified, picture, COUNT(dbo.[Likes].blogId) as likeCount, primaryColor, secondaryColor, CASE WHEN EXISTS (SELECT * FROM dbo.[Likes] WHERE email = '" + email + "' AND blogId = '" + blogId + "') "
+        DataTable dt = ExecuteSelectQuery("SELECT dbo.[Blogs].blogId, blogTitle, dbo.[Blogs].domainId, dbo.[Blogs].username, blogContent, htmlBlogContent, canLike, canComment, canReblog, dateCreated, dateModified, picture, COUNT(dbo.[Likes].blogId) as likeCount, primaryColor, secondaryColor, image, CASE WHEN EXISTS (SELECT * FROM dbo.[Likes] WHERE email = '" + email + "' AND blogId = '" + blogId + "') "
                 + "THEN '1' "
                 + "ELSE '0' "
 	            + "END AS isLiked "
@@ -162,10 +162,21 @@ public class BlogsService : System.Web.Services.WebService {
                 + "WHERE dbo.[Blogs].blogId = '" + blogId + "' "
                 + "AND dbo.[Blogs].username = dbo.[Accounts].username "
                 + "AND dbo.[Blogs].domainId = dbo.[Domains].domainId "
-                + "group by dbo.[Blogs].blogId, blogTitle,  dbo.[Blogs].domainId, dbo.[Blogs].username, blogContent, htmlBlogContent, canLike, canComment, canReblog, dateCreated, dateModified, picture, primaryColor, secondaryColor");
+                + "group by dbo.[Blogs].blogId, blogTitle,  dbo.[Blogs].domainId, dbo.[Blogs].username, blogContent, htmlBlogContent, canLike, canComment, canReblog, dateCreated, dateModified, picture, primaryColor, secondaryColor, image");
         dt.TableName = blogId;
 
         return ConvertDataTabletoString(dt);
+    }
+
+    [WebMethod]
+    public string UploadBlogHeader(string blogId, string imageName)
+    {
+
+        string[] array = imageName.Split('.');
+        ExecuteInsertQuery("UPDATE dbo.[Blogs] SET image = '" + blogId + "." + array[array.Length - 1] +  "' WHERE  blogId = '" + blogId + "'");
+        File.Copy(Server.MapPath("~/Assets/Temp/" + imageName), Server.MapPath("~/Assets/BlogHeaders/" + blogId + "." + array[array.Length - 1]), true) ;
+
+        return "Success";
     }
     
 }

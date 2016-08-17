@@ -61,8 +61,8 @@
                     </EmptyDataTemplate>
                     <ItemTemplate>
                         <div class="mdl-card mdl-cell mdl-cell--12-col">
-                            <div class="mdl-card__media mdl-color-text--grey-50" style="background-color: <%# Eval("primaryColor") %> ;">
-                                <h3><a href= "<%# Eval("blogTitle").ToString().Replace(" ", "_") + ".aspx" %>"> <%# Eval("blogTitle") %></a></h3>
+                            <div class="mdl-card__media mdl-color-text--grey-50" style="background-color: <%# Eval("primaryColor") %> ; background-image: url('http://www.wordpress.com/WordPress/Assets/BlogHeaders/<%#Eval("image")%>')">
+                                <h3 style="text-shadow: 1px 1px 2px #000000;"><a href= "<%# Eval("blogTitle").ToString().Replace(" ", "_") + ".aspx" %>"> <%# Eval("blogTitle") %></a></h3>
                             </div>
                             <div class="mdl-color-text--grey-600 mdl-card__supporting-text">
                                 <%# Eval("blogContent") %>
@@ -95,8 +95,6 @@
                     </asp:ListView>
                 </ContentTemplate>
             </asp:UpdatePanel>
-
-          
 
             <a ID="show-dialog" href="#" class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored">
               <i class="material-icons">add</i>
@@ -136,7 +134,7 @@
 
 
         <asp:SqlDataSource ID="SqlDataSource1" runat="server" 
-        ConnectionString="<%$ ConnectionStrings:WordPressConnectionString %>" SelectCommand="SELECT blogId, blogTitle, b.domainId, b.username, blogContent, htmlBlogContent, canLike, canComment, canReblog, dateCreated, datemodified, picture, primaryColor, secondaryColor,
+        ConnectionString="<%$ ConnectionStrings:WordPressConnectionString %>" SelectCommand="SELECT blogId, blogTitle, b.domainId, b.username, blogContent, htmlBlogContent, canLike, canComment, canReblog, dateCreated, datemodified, picture, primaryColor, secondaryColor, image,
                 CASE WHEN EXISTS(SELECT * FROM dbo.[Likes] as l WHERE l.email = @email AND l.blogId = b.blogId)
                     THEN '1' 
                     ELSE '0'

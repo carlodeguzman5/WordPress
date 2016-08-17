@@ -1,4 +1,4 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Domains/Template.master" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="Template.master" %>
 
 <script runat="server">
 
@@ -44,11 +44,12 @@
                 <ul class="mdl-menu mdl-menu--bottom-left mdl-js-menu mdl-js-ripple-effect" for="blogMenu">
                   <li class="mdl-menu__item edit">Edit</li>
                   <li class="mdl-menu__item delete">Delete</li>
+                  <li class="mdl-menu__item upload">Upload Header Image</li>
                 </ul>
                     
-                <div class="mdl-card__media mdl-color-text--grey-50">
-                    <h3 class="blogTitle">
-                    </h3>
+                <div class="mdl-card__media mdl-color-text--grey-50" style="height: 200px;">
+                    <h2 class="blogTitle" style="text-shadow: 1px 1px 2px #000000;">
+                    </h2>
                 </div>
                 <div class="mdl-color-text--grey-700 mdl-card__supporting-text meta">
                     <img class="picture minilogo" src="">
@@ -166,6 +167,22 @@
         
     </div>
 
+    <div class="mdl-dialog uploadDialogWindow" style="width: 50%; position:absolute; z-index:101; top:20%; background-color:White; visibility: hidden; margin-left: auto; margin-right: auto; left: 0; right: 0;">
+        
+        <h4 class="mdl-dialog__title">Upload Header Image</h4>
+        <div class="mdl-dialog__content">
+            
+            <input type="file" class="upload" id="f_UploadImage" />
+            <img id="myUploadedImg" alt="Photo" style="width:180px;" />
+
+        </div>
+        <div class="mdl-dialog__actions">
+            <button type="button" class="mdl-button uploadDialogSave">Save Changes</button>
+            <button type="button" class="mdl-button uploadDialogClose">I Changed My Mind</button>
+        </div>
+        
+    </div>
+
     <script type="text/javascript">
         var emailSession = '<%= Session["email"] %>'
 
@@ -246,6 +263,8 @@
                         $('.picture').prop("src", "../../Assets/ProfilePictures/" + datatable["picture"]);
                         $('.username').html(datatable["username"]);
                         $('.mdl-card__media').css("background-color", datatable["primaryColor"]);
+                        $('.mdl-card__media').css("background-image", "url('http://www.wordpress.com/WordPress/Assets/BlogHeaders/" + datatable["image"] + "')");
+                        $('.mdl-card__media').css("background-size", "cover");
 
                         var date = new Date(parseInt(datatable["dateCreated"].replace(/\//g, "").replace(/Date\(/g, "").replace(/\)/g, "")));
                         $('.dateCreated').html(new Date());
@@ -274,6 +293,45 @@
                 },
                 failure: function (response) {
                     alert("Database Error");
+                }
+            });
+        }
+
+
+        var _URL = window.URL || window.webkitURL;
+        $("#f_UploadImage").on('change', function () {
+
+            var file, img;
+            if ((file = this.files[0])) {
+                img = new Image();
+                img.onload = function () {
+                    sendFile(file);
+                };
+                img.onerror = function () {
+                    alert("Not a valid file:" + file.type);
+                };
+                img.src = _URL.createObjectURL(file);
+            }
+        });
+
+        function sendFile(file) {
+
+            var formData = new FormData();
+            formData.append('file', $('#f_UploadImage')[0].files[0]);
+            $.ajax({
+                type: 'post',
+                url: 'http://www.wordpress.com/WordPress/fileUploader.ashx',
+                data: formData,
+                success: function (status) {
+                    if (status != 'error') {
+                        var my_path = "http://www.wordpress.com/WordPress/Assets/Temp/" + status;
+                        $("#myUploadedImg").attr("src", my_path);
+                    }
+                },
+                processData: false,
+                contentType: false,
+                error: function () {
+                    alert("Whoops something went wrong!");
                 }
             });
         }
@@ -344,6 +402,11 @@
                 $('.deleteDialogPrompt').css("visibility", "visible");
             });
 
+            $('.upload').on("click", function () {
+                $('.uploadDialogWindow').css("visibility", "visible");
+            });
+
+
             $('.dialogDelete').on("click", function () {
                 var data = "{\"blogId\":\"" + $('.TextBox3').val() + "\",\"domainId\":\"" + domain + "\",\"blogTitle\":\"" + newTitle + "\"}";
 
@@ -372,6 +435,35 @@
                 editor.setContent("");
             });
 
+            $('.uploadDialogClose').on("click", function () {
+                $('.uploadDialogWindow').css("visibility", "hidden");
+                editor.setContent("");
+            });
+
+            $('.uploadDialogSave').on("click", function () {
+                var imagePath = $('#myUploadedImg').prop("src");
+                var array = imagePath.split('/');
+
+                $.ajax({
+                    cache: false,
+                    type: "POST",
+                    url: "http://www.wordpress.com/WordPress/Services/BlogsService.asmx/UploadBlogHeader",
+                    data: "{\"blogId\":\"" + $('.TextBox3').val() + "\",\"imageName\":\"" + array[array.length - 1] + "\"}",
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (response) {
+                        location.reload();
+                    },
+                    failure: function (response) {
+                        alert("Database Error");
+                    }
+                });
+
+                $('.uploadDialogWindow').css("visibility", "hidden");
+
+
+            });
+
             $('.editDialogSave').on("click", function () {
 
                 var data = "{\"blogId\":\"" + $(".TextBox3").val() + "\",\"blogContentText\":\"" + editor.getContent({ format: 'text' }) + "\",\"blogContentHtml\":\"" + editor.getContent().replace(/"/g, "'") + "\"}"
@@ -397,8 +489,6 @@
             if (domainSession != domain) {
                 $(".blog-menu").hide();
             }
-
-
 
 
             $.ajax({

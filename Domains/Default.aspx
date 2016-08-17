@@ -1,4 +1,4 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Domains/Template.master" AutoEventWireup="true" CodeFile="Default.aspx.cs" Inherits="Domains_Template" ValidateRequest = "false"%>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="Template.master" AutoEventWireup="true" CodeFile="Default.aspx.cs" Inherits="Domains_Template" ValidateRequest = "false"%>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" Runat="Server">
     <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/tinymce/4.3.13/tinymce.min.js"></script>
@@ -61,15 +61,15 @@
                     </EmptyDataTemplate>
                     <ItemTemplate>
                         <div class="mdl-card mdl-cell mdl-cell--12-col">
-                            <div class="mdl-card__media mdl-color-text--grey-50" style="background-color: <%# Eval("primaryColor") %> ;">
-                                <h3><a href= "<%# Eval("blogTitle").ToString().Replace(" ", "_") + ".aspx" %>"> <%# Eval("blogTitle") %></a></h3>
+                            <div class="mdl-card__media mdl-color-text--grey-50" style="background-color: <%# Eval("primaryColor") %> ; background-image: url('http://www.wordpress.com/WordPress/Assets/BlogHeaders/<%#Eval("image")%>')">
+                                <h3 style="text-shadow: 1px 1px 2px #000000;"><a href= "<%# Eval("blogTitle").ToString().Replace(" ", "_") + ".aspx" %>"> <%# Eval("blogTitle") %></a></h3>
                             </div>
                             <div class="mdl-color-text--grey-600 mdl-card__supporting-text">
                                 <%# Eval("blogContent") %>
                             </div>
 
                             <div class="mdl-card__supporting-text meta mdl-color-text--grey-600">
-                              <img alt="DP" src=" <%# "../../Assets/ProfilePictures/" + Eval("picture")  %>"  class="minilogo">
+                              <img alt="DP" src=" <%# "http://www.wordpress.com/WordPress/Assets/ProfilePictures/" + Eval("picture")  %>"  class="minilogo">
                               <div>
                                 <strong><%# Eval("username") %></strong>
                                 <span><%# Eval("dateCreated") %></span>
@@ -77,7 +77,7 @@
                             </div>
 
                             <span>
-                                <asp:LinkButton ID="LinkButton1" runat="server" class="mdl-button mdl-js-button mdl-button--icon" CommandName="Like" CommandArgument="<%#Eval("blogId").toString()%>
+                                <asp:LinkButton ID="LinkButton1" runat="server" class="mdl-button mdl-js-button mdl-button--icon" CommandName="Like" CommandArgument="22">
                                     <i class="material-icons like-icon" style="color:<%# Eval("isLiked").ToString().Equals("1") ? "Red" : "Black" %>">favorite</i>
                                 </asp:LinkButton>
                                 <button class="mdl-button mdl-js-button mdl-button--icon" <%# Eval("canReblog").ToString().Equals("1") ? "" : "disabled" %>>
@@ -95,8 +95,6 @@
                     </asp:ListView>
                 </ContentTemplate>
             </asp:UpdatePanel>
-
-          
 
             <a ID="show-dialog" href="#" class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored">
               <i class="material-icons">add</i>
@@ -136,7 +134,7 @@
 
 
         <asp:SqlDataSource ID="SqlDataSource1" runat="server" 
-        ConnectionString="<%$ ConnectionStrings:WordPressConnectionString %>" SelectCommand="SELECT blogId, blogTitle, b.domainId, b.username, blogContent, htmlBlogContent, canLike, canComment, canReblog, dateCreated, datemodified, picture, primaryColor, secondaryColor,
+        ConnectionString="<%$ ConnectionStrings:WordPressConnectionString %>" SelectCommand="SELECT blogId, blogTitle, b.domainId, b.username, blogContent, htmlBlogContent, canLike, canComment, canReblog, dateCreated, datemodified, picture, primaryColor, secondaryColor, image,
                 CASE WHEN EXISTS(SELECT * FROM dbo.[Likes] as l WHERE l.email = @email AND l.blogId = b.blogId)
                     THEN '1' 
                     ELSE '0'
@@ -277,7 +275,7 @@
                 success: function (response) {
                     var datatable = JSON.parse(response.d)[0];
 
-                    $('body').css("background-image", "url('../../Assets/BackgroundImages/" + datatable["bgImage"] + "')");
+                    $('body').css("background-image", "url('http://www.wordpress.com/WordPress/Assets/BackgroundImages/" + datatable["bgImage"] + "'");
 
                 },
                 failure: function (response) {
