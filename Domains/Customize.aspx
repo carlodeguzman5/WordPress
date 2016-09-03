@@ -96,7 +96,7 @@
 
                 $('.mdl-card__title').css("background-color", datatable["primaryColor"]);
                 $('.mdl-card__title').css("color", datatable["secondaryColor"]);
-                $('body').css("background-image", "url('../Assets/BackgroundImages/" + datatable["bgImage"] + "')");
+                $('body').css("background-image", "url('../Assets/BackgroundImages/" + datatable["bgImage"] + "?" + new Date().getTime() + "')");
 
                 $('#primary-color').val(datatable["primaryColor"]);
             },

@@ -2,6 +2,11 @@
 
 <script runat="server">
 
+    protected void ListView2_ItemCommand(object sender, ListViewCommandEventArgs e)
+    {
+        System.Diagnostics.Debug.WriteLine(e.CommandArgument.ToString());
+    }
+    
 </script>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" Runat="Server">
@@ -19,6 +24,14 @@
 
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" Runat="Server">
+    <div id="fb-root"></div>
+    <script>        (function (d, s, id) {
+            var js, fjs = d.getElementsByTagName(s)[0];
+            if (d.getElementById(id)) return;
+            js = d.createElement(s); js.id = id;
+            js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.7&appId=1659501234363339";
+            fjs.parentNode.insertBefore(js, fjs);
+        } (document, 'script', 'facebook-jssdk'));</script>
     <asp:ScriptManager ID="ScriptManager1" runat="server">
     </asp:ScriptManager>
 <body>
@@ -60,13 +73,21 @@
                     <div class="section-spacer"></div>
                     <div class="meta__favorites">
                         <div class="likeCount"> </div>
-                        <asp:LinkButton ID="LikeButton" runat="server" OnClientClick="return false;" class="mdl-button mdl-js-button like-button">
-                            <i class="material-icons like-icon">favorite</i>
-                        </asp:LinkButton>
-                        <span class="visuallyhidden">favorites</span>
+                        <span>
+                            <button id="LikeButton" type="button" onclick="return false;" class="mdl-button mdl-js-button mdl-button--icon like-button">
+                                <i class="material-icons like-icon">favorite</i>
+                            </button>
+                            <span class="visuallyhidden">favorites</span>
+                        </span>
+
+                        <button id="ReblogButton" type="button" onclick="return false;" class="mdl-button mdl-js-button mdl-button--icon reblog-button">
+                            <i class="material-icons reblog-icon">repeat</i>
+                        </button>
+                        <span class="visuallyhidden">repeat</span>
+
                     </div>
                     <div>
-                    <i class="material-icons" role="presentation">share</i>
+                    <div class="fb-share-button" onclick="fbshareCurrentPage()" data-layout="button" data-size="large" data-mobile-iframe="false"><a class="fb-xfbml-parse-ignore" >Share</a></div>
                     <span class="visuallyhidden">share</span>
                     </div>
                 </div>
@@ -104,6 +125,11 @@
                                             <strong><%# Eval("username") %></strong>
                                             <span><%# Eval("timestamp") %></span>
                                             </div>
+                                            <div>   
+                                                <button class="mdl-button mdl-js-button mdl-button--icon" type="button" onclick="deleteConfirm(<%#Eval("commentId")%>)" style="visibility:<%# Eval("username").ToString().Equals(Session["username"].ToString()) ? "visible" : "hidden" %>" >
+                                                  <i class="material-icons">clear</i>
+                                                </button>
+                                            </div>
                                         </header>
                                         <div class="comment__text">
                                             <%# Eval("commentContent") %>
@@ -132,15 +158,17 @@
             </div>
         </div>
 
+       
+
         <asp:SqlDataSource ID="SqlDataSource2" runat="server" 
-                ConnectionString="<%$ ConnectionStrings:WordPressConnectionString %>" SelectCommand="SELECT c.blogId, c.username, commentContent, timestamp, picture FROM dbo.[Comments] as c JOIN dbo.[Accounts] ON c.username = dbo.[Accounts].username 
+                ConnectionString="<%$ ConnectionStrings:WordPressConnectionString %>" SelectCommand="SELECT c.blogId, c.username, commentContent, timestamp, picture, commentId FROM dbo.[Comments] as c JOIN dbo.[Accounts] ON c.username = dbo.[Accounts].username 
                 WHERE blogId = @blogId ORDER BY timestamp DESC">
                 <SelectParameters>
                     <asp:ControlParameter ControlID="TextBox3" Name="blogId" PropertyName="Text" />
                 </SelectParameters>
             </asp:SqlDataSource>
 
-    <div class="mdl-dialog deleteDialogPrompt" style="width: 50%; position:absolute; z-index:101; top:20%; background-color:White; visibility: hidden; margin-left: auto; margin-right: auto; left: 0; right: 0;"">
+    <div class="mdl-dialog deleteDialogPrompt" style="width: 50%; position:fixed; z-index:101; top:20%; background-color:White; visibility: hidden; margin-left: auto; margin-right: auto; left: 0; right: 0;"">
         <h4 class="mdl-dialog__title">Delete Blog Entry?</h4>
         <div class="mdl-dialog__content">
           <p>
@@ -154,7 +182,7 @@
         </div>
     </div>
 
-    <div class="mdl-dialog editDialogWindow" style="width: 50%; position:absolute; z-index:101; top:20%; background-color:White; visibility: hidden; margin-left: auto; margin-right: auto; left: 0; right: 0;">
+    <div class="mdl-dialog editDialogWindow" style="width: 70%; position:fixed; z-index:101; top:10%; background-color:White; visibility: hidden; margin-left: auto; margin-right: auto; left: 0; right: 0;">
         
         <h4 class="mdl-dialog__title">Edit Blog Entry</h4>
         <div class="mdl-dialog__content">
@@ -167,7 +195,7 @@
         
     </div>
 
-    <div class="mdl-dialog uploadDialogWindow" style="width: 50%; position:absolute; z-index:101; top:20%; background-color:White; visibility: hidden; margin-left: auto; margin-right: auto; left: 0; right: 0;">
+    <div class="mdl-dialog uploadDialogWindow" style="width: 50%; position:fixed; z-index:101; top:20%; background-color:White; visibility: hidden; margin-left: auto; margin-right: auto; left: 0; right: 0;">
         
         <h4 class="mdl-dialog__title">Upload Header Image</h4>
         <div class="mdl-dialog__content">
@@ -183,11 +211,57 @@
         
     </div>
 
+    <div class="mdl-dialog commentDeleteDialog" style="width: 50%; position:fixed; z-index:101; top:20%; background-color:White; visibility: hidden; margin-left: auto; margin-right: auto; left: 0; right: 0;">
+        
+        <h4 class="mdl-dialog__title">Are you sure you want to delete this comment?</h4>
+        <div class="mdl-dialog__content"> 
+
+        </div>
+        <div class="mdl-dialog__actions">
+            <button type="button" class="mdl-button commentDeleteYes">Yes</button>
+            <button type="button" class="mdl-button commentDeleteDialogClose">Nevermind</button>
+        </div>
+        
+    </div>
+
+    
+
     <script type="text/javascript">
         var emailSession = '<%= Session["email"] %>'
+        var domainSession = '<%= Session["domain"] %>'
+        var usernameSession = '<%= Session["username"] %>'
+
+        function reblog() {
+            if (emailSession == "") {
+                alert("Please Login to Like posts");
+            }
+            else {
+                $.ajax({
+                    cache: false,
+                    type: "POST",
+                    url: "http://www.wordpress.com/WordPress/Services/ReblogsService.asmx/Reblog",
+                    data: "{\"domainId\":\"" + domainSession + "\",\"blogId\":\"" + $('.TextBox3').val() + "\"}",
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (response) {
+                        if (response.d == "Reblogged") {
+                            $('.reblog-icon').css("color", "blue");
+                        }
+                        else {
+                            $('.reblog-icon').css("color", "black");
+                        }
+                    },
+                    failure: function (response) {
+                        alert("Database Error");
+                    }
+                });
+            }
+
+
+        }
 
         function like() {
-            var data = "{\"blogId\":\"" + $('.TextBox3').val() + "\",\"email\":\"" + emailSession + "\"}";
+            var data = "{\"blogId\":\"" + $('.TextBox3').val() + "\",\"username\":\"" + usernameSession + "\"}";
             if (emailSession == "") {
                 alert("Please Login to Like posts");
             }
@@ -243,9 +317,46 @@
             }
         }
 
+        var commentPointer;
+        function deleteConfirm(commentId) {
+            $('.commentDeleteDialog').css("visibility", "visible");
+            commentPointer = commentId;
+
+        }
+
+        $('.commentDeleteYes').on("click", function () {
+            deleteComment(commentPointer);
+            $('.commentDeleteDialog').css("visibility", "hidden");
+        });
+
+        $('.commentDeleteDialogClose').on("click", function () {
+            commentPointer = null;
+            $('.commentDeleteDialog').css("visibility", "hidden");
+        });
+
+
+        function deleteComment(commentId) {
+            $.ajax({
+                cache: false,
+                type: 'POST',
+                url: 'http://www.wordpress.com/WordPress/Services/CommentsService.asmx/DeleteComment',
+                data: "{\"commentId\":\"" + commentId + "\"}",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {
+                    __doPostBack('<%=UpdatePanel2.ClientID %>', '');
+                },
+                error: function (response) {
+                    alert("Database Error: Delete Comment");
+                }
+            });
+
+
+        }
+
         function GetBlogData() {
 
-            var data = "{\"blogId\":\"" + $('.TextBox3').val() + "\",\"email\":\"" + '<%=Session["email"]%>' + "\"}";
+            var data = "{\"blogId\":\"" + $('.TextBox3').val() + "\",\"username\":\"" + '<%=Session["username"]%>' + "\",\"email\":\"" + emailSession + "\"}";
             $.ajax({
                 cache: false,
                 type: "POST",
@@ -273,6 +384,10 @@
                             $('.like-icon').css("color", "Red");
                         }
 
+                        if (datatable["isReblogged"] == "1") {
+                            $('.reblog-icon').css("color", "Blue");
+                        }
+
                         if (datatable["canComment"] == "0") {
                             $('.comment-field').attr("disabled", "disabled");
                             $('.comment-label').html("Comments have been disabled.");
@@ -287,6 +402,13 @@
                         }
                         else {
                             $('.like-button').attr("onclick", "like(); return false;");
+                        }
+
+                        if (datatable["canReblog"] == "0" || datatable['domainId'] == '<%=Session["domain"]%>') {
+                            $('.reblog-button').attr("disabled", "disabled");
+                        }
+                        else {
+                            $('.reblog-button').attr("onclick", "reblog(); return false;");
                         }
 
                     }
@@ -371,9 +493,6 @@
             });
 
 
-
-
-
             $('.edit').on("click", function () {
                 $('.editDialogWindow').css("visibility", "visible");
 
@@ -393,8 +512,6 @@
                         alert("Database Error");
                     }
                 });
-
-
 
             });
 
@@ -440,6 +557,7 @@
                 editor.setContent("");
             });
 
+
             $('.uploadDialogSave').on("click", function () {
                 var imagePath = $('#myUploadedImg').prop("src");
                 var array = imagePath.split('/');
@@ -463,6 +581,12 @@
 
 
             });
+
+            function fbshareCurrentPage() {
+                window.open("https://www.facebook.com/sharer/sharer.php?u=" + escape(window.location.href) + "&t=" + document.title, '',
+                'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=600');
+                return false;
+            }
 
             $('.editDialogSave').on("click", function () {
 
@@ -507,7 +631,6 @@
                     alert("Database Error: Set BG Image")
                 }
             });
-
 
         });
         

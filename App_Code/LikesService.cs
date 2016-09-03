@@ -68,15 +68,34 @@ public class LikesService : System.Web.Services.WebService {
     }
 
     [WebMethod]
-    public string CreateLike(string blogId, string email)
+    public string CreateLike(string blogId, string username)
     {
-        DataTable dt = ExecuteSelectQuery("SELECT * FROM dbo.[Likes] WHERE blogId = '" + blogId + "' AND email = '" + email + "'");
+        
+        SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["WordPressConnectionString"].ConnectionString);
+        SqlCommand cmd;
+        DataTable dt = ExecuteSelectQuery("SELECT * FROM dbo.[Likes] WHERE blogId = '" + blogId + "' AND username = '" + username + "'");
         if (dt.Rows.Count > 0) {
-
-            ExecuteInsertQuery("DELETE FROM dbo.[Likes] WHERE blogId = '" + blogId + "' AND email = '" + email + "'");
+            
+            conn.Open();
+            cmd = new SqlCommand("DELETE FROM dbo.[Likes] WHERE blogId = @blogId AND username = @username", conn);
+            cmd.Parameters.AddWithValue("@blogId", blogId);
+            cmd.Parameters.AddWithValue("@username", username);
+            cmd.ExecuteNonQuery();
+            conn.Close();
+            
             return "Unliked";
         }
-        ExecuteInsertQuery("INSERT INTO dbo.[Likes] VALUES('" + blogId + "','" + email + "')");
+        
+        conn.Open();
+        cmd = new SqlCommand("INSERT INTO dbo.[Likes] (blogId, username, timestamp, seen) VALUES( @blogId, @username, @timestamp, @seen)", conn);
+
+        cmd.Parameters.AddWithValue("@blogId", blogId);
+        cmd.Parameters.AddWithValue("@username", username);
+        cmd.Parameters.AddWithValue("@timestamp", DateTime.Now);
+        cmd.Parameters.AddWithValue("@seen", 0);
+        cmd.ExecuteNonQuery();
+        conn.Close();
+        
         return "Liked";
     }
     

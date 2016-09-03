@@ -66,15 +66,33 @@ public class CommentsService : System.Web.Services.WebService {
         SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["WordPressConnectionString"].ConnectionString);
         conn.Open();
 
-        SqlCommand cmd = new SqlCommand("INSERT INTO dbo.[Comments] VALUES (@blogId, @username, @commentContent, @timestamp)", conn);
+        SqlCommand cmd = new SqlCommand("INSERT INTO dbo.[Comments] (blogId, username, commentContent, timestamp, seen) VALUES (@blogId, @username, @commentContent, @timestamp, @seen)", conn);
         cmd.Parameters.AddWithValue("@blogId", blogId);
         cmd.Parameters.AddWithValue("@username", username);
         cmd.Parameters.AddWithValue("@commentContent", commentContent);
         cmd.Parameters.AddWithValue("@timestamp", DateTime.Now);
+        cmd.Parameters.AddWithValue("@seen", 0);
         cmd.ExecuteNonQuery();
 
         conn.Close();
 
         return "Success";
     }
+
+    [WebMethod]
+    public string DeleteComment(string commentId)
+    {
+        SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["WordPressConnectionString"].ConnectionString);
+        conn.Open();
+
+        SqlCommand cmd = new SqlCommand("DELETE FROM dbo.[Comments] WHERE commentId = @commentId", conn);
+        cmd.Parameters.AddWithValue("@commentId", commentId);
+        cmd.ExecuteNonQuery();
+
+        conn.Close();
+
+        return "Success";
+    }
+    
+
 }

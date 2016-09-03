@@ -36,11 +36,16 @@
                         <div class="mdl-layout-spacer"></div>
                         <!-- Navigation. We hide it in small screens. -->
                         <nav class="mdl-navigation mdl-layout--large-screen-only">
+                            <a class=" mdl-badge mdl-badge--overlap" id="notif-button" href="#"><i class="material-icons mdl-button--icon">notifications</i></a>
                             <a class="mdl-navigation__link" id="home-button" href="#">Home</a>
                             <a class="mdl-navigation__link" id="profile-button" href="#">Profile</a>
                             <a class="mdl-navigation__link" id="customize-button" href="#">Customize</a>
                             <a class="mdl-navigation__link" id="logout-button" href="#">Logout</a>
                         </nav>
+
+                        <ul class="mdl-menu mdl-menu--bottom-left mdl-js-menu mdl-js-ripple-effect notification-list" for="notif-button">
+                          
+                        </ul>
                     </div>
                 </header>
                 
@@ -121,6 +126,90 @@
         $('#customize-button').on('click', function () {
             window.location = "/WordPress/Domains/Customize.aspx";
         });
+
+        $.ajax({
+            cache: false,
+            type: "POST",
+            url: "http://www.wordpress.com/WordPress/Services/AccountsService.asmx/GetNotifications",
+            data: "{\"username\":\"" + '<%=Session["username"] %>' + "\"}",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                var datatable = JSON.parse(response.d);
+
+                for (i = 0; i < datatable.length; i++) {
+                    var row = datatable[i];
+
+                    
+
+                    var domain = '<%=Session["domain"]%>';
+                    var blogTitle = row["blogTitle"].replace(/ /g, "_") + ".aspx";
+
+                    var link = "http://www.wordpress.com/WordPress/Domains/" + domain + "/" + blogTitle;
+
+                    if (row["commentContent"] == "[Like]") {
+
+                        var data = link + ",0," + row["blogId"] + "," + row["username"] + "," + row["commentContent"];
+                        $('.notification-list').append('<a href=' + link + '><li class="mdl-menu__item">' + row["username"] + ' just liked ' + row["blogTitle"] + '</li></a>' );
+
+                    }
+                    else {
+                        $('.notification-list').append('<a href=' + link + '><li class="mdl-menu__item">' + row["username"] + ' just commented on ' + row["blogTitle"] + ': ' + row["commentContent"] + '</li></a>');
+
+                    }
+
+
+                }
+
+
+            },
+            failure: function (response) {
+                alert("Database Error: Notifs")
+            }
+        });
+
+
+        $.ajax({
+            cache: false,
+            type: "POST",
+            url: "http://www.wordpress.com/WordPress/Services/AccountsService.asmx/GetNewNotifCount",
+            data: "{\"username\":\"" + '<%=Session["username"] %>' + "\"}",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+
+                $('#notif-button').attr("data-badge", response.d);
+            },
+            failure: function (response) {
+                alert("Database Error: Notifs")
+            }
+        });
+
+
+
+        $('#notif-button').on("click", function(){
+            
+            $.ajax({
+                cache: false,
+                type: "POST",
+                url: "http://www.wordpress.com/WordPress/Services/AccountsService.asmx/SeenNotif",
+                data: "{\"username\":\"" + '<%=Session["username"] %>' + "\"}",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {
+                    $('#notif-button').attr("data-badge", "0");
+                },
+                failure: function (response) {
+                    alert("Database Error: Notifs")
+                }
+            });
+
+        });
+
+        if ('<%=Session["username"] %>' == '') {
+            $('#notif-button').css("visibility", "hidden");
+        }
+
 
     </script>
 

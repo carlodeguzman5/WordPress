@@ -151,9 +151,7 @@ body .demo-blog {
   font-weight: 500;
 }
 .demo-blog .meta > .meta__favorites .material-icons {
-  font-size: 2em;
   cursor: pointer;
-  margin-left: 12px;
 }
 .demo-blog .mdl-card .meta.meta--fill {
   -webkit-justify-content: space-between;

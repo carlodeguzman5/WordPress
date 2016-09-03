@@ -3,7 +3,6 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="head" Runat="Server">
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" Runat="Server">
-
    <!-- Square card -->
     <style>
         .demo-card-square.mdl-card 
@@ -44,8 +43,12 @@
                                 <p>Profile Picture: </p>
                             </td>
                             <td>
-                                <asp:Image ID="Image1" AlternateText="Picture" ImageUrl= '<%# "~/Assets/ProfilePictures/" +  Eval("picture") %>' width="100px" runat="server" />
-                                   
+                                <asp:UpdatePanel ID="UpdatePanel2" runat="server" UpdateMode="Always">
+                                    <ContentTemplate>
+                                        <asp:Image ID="Image1" AlternateText="Picture" ImageUrl= '<%# "~/Assets/ProfilePictures/" +  Eval("picture") + "?" + DateTime.Now.Ticks/1000 %>' width="100px" runat="server" />
+                                    </ContentTemplate>
+                                </asp:UpdatePanel>
+                               
                             </td>
                         </tr>
                         <tr>
@@ -93,8 +96,8 @@
 
       </div>
       <div class="mdl-card__actions mdl-card--border">
-        <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">
-          Save
+        <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" href="http://www.wordpress.com/WordPress/">
+          Back
         </a>
       </div>
     </div>

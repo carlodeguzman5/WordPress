@@ -73,9 +73,9 @@ public class BlogsService : System.Web.Services.WebService {
         cmd.Parameters.AddWithValue("@blogTitle", blogTitle.Replace("'", "''"));
         cmd.Parameters.AddWithValue("@username", username);
         cmd.Parameters.AddWithValue("@domainId", domainId);
-        cmd.Parameters.AddWithValue("@htmlBlogContent", htmlBlogContent.Replace("'", "''").Replace("\"", "''"));
-        cmd.Parameters.AddWithValue("@blogContent", blogContent.Replace("'", "''").Replace("\"", "''"));
-        cmd.Parameters.AddWithValue("@canLike", int.Parse(canLike));
+        cmd.Parameters.AddWithValue("@htmlBlogContent", htmlBlogContent);
+        cmd.Parameters.AddWithValue("@blogContent", blogContent);
+        cmd.Parameters.AddWithValue("@canLike", canLike);
         cmd.Parameters.AddWithValue("@canComment", canComment);
         cmd.Parameters.AddWithValue("@canReblog", canReblog);
         cmd.Parameters.AddWithValue("@dateCreated", DateTime.Now);
@@ -170,12 +170,19 @@ public class BlogsService : System.Web.Services.WebService {
 
 
     [WebMethod]
-    public string GetBlogContentsForPage(string blogId, string email)
+    public string GetBlogContentsForPage(string blogId, string email, string username)
     {
-        DataTable dt = ExecuteSelectQuery("SELECT dbo.[Blogs].blogId, blogTitle, dbo.[Blogs].domainId, dbo.[Blogs].username, blogContent, htmlBlogContent, canLike, canComment, canReblog, dateCreated, dateModified, picture, COUNT(dbo.[Likes].blogId) as likeCount, primaryColor, secondaryColor, image, CASE WHEN EXISTS (SELECT * FROM dbo.[Likes] WHERE email = '" + email + "' AND blogId = '" + blogId + "') "
+        DataTable emailToDomain = ExecuteSelectQuery("SELECT domainId FROM dbo.[Accounts] WHERE email = '" + email + "'");
+        string domainId = emailToDomain.Rows[0]["domainId"].ToString();
+
+        DataTable dt = ExecuteSelectQuery("SELECT dbo.[Blogs].blogId, blogTitle, dbo.[Blogs].domainId, dbo.[Blogs].username, blogContent, htmlBlogContent, canLike, canComment, canReblog, dateCreated, dateModified, picture, COUNT(CASE dbo.[Likes].blogId WHEN '" + blogId + "' THEN 1 else null END) as likeCount, primaryColor, secondaryColor, image, CASE WHEN EXISTS (SELECT * FROM dbo.[Likes] WHERE username = '" + username + "' AND blogId = '" + blogId + "') "
                 + "THEN '1' "
                 + "ELSE '0' "
-	            + "END AS isLiked "
+	            + "END AS isLiked, "
+                + "CASE WHEN EXISTS(SELECT * FROM dbo.[Reblogs] WHERE domainId = '" + domainId + "' AND blogId = '" + blogId + "') "
+                + "THEN '1' "
+                + "ELSE '0' "
+                + "END AS isReblogged "
                 + "FROM  dbo.[Accounts], dbo.[Blogs], dbo.[Domains] "
                 + "LEFT JOIN dbo.[Likes] "
                 + "on (blogId = dbo.[Likes].blogId) "

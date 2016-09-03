@@ -14,8 +14,9 @@ public partial class Domains_Template : System.Web.UI.Page
         string[] path = Server.MapPath("").Split('\\');
         HiddenField1.Value = path[path.Length - 1];
 
-        if (Session["domain"] != null) { 
-            
+        if (Session["domain"] != null)
+        {
+
         }
     }
 
@@ -30,7 +31,8 @@ public partial class Domains_Template : System.Web.UI.Page
             com.wordpress.www.LikesService LikesService = new com.wordpress.www.LikesService();
             if (Session["email"] != null)
             {
-                LikesService.CreateLike(blogId, Session["username"].ToString());
+                LikesService.CreateLike(blogId, Session["email"].ToString());
+                UpdatePanel1.Update();
             }
             //else, return error message.
         }

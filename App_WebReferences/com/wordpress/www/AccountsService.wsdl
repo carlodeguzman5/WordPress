@@ -62,6 +62,48 @@
           </s:sequence>
         </s:complexType>
       </s:element>
+      <s:element name="GetNotifications">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="username" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetNotificationsResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetNotificationsResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetNewNotifCount">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="username" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetNewNotifCountResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetNewNotifCountResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SeenNotif">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="username" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SeenNotifResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="SeenNotifResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
       <s:element name="string" nillable="true" type="s:string" />
     </s:schema>
   </wsdl:types>
@@ -89,6 +131,24 @@
   <wsdl:message name="GetProfileInformationSoapOut">
     <wsdl:part name="parameters" element="tns:GetProfileInformationResponse" />
   </wsdl:message>
+  <wsdl:message name="GetNotificationsSoapIn">
+    <wsdl:part name="parameters" element="tns:GetNotifications" />
+  </wsdl:message>
+  <wsdl:message name="GetNotificationsSoapOut">
+    <wsdl:part name="parameters" element="tns:GetNotificationsResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetNewNotifCountSoapIn">
+    <wsdl:part name="parameters" element="tns:GetNewNotifCount" />
+  </wsdl:message>
+  <wsdl:message name="GetNewNotifCountSoapOut">
+    <wsdl:part name="parameters" element="tns:GetNewNotifCountResponse" />
+  </wsdl:message>
+  <wsdl:message name="SeenNotifSoapIn">
+    <wsdl:part name="parameters" element="tns:SeenNotif" />
+  </wsdl:message>
+  <wsdl:message name="SeenNotifSoapOut">
+    <wsdl:part name="parameters" element="tns:SeenNotifResponse" />
+  </wsdl:message>
   <wsdl:message name="LoginHttpGetIn">
     <wsdl:part name="email" type="s:string" />
     <wsdl:part name="password" type="s:string" />
@@ -115,6 +175,24 @@
     <wsdl:part name="domainId" type="s:string" />
   </wsdl:message>
   <wsdl:message name="GetProfileInformationHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="GetNotificationsHttpGetIn">
+    <wsdl:part name="username" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetNotificationsHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="GetNewNotifCountHttpGetIn">
+    <wsdl:part name="username" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetNewNotifCountHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="SeenNotifHttpGetIn">
+    <wsdl:part name="username" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="SeenNotifHttpGetOut">
     <wsdl:part name="Body" element="tns:string" />
   </wsdl:message>
   <wsdl:message name="LoginHttpPostIn">
@@ -145,6 +223,24 @@
   <wsdl:message name="GetProfileInformationHttpPostOut">
     <wsdl:part name="Body" element="tns:string" />
   </wsdl:message>
+  <wsdl:message name="GetNotificationsHttpPostIn">
+    <wsdl:part name="username" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetNotificationsHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="GetNewNotifCountHttpPostIn">
+    <wsdl:part name="username" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetNewNotifCountHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="SeenNotifHttpPostIn">
+    <wsdl:part name="username" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="SeenNotifHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
   <wsdl:portType name="AccountsServiceSoap">
     <wsdl:operation name="Login">
       <wsdl:input message="tns:LoginSoapIn" />
@@ -161,6 +257,18 @@
     <wsdl:operation name="GetProfileInformation">
       <wsdl:input message="tns:GetProfileInformationSoapIn" />
       <wsdl:output message="tns:GetProfileInformationSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetNotifications">
+      <wsdl:input message="tns:GetNotificationsSoapIn" />
+      <wsdl:output message="tns:GetNotificationsSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetNewNotifCount">
+      <wsdl:input message="tns:GetNewNotifCountSoapIn" />
+      <wsdl:output message="tns:GetNewNotifCountSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="SeenNotif">
+      <wsdl:input message="tns:SeenNotifSoapIn" />
+      <wsdl:output message="tns:SeenNotifSoapOut" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:portType name="AccountsServiceHttpGet">
@@ -180,6 +288,18 @@
       <wsdl:input message="tns:GetProfileInformationHttpGetIn" />
       <wsdl:output message="tns:GetProfileInformationHttpGetOut" />
     </wsdl:operation>
+    <wsdl:operation name="GetNotifications">
+      <wsdl:input message="tns:GetNotificationsHttpGetIn" />
+      <wsdl:output message="tns:GetNotificationsHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetNewNotifCount">
+      <wsdl:input message="tns:GetNewNotifCountHttpGetIn" />
+      <wsdl:output message="tns:GetNewNotifCountHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="SeenNotif">
+      <wsdl:input message="tns:SeenNotifHttpGetIn" />
+      <wsdl:output message="tns:SeenNotifHttpGetOut" />
+    </wsdl:operation>
   </wsdl:portType>
   <wsdl:portType name="AccountsServiceHttpPost">
     <wsdl:operation name="Login">
@@ -197,6 +317,18 @@
     <wsdl:operation name="GetProfileInformation">
       <wsdl:input message="tns:GetProfileInformationHttpPostIn" />
       <wsdl:output message="tns:GetProfileInformationHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetNotifications">
+      <wsdl:input message="tns:GetNotificationsHttpPostIn" />
+      <wsdl:output message="tns:GetNotificationsHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetNewNotifCount">
+      <wsdl:input message="tns:GetNewNotifCountHttpPostIn" />
+      <wsdl:output message="tns:GetNewNotifCountHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="SeenNotif">
+      <wsdl:input message="tns:SeenNotifHttpPostIn" />
+      <wsdl:output message="tns:SeenNotifHttpPostOut" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="AccountsServiceSoap" type="tns:AccountsServiceSoap">
@@ -230,6 +362,33 @@
     </wsdl:operation>
     <wsdl:operation name="GetProfileInformation">
       <soap:operation soapAction="http://tempuri.org/GetProfileInformation" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetNotifications">
+      <soap:operation soapAction="http://tempuri.org/GetNotifications" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetNewNotifCount">
+      <soap:operation soapAction="http://tempuri.org/GetNewNotifCount" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SeenNotif">
+      <soap:operation soapAction="http://tempuri.org/SeenNotif" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
@@ -276,6 +435,33 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="GetNotifications">
+      <soap12:operation soapAction="http://tempuri.org/GetNotifications" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetNewNotifCount">
+      <soap12:operation soapAction="http://tempuri.org/GetNewNotifCount" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SeenNotif">
+      <soap12:operation soapAction="http://tempuri.org/SeenNotif" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
   </wsdl:binding>
   <wsdl:binding name="AccountsServiceHttpGet" type="tns:AccountsServiceHttpGet">
     <http:binding verb="GET" />
@@ -315,6 +501,33 @@
         <mime:mimeXml part="Body" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="GetNotifications">
+      <http:operation location="/GetNotifications" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetNewNotifCount">
+      <http:operation location="/GetNewNotifCount" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SeenNotif">
+      <http:operation location="/SeenNotif" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
   </wsdl:binding>
   <wsdl:binding name="AccountsServiceHttpPost" type="tns:AccountsServiceHttpPost">
     <http:binding verb="POST" />
@@ -347,6 +560,33 @@
     </wsdl:operation>
     <wsdl:operation name="GetProfileInformation">
       <http:operation location="/GetProfileInformation" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetNotifications">
+      <http:operation location="/GetNotifications" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetNewNotifCount">
+      <http:operation location="/GetNewNotifCount" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SeenNotif">
+      <http:operation location="/SeenNotif" />
       <wsdl:input>
         <mime:content type="application/x-www-form-urlencoded" />
       </wsdl:input>

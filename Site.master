@@ -25,7 +25,7 @@
             height: 24px;
         }
         #background-images {
-          background: url('Assets/home.jpg') center / cover;
+          background: url('Assets/home5.jpg') center / cover;
         }
         .demo-layout-transparent .mdl-layout__header,
         .demo-layout-transparent .mdl-layout__drawer-button {
@@ -57,10 +57,6 @@
             <div class="mdl-layout-spacer"></div>
             <!-- Navigation. We hide it in small screens. -->
             <nav class="mdl-navigation mdl-layout--large-screen-only">
-                <a class="mdl-navigation__link" id="home-button" href="#">Home</a>
-                <a class="mdl-navigation__link" id="profile-button" href="#">Profile</a>
-                <a class="mdl-navigation__link" id="customize-button" href="#">Customize</a>
-                <a class="mdl-navigation__link" id="logout-button" href="#">Logout</a>
             </nav>
         </div>
       </header>
@@ -80,10 +76,10 @@
      <script type="text/javascript">
         
 
-             var imageSet1 = ["Assets/home1.jpg", "Assets/home2.jpg", "Assets/home3.jpg"];
+             var imageSet1 = ["Assets/home1.jpg", "Assets/home2.jpg", "Assets/home.jpg"];
              var currentImageSet1 = 0;
 
-             var imageSet2 = ["Assets/home4.jpg", "Assets/home5.jpg", "Assets/home6.jpg"];
+             var imageSet2 = ["Assets/home4.jpg", "Assets/home6.jpg", "Assets/home5.jpg"];
              var currentImageSet2 = 0;
 
              function changeBackgroundImages() {
@@ -110,7 +106,7 @@
                      currentImageSet2 -= imageSet2.length;
                  };
              }
-             
+
              $(document).ready(function () {
                  setInterval(changeBackgroundImages, 10000);
              });

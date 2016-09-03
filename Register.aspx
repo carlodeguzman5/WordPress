@@ -17,9 +17,14 @@
         {
             
         }
+        
+        div
+        {
+            width: 400px;    
+        }
     </style>
 
-    <div class="demo-card-square mdl-card mdl-shadow--2dp">
+    <div class="demo-card-square mdl-card mdl-shadow--2dp" style="width: 100%">
       <div class="mdl-card__title mdl-card--expand">
         <h2 class="mdl-card__title-text">Register</h2>
       </div>

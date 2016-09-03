@@ -35,7 +35,7 @@ public partial class Domains_Customize : System.Web.UI.Page
                 try
                 {
                     FileUpload1.PostedFile.SaveAs(path
-                        + Session["username"].ToString() + System.IO.Path.GetExtension(FileUpload1.FileName));
+                        + Session["domain"].ToString() + System.IO.Path.GetExtension(FileUpload1.FileName));
                     Label1.Text = "File uploaded!";
                     SaveToDatabase(Session["domain"].ToString() + System.IO.Path.GetExtension(FileUpload1.FileName), Session["domain"].ToString());
 

@@ -9,7 +9,7 @@
         plugins: "image, paste, emoticons, textcolor, wordcount",
         toolbar: "forecolor backcolor | styleselect | undo redo | removeformat | bold italic underline |  aligncenter alignjustify  | bullist numlist outdent indent | link | print | fontselect fontsizeselect",
         max_height: 700,
-        min_height: 400
+        min_height: 200
     });
 </script>
 </asp:Content>
@@ -35,10 +35,7 @@
                     <strong class="username"></strong>
                   </div>
                   <ul class="mdl-menu mdl-js-menu mdl-menu--bottom-right mdl-js-ripple-effect" for="menubtn">
-                    <li class="mdl-menu__item">About</li>
-                    <li class="mdl-menu__item">Message</li>
-                    <li class="mdl-menu__item">Favorite</li>
-                    <li class="mdl-menu__item">Search</li>
+                    
                   </ul>
                   <button id="menubtn" type="button" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon">
                     <i class="material-icons" role="presentation">more_vert</i>
@@ -62,7 +59,7 @@
                     <ItemTemplate>
                         <div class="mdl-card mdl-cell mdl-cell--12-col">
                             <div class="mdl-card__media mdl-color-text--grey-50" style="background-color: <%# Eval("primaryColor") %> ; background-image: url('http://www.wordpress.com/WordPress/Assets/BlogHeaders/<%#Eval("image")%>')">
-                                <h3 style="text-shadow: 1px 1px 2px #000000;"><a href= "<%# Eval("blogTitle").ToString().Replace(" ", "_") + ".aspx" %>"> <%# Eval("blogTitle") %></a></h3>
+                                <h3 style="text-shadow: 1px 1px 2px #000000;"><a href= "http://www.wordpress.com/WordPress/Domains/<%# Eval("domainId") + "/" + Eval("blogTitle").ToString().Replace(" ", "_") + ".aspx" %>"> <%# Eval("blogTitle") %></a></h3>
                             </div>
                             <div class="mdl-color-text--grey-600 mdl-card__supporting-text">
                                 <%# Eval("blogContent") %>
@@ -77,12 +74,10 @@
                             </div>
 
                             <span>
-                                <asp:LinkButton ID="LinkButton1" runat="server" class="mdl-button mdl-js-button mdl-button--icon" CommandName="Like" CommandArgument="22">
+                             <%--   <asp:LinkButton ID="LinkButton1" runat="server" class="mdl-button mdl-js-button mdl-button--icon" CommandName="Like" CommandArgument="<%#Eval("blogId")%>">
                                     <i class="material-icons like-icon" style="color:<%# Eval("isLiked").ToString().Equals("1") ? "Red" : "Black" %>">favorite</i>
-                                </asp:LinkButton>
-                                <button class="mdl-button mdl-js-button mdl-button--icon" <%# Eval("canReblog").ToString().Equals("1") ? "" : "disabled" %>>
-                                    <i class="material-icons">repeat</i>
-                                </button>
+                                </asp:LinkButton>--%>
+                              
                             </span>
                                         
                         </div>
@@ -98,7 +93,7 @@
 
         </div>
 
-        <div class="mdl-dialog addNewBlogDialog" style="width: 50%; position:absolute; z-index:101; top:20%; background-color:White; visibility: hidden; margin-left: auto; margin-right: auto; left: 0; right: 0;">
+        <div class="mdl-dialog addNewBlogDialog" style="width: 70%; position:fixed; z-index:101; top:10%; background-color:White; visibility: hidden; margin-left: auto; margin-right: auto; left: 0; right: 0;">
             <h4 class="mdl-dialog__title">New Blog Entry</h4>
             <div class="mdl-dialog__content">
             <asp:Label ID="Label1" runat="server" Text="Title: "></asp:Label>
@@ -131,24 +126,34 @@
 
         <asp:SqlDataSource ID="SqlDataSource1" runat="server" 
         ConnectionString="<%$ ConnectionStrings:WordPressConnectionString %>" SelectCommand="SELECT blogId, blogTitle, b.domainId, b.username, blogContent, htmlBlogContent, canLike, canComment, canReblog, dateCreated, datemodified, picture, primaryColor, secondaryColor, image,
-                CASE WHEN EXISTS(SELECT * FROM dbo.[Likes] as l WHERE l.email = @email AND l.blogId = b.blogId)
+                CASE WHEN EXISTS(SELECT * FROM dbo.[Likes] as l WHERE l.username = @username AND l.blogId = b.blogId)
                     THEN '1' 
                     ELSE '0'
 	                END AS isLiked
-                FROM dbo.[Blogs] AS b, dbo.[Accounts] AS a, dbo.[Domains] as d 
+                FROM dbo.[Blogs] AS b, dbo.[Accounts] AS a, dbo.[Domains] AS d
                 WHERE a.username = b.username 
                 AND d.domainId = b.domainId
-                AND b.domainId = @domainId">
+                AND b.domainId = @domainId
+                UNION
+                SELECT b.blogId, blogTitle, b.domainId, b.username, blogContent, htmlBlogContent, canLike, canComment, canReblog, dateCreated, datemodified, picture, primaryColor, secondaryColor, image,
+                CASE WHEN EXISTS(SELECT * FROM dbo.[Likes] as l WHERE l.username =  @username AND l.blogId = b.blogId)
+                    THEN '1' 
+                    ELSE '0'
+	                END AS isLiked
+                FROM dbo.[Blogs] AS b, dbo.[Accounts] AS a, dbo.[Domains] AS d, dbo.[Reblogs] AS r
+                WHERE r.domainId = @domainId
+                AND b.domainId = d.domainId
+                AND a.username = b.username
+                AND r.blogId = b.blogId
+                
+                ">
             <SelectParameters>
-                <asp:SessionParameter Name="email" SessionField="email" DefaultValue=" " />
+                <asp:SessionParameter Name="username" SessionField="username" DefaultValue=" " />
                 <asp:ControlParameter ControlID="HiddenField1" Name="domainId" 
                     PropertyName="Value" />
             </SelectParameters>
         </asp:SqlDataSource>
     </body>
-    
-
-
 
     <script type="text/javascript">
         var loc = window.location.pathname;
@@ -162,7 +167,7 @@
         }
 
         function Like(blogId) {
-            alert(blogId);
+            //alert(blogId);
         }
 
         $(document).ready(function () {
@@ -209,8 +214,8 @@
                     ReblogCheck = 1;
                 }
 
-                var data = "{\"blogTitle\":\"" + $('.TitleText').val() + "\", \"domainId\":\"" + dir + "\",\"username\":\"" + dir + "\",\"blogContent\":\"" + contentText + "\"," +
-                "\"canLike\":\"" + LikeCheck + "\",\"canComment\":\"" + CommentCheck + "\",\"canReblog\":\"" + ReblogCheck + "\",\"htmlBlogContent\":\"" + contentHtml + "\"}";
+                var data = "{\"blogTitle\":\"" + $('.TitleText').val() + "\", \"domainId\":\"" + '<%=Session["domain"] %>' + "\",\"username\":\"" + '<%=Session["username"] %>' + "\",\"blogContent\":\"" + contentText + "\"," +
+                "\"canLike\":\"" + LikeCheck + "\",\"canComment\":\"" + CommentCheck + "\",\"canReblog\":\"" + ReblogCheck + "\",\"htmlBlogContent\":\"" + contentHtml.replace(/\"/g, "'") + "\"}";
 
                 if (typeof (Page_ClientValidate) == 'function') {
                     Page_ClientValidate();
@@ -218,7 +223,6 @@
 
 
                 if (Page_IsValid) {
-                    alert(data);
                     $.ajax({
                         cache: false,
                         type: "POST",

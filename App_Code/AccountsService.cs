@@ -103,7 +103,7 @@ public class AccountsService : System.Web.Services.WebService {
         {
             
             ExecuteInsertQuery("INSERT INTO dbo.[Accounts] (email, username, password, domainId, picture) VALUES('" + email + "','" + username + "','" + password + "','" + domain + "', 'default/user.png')");
-            ExecuteInsertQuery("INSERT INTO dbo.[Domains] VALUES('" + domain + "','#000000','#FFFFFF', 'bg_2048.png')");
+            ExecuteInsertQuery("INSERT INTO dbo.[Domains] VALUES('" + domain + "','#000000','#FFFFFF', 'default/default.png')");
 
             responseMessage[0] = "200";
             responseMessage[1] = "Your account is ready!";
@@ -131,7 +131,65 @@ public class AccountsService : System.Web.Services.WebService {
         
         return ConvertDataTabletoString(dt);
     }
-    
+
+    [WebMethod]
+    public string GetNotifications(string username){
+        DataTable dt = ExecuteSelectQuery("SELECT TOP 10 b.blogId, b.blogTitle, c.username, c.commentContent, c.timestamp "
+                + "FROM dbo.[Comments] AS c, dbo.[Blogs] AS b, dbo.[Accounts] AS a "
+                + "WHERE a.username = '" + username + "' "
+                + "AND a.domainId = b.domainId " 
+                + "AND b.blogId = c.blogId "
+                + "UNION ALL "
+                + "SELECT b.blogId, b.blogTitle, l.username, '[Like]' AS CommentContent , l.timestamp "
+                + "FROM dbo.[Likes] AS l, dbo.[Blogs] AS b, dbo.[Accounts] AS a "
+                + "WHERE a.username = '" + username + "' "
+                + "AND a.domainId = b.domainId "
+                + "AND b.blogId = l.blogId "
+                + "ORDER BY c.timestamp DESC" 
+            );
+
+        return ConvertDataTabletoString(dt);
+    }
+
+    [WebMethod]
+    public string GetNewNotifCount(string username){
+        DataTable dt = ExecuteSelectQuery("SELECT COUNT(b.blogId) AS count "
+                + "FROM dbo.[Comments] AS c, dbo.[Blogs] AS b, dbo.[Accounts] AS a "
+                + "WHERE a.username = '" + username + "' "
+                + "AND a.domainId = b.domainId "
+                + "AND b.blogId = c.blogId "
+                + "AND seen = '0' "
+            );
+
+        DataTable dt2 = ExecuteSelectQuery("SELECT COUNT(b.blogId) AS count "
+               + "FROM dbo.[Likes] AS l, dbo.[Blogs] AS b, dbo.[Accounts] AS a "
+               + "WHERE a.username = '" + username + "' "
+               + "AND a.domainId = b.domainId "
+               + "AND b.blogId = l.blogId "
+               + "AND seen = '0' "
+           );
+
+        return (int.Parse(dt.Rows[0]["count"].ToString()) + int.Parse(dt2.Rows[0]["count"].ToString())).ToString();
+    }
+
+
+
+    [WebMethod]
+    public string SeenNotif(string username) {
+        ExecuteInsertQuery("UPDATE dbo.[Likes] SET seen ='1' WHERE seen IN (SELECT seen FROM dbo.[Likes], dbo.[Accounts], dbo.[Blogs] "
+            + "WHERE dbo.[Accounts].username = 'carlo' "
+            + "AND dbo.[Accounts].domainId = dbo.[Blogs].domainId AND dbo.[Blogs].blogId = dbo.[Likes].blogId) ");
+
+        ExecuteInsertQuery("UPDATE dbo.[Comments] SET seen ='1' WHERE seen IN (SELECT seen FROM dbo.[Comments], dbo.[Accounts], dbo.[Blogs] "
+        + "WHERE dbo.[Accounts].username = 'carlo' "
+        + "AND dbo.[Accounts].domainId = dbo.[Blogs].domainId AND dbo.[Blogs].blogId = dbo.[Comments].blogId) ");
+
+
+
+        return "Success";
+    }
+
+
     
     private void CreateDirectory(string folderName) {
         string directoryPath = Server.MapPath(string.Format("~/Domains/{0}/", folderName));
